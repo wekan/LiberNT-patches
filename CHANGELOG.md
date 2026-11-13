@@ -31,8 +31,8 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 # Upcoming LiberNT-patches release
 
 **In short:** the first release: everything **wekan/LiberNT** adds to upstream
-LiberNT, as patches - the user interface, fourteen **message tables** and the
-**Unicode character names** in **Finnish**, and the **Release All**
+LiberNT, as patches - the user interface, fourteen **message tables**, the
+**Unicode character names** and the **time zones** in **Finnish**, and the **Release All**
 and **Release All Missing** workflows, which build releases from upstream and
 these patches, with the source **with and without its git history**, the
 **boot CD and disk images**, and **upstream's own releases** mirrored.
@@ -137,6 +137,25 @@ English names is regenerated rather than hand-edited. `tests/real-upstream.sh`
 checks the ids, the include and that the file is exactly the generator's
 output. `releases/apply-patches.sh` now takes the patches in byte order, so a
 release's commit hashes no longer depend on the machine's locale.
+
+</details>
+
+<details>
+<summary><a href="https://github.com/wekan/LiberNT-patches/commit/295cb5809e7e71aa3578fa1c31d2013e590c68a8">Finnish for the modules whose .rc carried only English</a>. Thanks to xet7.</summary>
+
+WordPad, write, the Game Controllers control panel, the multimedia errors of
+winmm, the console host, Program Manager, the time zone names of tzres and the
+Btrfs pages of Explorer carry their English resources in their own `.rc` and
+included no Finnish file, so the user interface translation did not reach
+them. `dist/translations/fi-FI-modules.patch` gives each a Finnish file
+translated from its current English block - same ids, controls and printf
+inserts - included under `LANGUAGE_FI_FI`; the time zones read "Länsi-Euroopan
+normaaliaika" and "(UTC+02:00) Helsinki, Kiova, Riika, Sofia, Tallinna, Vilna".
+
+`tests/real-upstream.sh` checks the eight includes, and now accepts a subject
+with several components such as `[WORDPAD][WRITE]`, which it took for one that
+had lost its component. storprop is left in English on purpose: its only
+dialog is unfinished upstream and not built in.
 
 </details>
 
