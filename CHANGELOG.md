@@ -38,8 +38,8 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 # Upcoming LiberNT-patches release
 
 **In short:** the first release: everything **wekan/LiberNT** adds to upstream
-LiberNT, as patches - the user interface and fourteen **message tables** in
-**Finnish**, and the **Release All**
+LiberNT, as patches - the user interface, fourteen **message tables** and the
+**Unicode character names** in **Finnish**, and the **Release All**
 and **Release All Missing** workflows, which build releases from upstream and
 these patches, with the source **with and without its git history**, the
 **boot CD and disk images**, and **upstream's own releases** mirrored.
@@ -126,6 +126,24 @@ and the English output stays the same.
 CMakeLists says, as the build does - before, it compiled them all as Unicode -
 and checks vfd.exe's five conversions. The C change was not compiled here:
 there is no LiberNT toolchain on this machine.
+
+</details>
+
+<details>
+<summary><a href="https://github.com/wekan/LiberNT-patches/commit/4992b1a836cd0ff20fef155da3e808d903b02d99">Finnish Unicode character names for getuname, and their generator</a>. Thanks to xet7.</summary>
+
+`dist/translations/fi-FI-getuname.patch` gives getuname.dll - the names
+Character Map shows - a fi-FI.rc with all 37,966 names of en-US.rc, by the
+same ids: "Latinalainen iso kirjain A, jossa akuutti", "Hangul-tavu Ga",
+"Oikealle osoittava nuoli palkista". A letter's own name is kept as written and
+the diacritics use the terms of Finnish typography.
+
+`tools/getuname-fi` generates the file from en-US.rc with a glossary and the
+rules where Finnish word order differs, so a change upstream makes to the
+English names is regenerated rather than hand-edited. `tests/real-upstream.sh`
+checks the ids, the include and that the file is exactly the generator's
+output. `releases/apply-patches.sh` now takes the patches in byte order, so a
+release's commit hashes no longer depend on the machine's locale.
 
 </details>
 
