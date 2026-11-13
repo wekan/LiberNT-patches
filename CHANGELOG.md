@@ -45,7 +45,8 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 # Upcoming LiberNT-patches release
 
 **In short:** the first release: everything **wekan/LiberNT** adds to upstream
-LiberNT, as patches - the user interface in **Finnish** and the **Release All**
+LiberNT, as patches - the user interface and nine **message tables** in
+**Finnish**, and the **Release All**
 and **Release All Missing** workflows, which build releases from upstream and
 these patches, with the source **with and without its git history**, the
 **boot CD and disk images**, and **upstream's own releases** mirrored.
@@ -78,6 +79,26 @@ the order, the version, the same commits twice, the zips with and without
 refusal of a changed patch, a patch that does not apply, an existing
 destination and a bad tag. `tests/real-upstream.sh` applies the real patches
 to upstream d02ef2e0db2 and checks the result against the tree expected.
+
+</details>
+
+and adds the following translations:
+
+<details>
+<summary><a href="https://github.com/wekan/LiberNT-patches/commit/65b2940b01f6faf84b489d2a27cb8ac93ae0334b">Finnish in nine of LiberNT's message tables, and tests that compile them</a>. Thanks to xet7.</summary>
+
+`dist/translations/fi-FI-messages.patch` gives 427 messages a Finnish block:
+DiskPart's command help, the net and arp commands, the event log and Service
+Control Manager, the I/O errors drivers log, the PCI device class names Device
+Manager shows, the Special Administration Console, RAPPS and the boot manager.
+Each table gets `Finnish=0x40B:MSG0040B`, with the same `%1`, `%n`, `%0` and
+`%%` inserts as the English; sacmsg.mc, which had no `LanguageNames`, lists
+English as windmc's default so its binary stays byte for byte the same.
+
+`tests/real-upstream.sh` builds windmc from the patched tree and compiles every
+changed table, requiring a Finnish binary from each. It also stopped piping
+`git log` into `grep -q`, which under pipefail failed once there were more
+commits than grep read.
 
 </details>
 
