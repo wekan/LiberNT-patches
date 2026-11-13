@@ -1,0 +1,2234 @@
+From 054f17094b4d8113bccefd7af28416386f19d654 Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 23:35:03 +0200
+Subject: [PATCH] [WORDPAD][WRITE] Add Finnish (fi-FI) translation
+
+Problem: WordPad and write.exe showed English on a Finnish system.
+
+Why: Both have lang/ files for other languages, but none for Finnish.
+
+How: Add wordpad's lang/fi-FI.rc, translated from the current English
+block of wordpad.rc so it has the same MENUEX menus - with the Lists
+submenu the older lang files lack - dialogs, strings and accelerators,
+and write's lang/Fi.rc; include both under LANGUAGE_FI_FI.
+---
+ base/applications/wordpad/lang/fi-FI.rc | 342 ++++++++++++++++++++++++
+ base/applications/wordpad/rsrc.rc       |   3 +
+ base/applications/write/lang/Fi.rc      |  26 ++
+ base/applications/write/rsrc.rc         |   3 +
+ 4 files changed, 374 insertions(+)
+ create mode 100644 base/applications/wordpad/lang/fi-FI.rc
+ create mode 100644 base/applications/write/lang/Fi.rc
+
+diff --git a/base/applications/wordpad/lang/fi-FI.rc b/base/applications/wordpad/lang/fi-FI.rc
+new file mode 100644
+index 00000000000..fe6f7219106
+--- /dev/null
++++ b/base/applications/wordpad/lang/fi-FI.rc
+@@ -0,0 +1,342 @@
++/*
++ * PROJECT:     ReactOS WordPad
++ * LICENSE:     LGPL-2.1-or-later (https://spdx.org/licenses/LGPL-2.1-or-later)
++ * PURPOSE:     Finnish resource file
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++IDM_MAINMENU MENUEX
++BEGIN
++    POPUP "&Tiedosto"
++    BEGIN
++        MENUITEM "&Uusi...\tCtrl+N",       ID_FILE_NEW
++        MENUITEM "&Avaa...\tCtrl+O",      ID_FILE_OPEN
++        MENUITEM "&Tallenna\tCtrl+S",         ID_FILE_SAVE
++        MENUITEM "Tallenna &nimellä...",           ID_FILE_SAVEAS
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        MENUITEM "T&ulosta...\tCtrl+P",     ID_PRINT
++        MENUITEM "&Esikatselu",        ID_PREVIEW
++        MENUITEM "Sivun &asetukset...",        ID_PRINTSETUP
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        MENUITEM "&Lopeta",                 ID_FILE_EXIT
++    END
++    POPUP "&Muokkaa"
++    BEGIN
++        MENUITEM "&Kumoa\tCtrl+Z",               ID_EDIT_UNDO
++        MENUITEM "&Tee uudelleen\tCtrl+Y",               ID_EDIT_REDO
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        MENUITEM "&Leikkaa\tCtrl+X",                ID_EDIT_CUT
++        MENUITEM "K&opioi\tCtrl+C",               ID_EDIT_COPY
++        MENUITEM "L&iitä\tCtrl+V",              ID_EDIT_PASTE
++        MENUITEM "&Poista\tDel",                 ID_EDIT_CLEAR
++        MENUITEM "&Valitse kaikki\tCtrl+A",         ID_EDIT_SELECTALL
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        MENUITEM "&Etsi...\tCtrl+F",            ID_FIND
++        MENUITEM "Etsi &seuraava\tF3",              ID_FIND_NEXT
++        MENUITEM "&Korvaa...\tCtrl+H",         ID_REPLACE
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        MENUITEM "&Vain luku",                  ID_EDIT_READONLY
++        MENUITEM "&Muokattu",                   ID_EDIT_MODIFIED
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        POPUP "&Lisätoiminnot"
++        BEGIN
++            MENUITEM "&Valinnan tiedot",             ID_EDIT_SELECTIONINFO
++            MENUITEM "&Merkkimuotoilu",           ID_EDIT_CHARFORMAT
++            MENUITEM "&Oletusmerkkimuotoilu",           ID_EDIT_DEFCHARFORMAT
++            MENUITEM "&Kappalemuotoilu",           ID_EDIT_PARAFORMAT
++            MENUITEM "&Hae teksti",                   ID_EDIT_GETTEXT
++        END
++    END
++    POPUP "&Näytä"
++    BEGIN
++        MENUITEM "&Työkalurivi",        ID_TOGGLE_TOOLBAR
++        MENUITEM "&Muotoilurivi",     ID_TOGGLE_FORMATBAR
++        MENUITEM "&Viivain",          ID_TOGGLE_RULER
++        MENUITEM "&Tilarivi",     ID_TOGGLE_STATUSBAR
++#ifdef __REACTOS__
++        MENUITEM "", -1, MFT_SEPARATOR
++#else
++        MENUITEM SEPARATOR
++#endif
++        MENUITEM "&Asetukset...",     ID_VIEWPROPERTIES
++    END
++    POPUP "&Lisää"
++    BEGIN
++        MENUITEM "&Päivämäärä ja aika...",  ID_DATETIME
++    END
++    POPUP "M&uotoile"
++    BEGIN
++        MENUITEM "&Fontti...",                     ID_FONTSETTINGS
++        POPUP "&Luettelot",                          ID_LISTMENU
++        BEGIN
++            MENUITEM "&Luettelomerkit",                ID_BULLET
++            MENUITEM "Numerot",                       ID_NUMBERING
++            MENUITEM "Kirjaimet - pienet",          ID_LCLETTER
++            MENUITEM "Kirjaimet - isot",          ID_UCLETTER
++            MENUITEM "Roomalaiset numerot - pienet",   ID_LCROMAN
++            MENUITEM "Roomalaiset numerot - isot",   ID_UCROMAN
++        END
++        MENUITEM "&Kappale...",                ID_PARAFORMAT
++        MENUITEM "&Sarkaimet...",                     ID_TABSTOPS
++        POPUP "&Tausta"
++        BEGIN
++            MENUITEM "&Järjestelmä\tCtrl+1",         ID_BACK_1
++            MENUITEM "&Vaaleankeltainen\tCtrl+2",           ID_BACK_2
++        END
++    END
++    POPUP "&Ohje"
++    BEGIN
++        MENUITEM "&Tietoja Wine Wordpadista",      ID_ABOUT
++    END
++END
++
++IDM_POPUP MENU
++BEGIN
++    POPUP ""
++    BEGIN
++        MENUITEM "&Leikkaa",                ID_EDIT_CUT
++        MENUITEM "K&opioi",               ID_EDIT_COPY
++        MENUITEM "L&iitä",              ID_EDIT_PASTE
++        MENUITEM SEPARATOR
++        MENUITEM "&Luettelomerkit",      ID_BULLET
++        MENUITEM "&Kappale...",       ID_PARAFORMAT
++    END
++END
++
++IDM_COLOR_POPUP MENU
++BEGIN
++    POPUP ""
++    BEGIN
++        MENUITEM "Musta",      ID_COLOR_BLACK
++        MENUITEM "Kastanjanruskea",     ID_COLOR_MAROON
++        MENUITEM "Vihreä",      ID_COLOR_GREEN
++        MENUITEM "Oliivinvihreä",      ID_COLOR_OLIVE
++        MENUITEM "Tummansininen",       ID_COLOR_NAVY
++        MENUITEM "Purppura",     ID_COLOR_PURPLE
++        MENUITEM "Sinivihreä",       ID_COLOR_TEAL
++        MENUITEM "Harmaa",       ID_COLOR_GRAY
++        MENUITEM "Hopea",     ID_COLOR_SILVER
++        MENUITEM "Punainen",        ID_COLOR_RED
++        MENUITEM "Limetinvihreä",       ID_COLOR_LIME
++        MENUITEM "Keltainen",     ID_COLOR_YELLOW
++        MENUITEM "Sininen",       ID_COLOR_BLUE
++        MENUITEM "Fuksia",    ID_COLOR_FUCHSIA
++        MENUITEM "Turkoosi",       ID_COLOR_AQUA
++        MENUITEM "Valkoinen",      ID_COLOR_WHITE
++        MENUITEM "Automaattinen",  ID_COLOR_AUTOMATIC
++    END
++END
++
++STRINGTABLE
++BEGIN
++    STRING_ALL_FILES,              "Kaikki tiedostot (*.*)"
++    STRING_TEXT_FILES_TXT,         "Tekstitiedostot (*.txt)"
++    STRING_TEXT_FILES_UNICODE_TXT, "Unicode-tekstitiedostot (*.txt)"
++    STRING_RICHTEXT_FILES_RTF,     "RTF-muoto (*.rtf)"
++    STRING_NEWFILE_RICHTEXT,       "RTF-asiakirja"
++    STRING_NEWFILE_TXT,            "Tekstiasiakirja"
++    STRING_NEWFILE_TXT_UNICODE,    "Unicode-tekstiasiakirja"
++    STRING_PRINTER_FILES_PRN,      "Tulostintiedostot (*.prn)"
++END
++
++STRINGTABLE
++BEGIN
++    STRING_ALIGN_LEFT,            "Vasen"
++    STRING_ALIGN_RIGHT,           "Oikea"
++    STRING_ALIGN_CENTER,          "Keskitetty"
++END
++
++STRINGTABLE
++BEGIN
++    STRING_VIEWPROPS_TITLE,          "Asetukset"
++    STRING_VIEWPROPS_TEXT,           "Teksti"
++    STRING_VIEWPROPS_RICHTEXT,       "RTF-teksti"
++END
++
++STRINGTABLE
++BEGIN
++    STRING_PREVIEW_PRINT,            "&Tulosta"
++    STRING_PREVIEW_NEXTPAGE,         "&Seuraava sivu"
++    STRING_PREVIEW_PREVPAGE,         "&Edellinen sivu"
++    STRING_PREVIEW_TWOPAGES,         "&Kaksi sivua"
++    STRING_PREVIEW_ONEPAGE,          "&Yksi sivu"
++    STRING_PREVIEW_ZOOMIN,           "&Lähennä"
++    STRING_PREVIEW_ZOOMOUT,          "L&oitonna"
++    STRING_PREVIEW_CLOSE,            "&Sulje"
++    STRING_PREVIEW_PAGE,             "Sivu"
++    STRING_PREVIEW_PAGES,            "Sivut"
++    STRING_UNITS_CM,                 "cm"
++    STRING_UNITS_IN,                 "in"
++    STRING_UNITS_INCH,               "tuuma"
++    STRING_UNITS_PT,                 "pt"
++END
++
++STRINGTABLE
++BEGIN
++    STRING_DEFAULT_FILENAME,     "Asiakirja"
++    STRING_PROMPT_SAVE_CHANGES,  "Tallennetaanko asiakirjan '%s' muutokset?"
++    STRING_SEARCH_FINISHED,      "Asiakirjan haku on valmis."
++    STRING_LOAD_RICHED_FAILED,   "RichEdit-kirjaston lataaminen epäonnistui."
++#ifdef __REACTOS__
++    STRING_SAVE_LOSEFORMATTING,  "Olet tallentamassa pelkkänä tekstinä, jolloin kaikki muotoilut menetetään. Haluatko varmasti tehdä näin?"
++#else
++    STRING_SAVE_LOSEFORMATTING,  "Olet tallentamassa pelkkänä tekstinä, " \
++                                 "jolloin kaikki muotoilut menetetään. " \
++                                 "Haluatko varmasti tehdä näin?"
++#endif
++    STRING_INVALID_NUMBER,       "Virheellinen numeromuoto."
++    STRING_OLE_STORAGE_NOT_SUPPORTED, "OLE-tallennusasiakirjoja ei tueta."
++    STRING_WRITE_FAILED,              "Tiedostoa ei voitu tallentaa."
++    STRING_WRITE_ACCESS_DENIED,       "Sinulla ei ole oikeutta tallentaa tiedostoa."
++    STRING_OPEN_FAILED,               "Tiedostoa ei voitu avata."
++    STRING_OPEN_ACCESS_DENIED,        "Sinulla ei ole oikeutta avata tiedostoa."
++    STRING_PRINTING_NOT_IMPLEMENTED,  "Tulostusta ei ole toteutettu."
++    STRING_MAX_TAB_STOPS,             "Sarkainkohtia voi lisätä enintään 32."
++END
++
++IDD_DATETIME DIALOG 30, 20, 130, 80
++STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
++CAPTION "Päivämäärä ja aika"
++FONT 8, "MS Shell Dlg"
++BEGIN
++    LTEXT        "Käytettävissä olevat muodot",-1,3,2,100,15
++    LISTBOX      IDC_DATETIME,3,12,80,65,LBS_NOINTEGRALHEIGHT | LBS_NOTIFY
++    DEFPUSHBUTTON "OK",IDOK,87,12,40,12
++    PUSHBUTTON   "Peruuta",IDCANCEL,87,26,40,12
++END
++
++IDD_NEWFILE DIALOG 30, 20, 140, 80
++STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
++CAPTION "Uusi"
++FONT 8, "MS Shell Dlg"
++BEGIN
++    LTEXT        "Uuden asiakirjan tyyppi",-1,3,2,100,15
++    LISTBOX      IDC_NEWFILE,3,12,90,65,LBS_NOINTEGRALHEIGHT
++    DEFPUSHBUTTON "OK",IDOK,97,12,40,12
++    PUSHBUTTON   "Peruuta",IDCANCEL,97,26,40,12
++END
++
++IDD_PARAFORMAT DIALOG 30, 20, 220, 110
++STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
++CAPTION "Kappalemuotoilu"
++FONT 8, "MS Shell Dlg"
++BEGIN
++    GROUPBOX "Sisennys", -1, 10, 10, 140, 68
++    LTEXT "Vasen", -1, 15, 22, 60, 13
++    EDITTEXT IDC_PARA_LEFT, 75, 20, 65, 13
++    LTEXT "Oikea", -1, 15, 40, 60, 13
++    EDITTEXT IDC_PARA_RIGHT, 75, 38, 65, 13
++    LTEXT "Ensimmäinen rivi", -1, 15, 58, 60, 13
++    EDITTEXT IDC_PARA_FIRST, 75, 56, 65, 13
++    LTEXT "Tasaus", -1, 15, 87, 60, 13
++    COMBOBOX IDC_PARA_ALIGN, 75, 85, 65, 60, CBS_DROPDOWNLIST
++    DEFPUSHBUTTON "OK", IDOK, 160, 15, 50, 15
++    PUSHBUTTON "Peruuta", IDCANCEL, 160, 33, 50, 15
++END
++
++IDD_TABSTOPS DIALOG 30, 20, 200, 110
++STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
++CAPTION "Sarkaimet"
++FONT 8, "MS Shell Dlg"
++BEGIN
++    GROUPBOX "Sarkainkohdat", -1, 10, 10, 120, 90
++    COMBOBOX IDC_TABSTOPS, 20, 20, 100, 60, CBS_SIMPLE
++    DEFPUSHBUTTON "&Lisää", ID_TAB_ADD, 20, 80, 45, 15
++    PUSHBUTTON "&Poista", ID_TAB_DEL, 72, 80, 45, 15
++    PUSHBUTTON "OK", IDOK, 135, 15, 58, 15
++    PUSHBUTTON "Peruuta", IDCANCEL, 135, 33, 58, 15
++    PUSHBUTTON "Poista &kaikki", ID_TAB_EMPTY, 135, 51, 58, 15
++END
++
++IDD_FORMATOPTS DIALOG 0, 0, 280, 110
++STYLE DS_SYSMODAL
++CAPTION ""
++FONT 8, "MS Shell Dlg"
++BEGIN
++    GROUPBOX "Rivitys", -1, 5, 10, 145, 85
++    RADIOBUTTON "&Ei rivitystä", IDC_PAGEFMT_WN, 10, 25, 138, 15
++    RADIOBUTTON "Rivitä &ikkunan reunan mukaan", IDC_PAGEFMT_WW, 10, 45, 138, 15
++    RADIOBUTTON "Rivitä &marginaalin mukaan", IDC_PAGEFMT_WM, 10, 65, 138, 15
++    GROUPBOX "Työkalurivit", -1, 155, 10, 115, 85
++    CHECKBOX "&Työkalurivi", IDC_PAGEFMT_TB, 165, 20, 80, 15
++    CHECKBOX "&Muotoilurivi", IDC_PAGEFMT_FB, 165, 38, 80, 15
++    CHECKBOX "&Viivain", IDC_PAGEFMT_RU, 165, 56, 80, 15
++    CHECKBOX "&Tilarivi", IDC_PAGEFMT_SB, 165, 74, 80, 15
++    LTEXT "", IDC_PAGEFMT_ID, 0,0,0,0
++END
++
++#ifdef __REACTOS__
++MAINACCELTABLE ACCELERATORS
++BEGIN
++    "1",          ID_BACK_1,          VIRTKEY, CONTROL
++    "2",          ID_BACK_2,          VIRTKEY, CONTROL
++    VK_F3,        ID_FIND_NEXT,       VIRTKEY
++    "L",          ID_ALIGN_LEFT,      VIRTKEY, CONTROL
++    "E",          ID_ALIGN_CENTER,    VIRTKEY, CONTROL
++    "R",          ID_ALIGN_RIGHT,     VIRTKEY, CONTROL
++    "F",          ID_FIND,            VIRTKEY, CONTROL
++    "H",          ID_REPLACE,         VIRTKEY, CONTROL
++    "A",          ID_EDIT_SELECTALL,  VIRTKEY, CONTROL
++    "X",          ID_EDIT_CUT,        VIRTKEY, CONTROL
++    "C",          ID_EDIT_COPY,       VIRTKEY, CONTROL
++    "Z",          ID_EDIT_UNDO,       VIRTKEY, CONTROL
++    "Y",          ID_EDIT_REDO,       VIRTKEY, CONTROL
++    "B",          ID_FORMAT_BOLD,     VIRTKEY, CONTROL
++    "I",          ID_FORMAT_ITALIC,   VIRTKEY, CONTROL
++    "U",          ID_FORMAT_UNDERLINE,VIRTKEY, CONTROL
++    "N",          ID_FILE_NEW,        VIRTKEY, CONTROL
++    "O",          ID_FILE_OPEN,       VIRTKEY, CONTROL
++    "S",          ID_FILE_SAVE,       VIRTKEY, CONTROL
++    "P",          ID_PRINT,           VIRTKEY, CONTROL
++END
++#else
++MAINACCELTABLE ACCELERATORS
++BEGIN
++    "1",          ID_BACK_1,          VIRTKEY, CONTROL
++    "2",          ID_BACK_2,          VIRTKEY, CONTROL
++    VK_F3,        ID_FIND_NEXT,       VIRTKEY
++    "#msgctxt#accelerator Align Left#L",   ID_ALIGN_LEFT, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Align Center#E", ID_ALIGN_CENTER, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Align Right#R",  ID_ALIGN_RIGHT, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Find#F",         ID_FIND, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Replace#H",      ID_REPLACE, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Select All#A",   ID_EDIT_SELECTALL, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Cut#X",          ID_EDIT_CUT, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Copy#C",         ID_EDIT_COPY, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Undo#Z",         ID_EDIT_UNDO, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Redo#Y",         ID_EDIT_REDO, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Bold#B",         ID_FORMAT_BOLD, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Italic#I",       ID_FORMAT_ITALIC, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Underline#U",    ID_FORMAT_UNDERLINE, VIRTKEY, CONTROL
++    "#msgctxt#accelerator New#N",          ID_FILE_NEW, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Open#O",         ID_FILE_OPEN, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Save#S",         ID_FILE_SAVE, VIRTKEY, CONTROL
++    "#msgctxt#accelerator Print#P",        ID_PRINT, VIRTKEY, CONTROL
++END
++#endif
+diff --git a/base/applications/wordpad/rsrc.rc b/base/applications/wordpad/rsrc.rc
+index 30e8f7ccaf7..58b3fc2d45d 100644
+--- a/base/applications/wordpad/rsrc.rc
++++ b/base/applications/wordpad/rsrc.rc
+@@ -25,6 +25,9 @@ IDI_RTFDOC ICON "res/document.ico"
+ #ifdef LANGUAGE_ES_ES
+     #include "lang/es-ES.rc"
+ #endif
++#ifdef LANGUAGE_FI_FI
++    #include "lang/fi-FI.rc"
++#endif
+ #ifdef LANGUAGE_FR_FR
+     #include "lang/fr-FR.rc"
+ #endif
+diff --git a/base/applications/write/lang/Fi.rc b/base/applications/write/lang/Fi.rc
+new file mode 100644
+index 00000000000..46dba57c43b
+--- /dev/null
++++ b/base/applications/write/lang/Fi.rc
+@@ -0,0 +1,26 @@
++/*
++ * Copyright (C) 2007 Mikolaj Zalewski
++ * Copyright (C) 2026 Lauri Ojansivu (Finnish translation)
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
++
++#include "resources.h"
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++STRINGTABLE
++{
++    IDS_FAILED, "Wordpadin käynnistäminen epäonnistui"
++}
+diff --git a/base/applications/write/rsrc.rc b/base/applications/write/rsrc.rc
+index d0b99c75139..860076eb407 100644
+--- a/base/applications/write/rsrc.rc
++++ b/base/applications/write/rsrc.rc
+@@ -39,6 +39,9 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+ #ifdef LANGUAGE_ES_ES
+     #include "lang/Es.rc"
+ #endif
++#ifdef LANGUAGE_FI_FI
++    #include "lang/Fi.rc"
++#endif
+ #ifdef LANGUAGE_FR_FR
+     #include "lang/Fr.rc"
+ #endif
+-- 
+2.56.0
+
+From 13509054a29648bac6574d078a536277d2b29196 Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 23:36:58 +0200
+Subject: [PATCH] [JOY][WINMM] Add Finnish (fi-FI) translation
+
+Problem: The Game Controllers control panel and the multimedia errors
+of winmm, which every MCI and wave program shows, were in English on a
+Finnish system.
+
+Why: joy.rc and winmm.rc carry their English resources themselves, as
+Wine has them, and include none of the lang/ files beside them; those
+are older and no longer built.
+
+How: Translate the English block of joy.rc into lang/fi-FI.rc and the
+string table of winmm.rc into lang/winmm_Fi.rc, with the same ids,
+controls and %-free texts, and include each under LANGUAGE_FI_FI with
+the UTF-8 code page.
+---
+ dll/cpl/joy/joy.rc               |   5 ++
+ dll/cpl/joy/lang/fi-FI.rc        | 108 +++++++++++++++++++++++++++
+ dll/win32/winmm/lang/winmm_Fi.rc | 124 +++++++++++++++++++++++++++++++
+ dll/win32/winmm/winmm.rc         |   5 ++
+ 4 files changed, 242 insertions(+)
+ create mode 100644 dll/cpl/joy/lang/fi-FI.rc
+ create mode 100644 dll/win32/winmm/lang/winmm_Fi.rc
+
+diff --git a/dll/cpl/joy/joy.rc b/dll/cpl/joy/joy.rc
+index ec579115dc2..03b1db9c49b 100644
+--- a/dll/cpl/joy/joy.rc
++++ b/dll/cpl/joy/joy.rc
+@@ -125,6 +125,11 @@ FONT 8, "Ms Shell Dlg"
+     AUTOCHECKBOX    "Rumble", IDC_WGI_RUMBLE, 260, 30, 40, 10
+ }
+ 
++#ifdef LANGUAGE_FI_FI
++#pragma code_page(65001)
++    #include "lang/fi-FI.rc"
++#endif
++
+ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+ 
+ /* @makedep: joy.manifest */
+diff --git a/dll/cpl/joy/lang/fi-FI.rc b/dll/cpl/joy/lang/fi-FI.rc
+new file mode 100644
+index 00000000000..0ce12cdf4b9
+--- /dev/null
++++ b/dll/cpl/joy/lang/fi-FI.rc
+@@ -0,0 +1,108 @@
++/*
++ * PROJECT:     ReactOS Game Controllers Control Panel
++ * LICENSE:     LGPL-2.1-or-later (https://spdx.org/licenses/LGPL-2.1-or-later)
++ * PURPOSE:     Finnish resource file, the resources of joy.rc
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++STRINGTABLE
++BEGIN
++    IDS_CPL_NAME        "Peliohjaimet"
++    IDS_CPL_INFO        "Testaa ja määritä peliohjaimia."
++END
++
++IDD_LIST DIALOG 0, 0, 320, 300
++STYLE WS_CAPTION | WS_CHILD | WS_DISABLED
++CAPTION "Joysticks"
++FONT 8, "Ms Shell Dlg"
++{
++    PUSHBUTTON      "&Poista käytöstä", IDC_BUTTON_DI_DISABLE, 200, 20, 60, 15
++    PUSHBUTTON      "&Palauta", IDC_BUTTON_DI_RESET, 200, 40, 60, 15
++    PUSHBUTTON      "&Ohita", IDC_BUTTON_XI_OVERRIDE, 200, 90, 60, 15
++    PUSHBUTTON      "&Ota käyttöön", IDC_BUTTON_ENABLE, 200, 160, 60, 15
++    LTEXT           "Kytketty (DirectInput-laitteet)", IDC_STATIC, 10, 10, 180, 10
++    LISTBOX         IDC_DI_ENABLED_LIST, 10, 20, 180, 60, WS_TABSTOP | WS_VSCROLL | LBS_NOTIFY
++    LTEXT           "Kytketty (XInput-laitteet)", IDC_STATIC, 10, 80, 180, 10
++    LISTBOX         IDC_XI_ENABLED_LIST, 10, 90, 180, 60, WS_TABSTOP | WS_VSCROLL | LBS_NOTIFY
++    LTEXT           "Poistettu käytöstä", IDC_STATIC, 10, 150, 180, 10
++    LISTBOX         IDC_DISABLED_LIST, 10, 160, 180, 60, WS_TABSTOP | WS_VSCROLL | LBS_NOTIFY
++
++    GROUPBOX        "Lisäasetukset (tulevat voimaan uudelleenkäynnistyksen jälkeen)", IDC_ADVANCED, 10, 220, 300, 70
++    AUTOCHECKBOX    "Ota SDL käyttöön", IDC_ENABLE_SDL, 20, 235, 100, 10
++    AUTOCHECKBOX    "Poista hidraw käytöstä", IDC_DISABLE_HIDRAW, 20, 245, 100, 10
++}
++
++IDD_TEST_DI DIALOG 0, 0, 320, 300
++STYLE WS_CAPTION | WS_CHILD | WS_DISABLED
++CAPTION "DInput"
++FONT 8, "Ms Shell Dlg"
++{
++    COMBOBOX        IDC_DI_DEVICES, 15, 10, 291, 60, CBS_DROPDOWNLIST | CBS_HASSTRINGS
++    GROUPBOX        "Akselit", IDC_DI_AXES, 15, 30, 214, 60
++    GROUPBOX        "POV-ohjaimet", IDC_DI_POVS, 246, 30, 60, 60
++    GROUPBOX        "Painikkeet", IDC_DI_BUTTONS, 15, 100, 291, 86
++    LTEXT           "Voimapalautetehoste", IDC_STATIC, 15, 196, 291, 10
++    LISTBOX         IDC_DI_EFFECTS, 15, 206, 291, 54, WS_TABSTOP | WS_VSCROLL | LBS_NOTIFY
++    LTEXT           "Toista valittu tehoste pitämällä mitä tahansa ohjaimen painiketta painettuna. Tehosteen suuntaa voi muuttaa ohjaimen akselilla.",
++                    IDC_STATIC, 15, 260, 291, 25
++}
++
++IDD_TEST_XI DIALOG 0, 0, 320, 300
++STYLE WS_CAPTION | WS_CHILD | WS_DISABLED
++CAPTION "XInput"
++FONT 8, "Ms Shell Dlg"
++{
++    GROUPBOX        "Käyttäjä #0", IDC_XI_USER_0, 15,  10, 291, 60
++    GROUPBOX        "Käyttäjä #1", IDC_XI_USER_1, 15,  80, 291, 60
++    GROUPBOX        "Käyttäjä #2", IDC_XI_USER_2, 15, 150, 291, 60
++    GROUPBOX        "Käyttäjä #3", IDC_XI_USER_3, 15, 220, 291, 60
++
++#ifndef __REACTOS__
++    LTEXT           "Paikassa #0 ei havaittu käyttäjää. Varmista, että " \
++                    "peliohjain on kytketty eikä sitä ole ohitettu " \
++                    "DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_0,         15, 10, 291, 60
++    LTEXT           "Paikassa #1 ei havaittu käyttäjää. Varmista, että " \
++                    "peliohjain on kytketty eikä sitä ole ohitettu " \
++                    "DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_1,         15,  80, 291, 60
++    LTEXT           "Paikassa #2 ei havaittu käyttäjää. Varmista, että " \
++                    "peliohjain on kytketty eikä sitä ole ohitettu " \
++                    "DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_2,         15, 150, 291, 60
++    LTEXT           "Paikassa #3 ei havaittu käyttäjää. Varmista, että " \
++                    "peliohjain on kytketty eikä sitä ole ohitettu " \
++                    "DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_3,         15, 220, 291, 60
++#else
++    LTEXT           "Paikassa #0 ei havaittu käyttäjää. Varmista, että peliohjain on kytketty eikä sitä ole ohitettu DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_0,         15, 10, 291, 60
++    LTEXT           "Paikassa #1 ei havaittu käyttäjää. Varmista, että peliohjain on kytketty eikä sitä ole ohitettu DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_1,         15,  80, 291, 60
++    LTEXT           "Paikassa #2 ei havaittu käyttäjää. Varmista, että peliohjain on kytketty eikä sitä ole ohitettu DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_2,         15, 150, 291, 60
++    LTEXT           "Paikassa #3 ei havaittu käyttäjää. Varmista, että peliohjain on kytketty eikä sitä ole ohitettu DInputille Joysticks-välilehdellä.",
++                    IDC_XI_NO_USER_3,         15, 220, 291, 60
++#endif
++
++    AUTOCHECKBOX    "Värinä", IDC_XI_RUMBLE_0, 260,  10, 40, 10
++    AUTOCHECKBOX    "Värinä", IDC_XI_RUMBLE_1, 260,  80, 40, 10
++    AUTOCHECKBOX    "Värinä", IDC_XI_RUMBLE_2, 260, 150, 40, 10
++    AUTOCHECKBOX    "Värinä", IDC_XI_RUMBLE_3, 260, 220, 40, 10
++}
++
++IDD_TEST_WGI DIALOG 0, 0, 320, 300
++STYLE WS_CAPTION | WS_CHILD | WS_DISABLED
++CAPTION "Windows.Gaming.Input"
++FONT 8, "Ms Shell Dlg"
++{
++    COMBOBOX        IDC_WGI_DEVICES, 15, 10, 150, 60, CBS_DROPDOWNLIST | CBS_HASSTRINGS
++    COMBOBOX        IDC_WGI_INTERFACE, 175, 10, 131, 60, CBS_DROPDOWNLIST | CBS_HASSTRINGS
++    GROUPBOX        "Akselit", IDC_WGI_AXES, 15, 30, 214, 60
++    GROUPBOX        "POV-ohjaimet", IDC_WGI_POVS, 246, 30, 60, 60
++    GROUPBOX        "Painikkeet", IDC_WGI_BUTTONS, 15, 100, 291, 86
++    GROUPBOX        "", IDC_WGI_GAMEPAD, 15, 30, 291, 60
++    AUTOCHECKBOX    "Värinä", IDC_WGI_RUMBLE, 260, 30, 40, 10
++}
+diff --git a/dll/win32/winmm/lang/winmm_Fi.rc b/dll/win32/winmm/lang/winmm_Fi.rc
+new file mode 100644
+index 00000000000..7c44cb8565b
+--- /dev/null
++++ b/dll/win32/winmm/lang/winmm_Fi.rc
+@@ -0,0 +1,124 @@
++/*
++ * PROJECT:     ReactOS multimedia library
++ * LICENSE:     LGPL-2.1-or-later (https://spdx.org/licenses/LGPL-2.1-or-later)
++ * PURPOSE:     Finnish resource file, the strings of winmm.rc
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++STRINGTABLE
++BEGIN
++
++/* MMSYS errors */
++MMSYSERR_NOERROR, 		"Määritetty komento suoritettiin."
++MMSYSERR_ERROR, 		"Määrittämätön ulkoinen virhe."
++MMSYSERR_BADDEVICEID, 		"Käytetty laitetunnus on järjestelmän sallitun alueen ulkopuolella."
++MMSYSERR_NOTENABLED, 		"Ajuria ei otettu käyttöön."
++MMSYSERR_ALLOCATED, 		"Määritetty laite on jo käytössä. Odota, kunnes se vapautuu, ja yritä sitten uudelleen."
++MMSYSERR_INVALHANDLE, 		"Määritetty laitekahva on virheellinen."
++MMSYSERR_NODRIVER, 		"Järjestelmään ei ole asennettu ajuria!"
++MMSYSERR_NOMEM, 		"Muisti ei riitä tähän tehtävään. Lopeta yksi tai useampi sovellus vapauttaaksesi muistia ja yritä sitten uudelleen."
++MMSYSERR_NOTSUPPORTED, 		"Tätä toimintoa ei tueta. Selvitä Capabilities-toiminnolla, mitä toimintoja ja viestejä ajuri tukee."
++MMSYSERR_BADERRNUM, 		"Määritettyä virhenumeroa ei ole määritelty järjestelmässä."
++MMSYSERR_INVALFLAG, 		"Järjestelmätoiminnolle välitettiin virheellinen lippu."
++MMSYSERR_INVALPARAM, 		"Järjestelmätoiminnolle välitettiin virheellinen parametri."
++
++/* WAVE errors */
++WAVERR_BADFORMAT, 		"Määritettyä muotoa ei tueta tai sitä ei voi muuntaa. Selvitä tuetut muodot Capabilities-toiminnolla."
++WAVERR_STILLPLAYING, 		"Toimintoa ei voi suorittaa mediatietojen toiston aikana. Nollaa laite tai odota, kunnes toisto päättyy."
++WAVERR_UNPREPARED, 		"Wave-otsaketta ei valmisteltu. Valmistele otsake Prepare-toiminnolla ja yritä sitten uudelleen."
++WAVERR_SYNC, 			"Laitetta ei voi avata ilman WAVE_ALLOWSYNC-lippua. Käytä lippua ja yritä sitten uudelleen."
++
++/* MIDI errors */
++MIDIERR_UNPREPARED, 		"MIDI-otsaketta ei valmisteltu. Valmistele otsake Prepare-toiminnolla ja yritä sitten uudelleen."
++MIDIERR_STILLPLAYING, 		"Toimintoa ei voi suorittaa mediatietojen toiston aikana. Nollaa laite tai odota, kunnes toisto päättyy."
++MIDIERR_NOMAP, 			"MIDI-määritystä ei löytynyt. Ajurissa voi olla ongelma, tai MIDIMAP.CFG-tiedosto voi olla vioittunut tai puuttua."
++MIDIERR_NOTREADY, 		"Portti lähettää tietoja laitteeseen. Odota, kunnes tiedot on lähetetty, ja yritä sitten uudelleen."
++MIDIERR_NODEVICE, 		"Nykyinen MIDI Mapper -asetus viittaa MIDI-laitteeseen, jota ei ole asennettu järjestelmään."
++MIDIERR_INVALIDSETUP, 		"Nykyinen MIDI-asetus on vahingoittunut. Kopioi alkuperäinen MIDIMAP.CFG-tiedosto Windowsin SYSTEM-hakemistoon ja yritä sitten uudelleen."
++
++/* MCI errors */
++MCIERR_INVALID_DEVICE_ID, 	"Virheellinen MCI-laitetunnus. Käytä tunnusta, joka palautettiin MCI-laitetta avattaessa."
++MCIERR_UNRECOGNIZED_KEYWORD, 	"Ajuri ei tunnista määritettyä komennon parametria."
++MCIERR_UNRECOGNIZED_COMMAND,	"Ajuri ei tunnista määritettyä komentoa."
++MCIERR_HARDWARE, 		"Medialaitteessa on ongelma. Varmista, että se toimii oikein, tai ota yhteyttä laitteen valmistajaan."
++MCIERR_INVALID_DEVICE_NAME, 	"Määritetty laite ei ole auki, tai MCI ei tunnista sitä."
++MCIERR_OUT_OF_MEMORY, 		"Muisti ei riitä tähän tehtävään. Lopeta yksi tai useampi sovellus vapauttaaksesi muistia ja yritä sitten uudelleen."
++MCIERR_DEVICE_OPEN, 		"Tämä sovellus käyttää jo laitteen nimeä aliaksena. Käytä yksilöllistä aliasta."
++MCIERR_CANNOT_LOAD_DRIVER, 	"Määritetyn laiteajurin lataamisessa on tunnistamaton ongelma."
++MCIERR_MISSING_COMMAND_STRING, 	"Komentoa ei määritetty."
++MCIERR_PARAM_OVERFLOW, 		"Tulosmerkkijono oli liian suuri paluupuskuriin. Suurenna puskuria."
++MCIERR_MISSING_STRING_ARGUMENT, "Määritetty komento vaatii merkkijonoparametrin. Anna se."
++MCIERR_BAD_INTEGER, 		"Määritetty kokonaisluku on virheellinen tälle komennolle."
++MCIERR_PARSER_INTERNAL, 	"Laiteajuri palautti virheellisen paluutyypin. Kysy laitteen valmistajalta uutta ajuria."
++MCIERR_DRIVER_INTERNAL, 	"Laiteajurissa on ongelma. Kysy laitteen valmistajalta uutta ajuria."
++MCIERR_MISSING_PARAMETER, 	"Määritetty komento vaatii parametrin. Anna se."
++MCIERR_UNSUPPORTED_FUNCTION, 	"Käyttämäsi MCI-laite ei tue määritettyä komentoa."
++MCIERR_FILE_NOT_FOUND, 		"Määritettyä tiedostoa ei löydy. Varmista, että polku ja tiedostonimi ovat oikein."
++MCIERR_DEVICE_NOT_READY, 	"Laiteajuri ei ole valmis."
++MCIERR_INTERNAL, 		"MCI:n alustuksessa tapahtui virhe. Yritä käynnistää Windows uudelleen."
++MCIERR_DRIVER, 			"Laiteajurissa on ongelma. Ajuri on suljettu. Virhettä ei voi lukea."
++MCIERR_CANNOT_USE_ALL, 		"Laitenimeä 'all' ei voi käyttää määritetyn komennon kanssa."
++MCIERR_MULTIPLE, 		"Virheitä tapahtui useammassa kuin yhdessä laitteessa. Määritä kukin komento ja laite erikseen selvittääksesi, mitkä laitteet aiheuttivat virheen."
++MCIERR_EXTENSION_NOT_FOUND, 	"Laitteen tyyppiä ei voi päätellä annetusta tiedostotunnisteesta."
++MCIERR_OUTOFRANGE, 		"Määritetty parametri on määritetyn komennon sallitun alueen ulkopuolella."
++MCIERR_FLAGS_NOT_COMPATIBLE, 	"Määritettyjä parametreja ei voi käyttää yhdessä."
++MCIERR_FILE_NOT_SAVED, 		"Määritettyä tiedostoa ei voi tallentaa. Varmista, että levytilaa on riittävästi tai että verkkoyhteys on yhä olemassa."
++MCIERR_DEVICE_TYPE_REQUIRED, 	"Määritettyä laitetta ei löydy. Varmista, että se on asennettu ja että laitteen nimi on kirjoitettu oikein."
++MCIERR_DEVICE_LOCKED, 		"Määritettyä laitetta suljetaan parhaillaan. Odota muutama sekunti ja yritä sitten uudelleen."
++MCIERR_DUPLICATE_ALIAS, 	"Määritetty alias on jo käytössä tässä sovelluksessa. Käytä yksilöllistä aliasta."
++MCIERR_BAD_CONSTANT, 		"Määritetty parametri on virheellinen tälle komennolle."
++MCIERR_MUST_USE_SHAREABLE, 	"Laiteajuri on jo käytössä. Jaa se käyttämällä 'shareable'-parametria jokaisessa 'open'-komennossa."
++MCIERR_MISSING_DEVICE_NAME, 	"Määritetty komento vaatii aliaksen, tiedoston, ajurin tai laitteen nimen. Anna jokin niistä."
++MCIERR_BAD_TIME_FORMAT, 	"Aikamuodolle määritetty arvo on virheellinen. Katso kelvolliset muodot MCI:n ohjeista."
++MCIERR_NO_CLOSING_QUOTE, 	"Parametrin arvosta puuttuu loppulainausmerkki. Lisää se."
++MCIERR_DUPLICATE_FLAGS, 	"Parametri tai arvo määritettiin kahdesti. Määritä se vain kerran."
++MCIERR_INVALID_FILE, 		"Määritettyä tiedostoa ei voi toistaa määritetyllä MCI-laitteella. Tiedosto voi olla vioittunut tai väärässä muodossa."
++MCIERR_NULL_PARAMETER_BLOCK, 	"MCI:lle välitettiin tyhjä parametrilohko."
++MCIERR_UNNAMED_RESOURCE, 	"Nimeämätöntä tiedostoa ei voi tallentaa. Anna tiedostonimi."
++MCIERR_NEW_REQUIRES_ALIAS, 	"Kun käytät 'new'-parametria, sinun on määritettävä alias."
++MCIERR_NOTIFY_ON_AUTO_OPEN, 	"'notify'-lippua ei voi käyttää automaattisesti avattujen laitteiden kanssa."
++MCIERR_NO_ELEMENT_ALLOWED, 	"Tiedostonimeä ei voi käyttää määritetyn laitteen kanssa."
++MCIERR_NONAPPLICABLE_FUNCTION, 	"Komentoja ei voi suorittaa määritetyssä järjestyksessä. Korjaa komentojen järjestys ja yritä sitten uudelleen."
++MCIERR_ILLEGAL_FOR_AUTO_OPEN, 	"Määritettyä komentoa ei voi suorittaa automaattisesti avatulle laitteelle. Odota, kunnes laite on suljettu, ja yritä sitten uudelleen."
++MCIERR_FILENAME_REQUIRED, 	"Tiedostonimi on virheellinen. Varmista, että tiedostonimessä on enintään 8 merkkiä, piste ja tunniste."
++MCIERR_EXTRA_CHARACTERS, 	"Lainausmerkkeihin suljetun merkkijonon jälkeen ei voi olla ylimääräisiä merkkejä."
++MCIERR_DEVICE_NOT_INSTALLED, 	"Määritettyä laitetta ei ole asennettu järjestelmään. Asenna laite Ohjauspaneelin Ajurit-toiminnolla."
++MCIERR_GET_CD, 			"Määritettyä tiedostoa tai MCI-laitetta ei voi käyttää. Yritä vaihtaa hakemistoa tai käynnistää tietokone uudelleen."
++MCIERR_SET_CD, 			"Määritettyä tiedostoa tai MCI-laitetta ei voi käyttää, koska sovellus ei voi vaihtaa hakemistoa."
++MCIERR_SET_DRIVE, 		"Määritettyä tiedostoa tai MCI-laitetta ei voi käyttää, koska sovellus ei voi vaihtaa asemaa."
++MCIERR_DEVICE_LENGTH, 		"Määritä laitteen tai ajurin nimi, jossa on alle 79 merkkiä."
++MCIERR_DEVICE_ORD_LENGTH, 	"Määritä laitteen tai ajurin nimi, jossa on alle 69 merkkiä."
++MCIERR_NO_INTEGER, 		"Määritetty komento vaatii kokonaislukuparametrin. Anna se."
++MCIERR_WAVE_OUTPUTSINUSE, 	"Kaikki wave-laitteet, jotka voivat toistaa nykyisen muotoisia tiedostoja, ovat käytössä. Odota, kunnes jokin wave-laite vapautuu, ja yritä sitten uudelleen."
++MCIERR_WAVE_SETOUTPUTINUSE, 	"Nykyistä wave-laitetta ei voi asettaa toistolaitteeksi, koska se on käytössä. Odota, kunnes laite vapautuu, ja yritä sitten uudelleen."
++MCIERR_WAVE_INPUTSINUSE, 	"Kaikki wave-laitteet, jotka voivat tallentaa nykyisen muotoisia tiedostoja, ovat käytössä. Odota, kunnes jokin wave-laite vapautuu, ja yritä sitten uudelleen."
++MCIERR_WAVE_SETINPUTINUSE, 	"Nykyistä wave-laitetta ei voi asettaa tallennuslaitteeksi, koska se on käytössä. Odota, kunnes laite vapautuu, ja yritä sitten uudelleen."
++MCIERR_WAVE_OUTPUTUNSPECIFIED,	"Mitä tahansa yhteensopivaa aaltomuodon toistolaitetta voidaan käyttää."
++MCIERR_WAVE_INPUTUNSPECIFIED, 	"Mitä tahansa yhteensopivaa aaltomuodon tallennuslaitetta voidaan käyttää."
++MCIERR_WAVE_OUTPUTSUNSUITABLE, 	"Asennettuna ei ole wave-laitetta, joka voi toistaa nykyisen muotoisia tiedostoja. Asenna wave-laite Ajurit-toiminnolla."
++MCIERR_WAVE_SETOUTPUTUNSUITABLE,"Laite, jolla yrität toistaa, ei tunnista nykyistä tiedostomuotoa."
++MCIERR_WAVE_INPUTSUNSUITABLE, 	"Asennettuna ei ole wave-laitetta, joka voi tallentaa nykyisen muotoisia tiedostoja. Asenna wave-laite Ajurit-toiminnolla."
++MCIERR_WAVE_SETINPUTUNSUITABLE, "Laite, jolta yrität tallentaa, ei tunnista nykyistä tiedostomuotoa."
++MCIERR_NO_WINDOW, 		"Näyttöikkunaa ei ole."
++MCIERR_CREATEWINDOW, 		"Ikkunaa ei voitu luoda tai käyttää."
++MCIERR_FILE_READ, 		"Määritettyä tiedostoa ei voi lukea. Varmista, että tiedosto on yhä olemassa, tai tarkista levy tai verkkoyhteys."
++MCIERR_FILE_WRITE, 		"Määritettyyn tiedostoon ei voi kirjoittaa. Varmista, että levytilaa on riittävästi tai että verkkoyhteys on yhä olemassa."
++MCIERR_SEQ_DIV_INCOMPATIBLE, 	"Aikamuodot ""song pointer"" ja SMPTE ovat toisensa poissulkevia. Niitä ei voi käyttää yhdessä."
++MCIERR_SEQ_NOMIDIPRESENT, 	"Järjestelmään ei ole asennettu MIDI-laitteita. Asenna MIDI-ajuri Ohjauspaneelin Ajurit-toiminnolla."
++MCIERR_SEQ_PORT_INUSE, 		"Määritetty MIDI-portti on jo käytössä. Odota, kunnes se vapautuu, ja yritä sitten uudelleen."
++MCIERR_SEQ_PORT_MAPNODEVICE, 	"Nykyinen MIDI Mapper -asetus viittaa MIDI-laitteeseen, jota ei ole asennettu järjestelmään."
++MCIERR_SEQ_PORT_MISCERROR, 	"Määritetyssä portissa tapahtui virhe."
++MCIERR_SEQ_PORT_NONEXISTENT, 	"Määritettyä MIDI-laitetta ei ole asennettu järjestelmään. Asenna MIDI-laite Ohjauspaneelin Ajurit-toiminnolla."
++MCIERR_SEQ_PORTUNSPECIFIED, 	"Järjestelmälle ei ole määritetty nykyistä MIDI-porttia."
++MCIERR_SEQ_TIMER, 		"Muut sovellukset käyttävät kaikkia multimediaajastimia. Lopeta jokin näistä sovelluksista ja yritä sitten uudelleen."
++
++/* mixer UI */
++IDS_MAPPER_NAME,		"Wine-äänimäärittäjä"
++IDS_VOLUME,			"Äänenvoimakkuus"
++IDS_MASTER_VOLUME,		"Päääänenvoimakkuus"
++IDS_MUTE,			"Mykistä"
++
++END
+diff --git a/dll/win32/winmm/winmm.rc b/dll/win32/winmm/winmm.rc
+index 2d23fdf2e2e..2adf0f7bf7a 100644
+--- a/dll/win32/winmm/winmm.rc
++++ b/dll/win32/winmm/winmm.rc
+@@ -138,3 +138,8 @@ IDS_MASTER_VOLUME,		"Master Volume"
+ IDS_MUTE,			"Mute"
+ 
+ END
++
++#ifdef LANGUAGE_FI_FI
++#pragma code_page(65001)
++    #include "lang/winmm_Fi.rc"
++#endif
+-- 
+2.56.0
+
+From c724e582e5dbd6e0e21bf357f53bed7eb23c93a2 Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 23:38:13 +0200
+Subject: [PATCH] [CONHOST][PROGMAN] Add Finnish (fi-FI) translation
+
+Problem: The console host's menus and settings dialogs and Program
+Manager were in English on a Finnish system.
+
+Why: conhost.rc and progman's new_resources.rc carry their English
+resources themselves and have no lang/ files.
+
+How: Translate conhost.rc's English block and the dialogs, menu,
+accelerators and strings of new_resources.rc into lang/fi-FI.rc of
+each, with the same ids and controls, and include them under
+LANGUAGE_FI_FI with the UTF-8 code page.
+---
+ base/shell/progman/lang/fi-FI.rc  | 240 ++++++++++++++++++++++++++++++
+ base/shell/progman/progman.rc     |   5 +
+ base/system/conhost/conhost.rc    |   5 +
+ base/system/conhost/lang/fi-FI.rc |  96 ++++++++++++
+ 4 files changed, 346 insertions(+)
+ create mode 100644 base/shell/progman/lang/fi-FI.rc
+ create mode 100644 base/system/conhost/lang/fi-FI.rc
+
+diff --git a/base/shell/progman/lang/fi-FI.rc b/base/shell/progman/lang/fi-FI.rc
+new file mode 100644
+index 00000000000..d393314541c
+--- /dev/null
++++ b/base/shell/progman/lang/fi-FI.rc
+@@ -0,0 +1,240 @@
++/*
++ * PROJECT:     ReactOS Program Manager
++ * LICENSE:     GPL-2.0-or-later (https://spdx.org/licenses/GPL-2.0-or-later)
++ * PURPOSE:     Finnish resource file, the resources of new_resources.rc
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++IDD_NEW DIALOGEX 0, 0, 240, 70
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Uusi objekti"
++FONT 8, "MS Shell Dlg", 0, 0, 0x1
++BEGIN
++    GROUPBOX        "",IDC_STATIC,5,5,165,44
++    AUTORADIOBUTTON "Ohjelma&ryhmä",PM_NEW_GROUP,10,4,66,11,WS_GROUP | WS_TABSTOP
++    AUTORADIOBUTTON "&Henkilökohtainen",PM_PERSONAL_GROUP,20,15,44,14,WS_GROUP | WS_TABSTOP
++    AUTORADIOBUTTON "&Yhteinen",PM_COMMON_GROUP,73,15,39,14
++    LTEXT           "&Muoto:",PM_FORMAT_TXT,20,33,35,11
++    COMBOBOX        PM_FORMAT,61,31,104,15,CBS_DROPDOWNLIST | WS_TABSTOP
++    AUTORADIOBUTTON "Ohjelma&kohde",PM_NEW_PROGRAM,10,52,59,12,WS_GROUP | WS_TABSTOP
++    DEFPUSHBUTTON   "OK",IDOK,175,5,60,15
++    PUSHBUTTON      "Peruuta",IDCANCEL,175,25,60,15
++    PUSHBUTTON      "&Ohje",IDHELP,175,49,60,15
++END
++
++IDD_COPY_MOVE DIALOGEX 0, 0, 250, 65
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Kopioi ohjelma"
++FONT 8, "MS Shell Dlg", 0, 0, 0x0
++BEGIN
++    LTEXT           "Kopioi ohjelma:",PM_COPY_MOVE_TXT,5,5,70,10
++    LTEXT           "P",PM_PROGRAM,80,5,100,10
++    LTEXT           "Ryhmästä:",IDC_STATIC,5,18,70,10
++    LTEXT           "G",PM_FROM_GROUP,80,18,100,10
++    LTEXT           "&Ryhmään:",IDC_STATIC,5,32,70,10
++    COMBOBOX        PM_TO_GROUP,5,46,140,50,CBS_DROPDOWNLIST | WS_TABSTOP
++    DEFPUSHBUTTON   "OK",IDOK,185,5,60,15
++    PUSHBUTTON      "Peruuta",IDCANCEL,185,25,60,15
++    PUSHBUTTON      "&Ohje",IDHELP,185,45,60,15
++END
++
++IDD_GROUP DIALOGEX 0, 0, 250, 65
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Ohjelmaryhmän ominaisuudet"
++FONT 8, "MS Shell Dlg", 0, 0, 0x0
++BEGIN
++    LTEXT           "&Kuvaus:",IDC_STATIC,5,16,50,11
++    EDITTEXT        PM_DESCRIPTION,60,14,120,15,ES_AUTOHSCROLL
++    LTEXT           "&Ryhmätiedosto:",IDC_STATIC,5,38,50,11
++    EDITTEXT        PM_FILE,60,35,120,15,ES_AUTOHSCROLL
++    DEFPUSHBUTTON   "OK",IDOK,185,5,60,15
++    PUSHBUTTON      "Peruuta",IDCANCEL,185,25,60,15
++    PUSHBUTTON      "&Ohje",IDHELP,185,45,60,15
++END
++
++IDD_PROGRAM DIALOGEX 0, 0, 270, 105
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Ohjelman ominaisuudet"
++FONT 8, "MS Shell Dlg", 0, 0, 0x0
++BEGIN
++    LTEXT           "&Kuvaus:",IDC_STATIC,5,11,65,10
++    EDITTEXT        PM_DESCRIPTION,75,7,115,15,ES_AUTOHSCROLL
++    LTEXT           "&Komentorivi:",IDC_STATIC,5,26,65,10
++    EDITTEXT        PM_COMMAND_LINE,75,23,115,15,ES_AUTOHSCROLL
++    LTEXT           "&Työhakemisto:",IDC_STATIC,5,41,65,10
++    EDITTEXT        PM_DIRECTORY,75,39,115,15,ES_AUTOHSCROLL
++    LTEXT           "&Pikanäppäin:",IDC_STATIC,5,56,65,10
++    CONTROL         "",PM_HOT_KEY,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,75,55,115,15
++    ICON            "",PM_ICON,24,72,20,20
++    CHECKBOX        "&Suorita pienennettynä",PM_SYMBOL,75,74,115,10
++    CONTROL         "Suorita erillisessä &muistitilassa",PM_NEW_VDM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,75,87,115,11
++    DEFPUSHBUTTON   "OK",IDOK,195,5,70,15
++    PUSHBUTTON      "Peruuta",IDCANCEL,195,25,70,15
++    PUSHBUTTON      "&Selaa...",PM_BROWSE,195,45,70,15
++    PUSHBUTTON      "Vaihda &kuvake...",PM_OTHER_SYMBOL,195,65,70,15
++    PUSHBUTTON      "&Ohje",IDHELP,195,85,70,15
++END
++
++IDD_SYMBOL DIALOGEX 0, 0, 240, 85
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Vaihda kuvake"
++FONT 8, "MS Shell Dlg", 0, 0, 0x0
++BEGIN
++    LTEXT           "&Tiedostonimi:",IDC_STATIC,5,11,50,10
++    EDITTEXT        PM_ICON_FILE,60,9,110,15,ES_AUTOHSCROLL
++    LTEXT           "Nykyinen &kuvake:",IDC_STATIC,5,32,50,10
++    DEFPUSHBUTTON   "OK",IDOK,175,5,60,15
++    PUSHBUTTON      "Peruuta",IDCANCEL,175,25,60,15
++    PUSHBUTTON      "&Selaa...",PM_BROWSE,175,45,60,15
++    PUSHBUTTON      "&Ohje",IDHELP,175,65,60,15
++    LISTBOX         PM_SYMBOL_LIST,5,45,165,35,LBS_OWNERDRAWFIXED | LBS_NOINTEGRALHEIGHT | LBS_MULTICOLUMN | LBS_DISABLENOSCROLL | WS_HSCROLL | WS_TABSTOP
++END
++
++IDD_EXECUTE DIALOGEX 0, 0, 200, 85
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Suorita ohjelma"
++FONT 8, "MS Shell Dlg", 0, 0, 0x0
++BEGIN
++    LTEXT           "&Komentorivi:",IDC_STATIC,5,15,125,10
++    COMBOBOX        PM_COMMAND,5,26,125,15,CBS_DROPDOWN | CBS_HASSTRINGS | CBS_AUTOHSCROLL | CBS_SORT | WS_VSCROLL | WS_TABSTOP
++    CHECKBOX        "&Suorita pienennettynä",PM_SYMBOL,5,46,115,10
++    CONTROL         "Suorita erillisessä &muistitilassa",PM_NEW_VDM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,59,115,11
++    DEFPUSHBUTTON   "OK",IDOK,135,5,60,15
++    PUSHBUTTON      "Peruuta",IDCANCEL,135,25,60,15
++    PUSHBUTTON      "&Selaa...",PM_BROWSE,135,45,60,15
++    PUSHBUTTON      "&Ohje",IDHELP,135,65,60,15
++END
++
++
++/////////////////////////////////////////////////////////////////////////////
++//
++// Menu
++//
++
++MAIN_MENU MENU
++BEGIN
++    POPUP "&Tiedosto"
++    BEGIN
++        MENUITEM "&Uusi...",                     PM_NEW
++        MENUITEM "&Avaa\tEnter",                PM_OPEN
++        MENUITEM "&Siirrä...\tF7",                PM_MOVE
++        MENUITEM "&Kopioi...\tF8",                PM_COPY
++        MENUITEM "&Poista\tDel",                PM_DELETE
++        MENUITEM "&Ominaisuudet\tAlt+Enter",      PM_ATTRIBUTES
++        MENUITEM SEPARATOR
++        MENUITEM "S&uorita...",                 PM_EXECUTE
++        MENUITEM SEPARATOR
++        MENUITEM "&Lopeta Windows",               PM_EXIT
++    END
++    POPUP "&Asetukset"
++    BEGIN
++        MENUITEM "&Järjestä automaattisesti",      PM_AUTO_ARRANGE
++        MENUITEM "&Pienennä suoritettaessa",            PM_MIN_ON_RUN
++        MENUITEM "&Tallenna asetukset lopetettaessa",      PM_SAVE_SETTINGS
++        MENUITEM SEPARATOR
++        MENUITEM "Tallenna asetukset &nyt",          PM_SAVE_SETTINGS_NOW
++    END
++    POPUP "&Ikkunat"
++    BEGIN
++        MENUITEM "&Limittäin\tShift+F5",       PM_OVERLAP
++        MENUITEM "&Vierekkäin\tShift+F4",     PM_SIDE_BY_SIDE
++        MENUITEM "&Järjestä kuvakkeet",              PM_ARRANGE
++    END
++    POPUP "&Ohje"
++    BEGIN
++        MENUITEM "&Sisällys\tF1",               PM_CONTENTS
++        MENUITEM "&Tietoja Ohjelmanhallinnasta",      PM_ABOUT
++    END
++END
++
++
++/////////////////////////////////////////////////////////////////////////////
++//
++// Accelerator
++//
++
++IDA_ACCEL ACCELERATORS
++BEGIN
++    VK_RETURN,      PM_ATTRIBUTES,          VIRTKEY, ALT, NOINVERT
++    VK_F1,          PM_CONTENTS,            VIRTKEY, NOINVERT
++    VK_F4,          PM_SIDE_BY_SIDE,        VIRTKEY, SHIFT, NOINVERT
++    VK_F5,          PM_OVERLAP,             VIRTKEY, SHIFT, NOINVERT
++    VK_F7,          PM_MOVE,                VIRTKEY, NOINVERT
++    VK_F8,          PM_COPY,                VIRTKEY, NOINVERT
++    VK_DELETE,      PM_DELETE,              VIRTKEY, NOINVERT
++END
++
++
++/////////////////////////////////////////////////////////////////////////////
++//
++// DESIGNINFO
++//
++
++#ifdef APSTUDIO_INVOKED
++GUIDELINES DESIGNINFO
++BEGIN
++    IDD_NEW, DIALOG
++    BEGIN
++    END
++
++    IDD_COPY_MOVE, DIALOG
++    BEGIN
++    END
++
++    IDD_GROUP, DIALOG
++    BEGIN
++    END
++
++    IDD_PROGRAM, DIALOG
++    BEGIN
++    END
++
++    IDD_SYMBOL, DIALOG
++    BEGIN
++    END
++
++    IDD_EXECUTE, DIALOG
++    BEGIN
++    END
++END
++#endif    // APSTUDIO_INVOKED
++
++
++/////////////////////////////////////////////////////////////////////////////
++//
++// String Table
++//
++
++STRINGTABLE
++BEGIN
++    IDS_PROGRAM_MANAGER     "Ohjelmanhallinta"
++    IDS_ERROR               "VIRHE"
++    IDS_WARNING             "VAROITUS"
++    IDS_INFO                "Tietoja"
++    IDS_DELETE              "Poista"
++    IDS_DELETE_GROUP_s      "Poistetaanko ryhmä `%s'?"
++    IDS_DELETE_PROGRAM_s    "Poistetaanko ohjelma `%s'?"
++    IDS_MOVE_PROGRAM_1      "Siirrä ohjelma"
++    IDS_MOVE_PROGRAM_2      "Siirrä ohjelma:"
++    IDS_NOT_IMPLEMENTED     "Ei toteutettu"
++    IDS_FILE_READ_ERROR_s   "Virhe luettaessa kohdetta `%s'."
++    IDS_FILE_WRITE_ERROR_s  "Virhe kirjoitettaessa kohdetta `%s'."
++    IDS_GRPFILE_READ_ERROR_s 
++                            "Ryhmätiedostoa `%s' ei voi avata.\nYritetäänkö sitä myöhemmin uudelleen?"
++    IDS_OUT_OF_MEMORY       "Muisti loppui."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_WINHELP_ERROR       "Ohje ei ole käytettävissä."
++    IDS_UNKNOWN_FEATURE_s   "Tuntematon ominaisuus kohteessa %s"
++    IDS_FILE_NOT_OVERWRITTEN_s "Tiedosto `%s' on olemassa. Sitä ei korvattu."
++    IDS_SAVE_GROUP_AS_s     "Tallenna ryhmä nimellä `%s', jotta alkuperäisiä tiedostoja ei korvata."
++    IDS_ALL_FILES           "Kaikki tiedostot (*.*)"
++    IDS_PROGRAMS            "Ohjelmat (*.exe)"
++    IDS_LIBRARIES_DLL       "Kirjastot (*.dll)"
++    IDS_SYMBOL_FILES        "Kuvaketiedostot (*.ico;*.exe;*.dll)"
++    IDS_SYMBOLS_ICO         "Kuvakkeet (*.ico)"
++END
+diff --git a/base/shell/progman/progman.rc b/base/shell/progman/progman.rc
+index 0850e362c3a..22b698e165f 100644
+--- a/base/shell/progman/progman.rc
++++ b/base/shell/progman/progman.rc
+@@ -182,3 +182,8 @@ PUSHBUTTON    "&Help",             PM_HELP,   135, 65,  60, 15, WS_TABSTOP
+ #endif
+ 
+ #include "new_resources.rc"
++
++#ifdef LANGUAGE_FI_FI
++#pragma code_page(65001)
++    #include "lang/fi-FI.rc"
++#endif
+diff --git a/base/system/conhost/conhost.rc b/base/system/conhost/conhost.rc
+index c37ad018345..6d60558b2f3 100644
+--- a/base/system/conhost/conhost.rc
++++ b/base/system/conhost/conhost.rc
+@@ -114,6 +114,11 @@ FONT 8, "MS Shell Dlg"
+ 	COMBOBOX IDC_CNF_EDITION_MODE, 119, 69, 75, 60, CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
+ }
+ 
++#ifdef LANGUAGE_FI_FI
++#pragma code_page(65001)
++    #include "lang/fi-FI.rc"
++#endif
++
+ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+ 
+ /* @makedep: conhost.manifest */
+diff --git a/base/system/conhost/lang/fi-FI.rc b/base/system/conhost/lang/fi-FI.rc
+new file mode 100644
+index 00000000000..dc805a8421b
+--- /dev/null
++++ b/base/system/conhost/lang/fi-FI.rc
+@@ -0,0 +1,96 @@
++/*
++ * PROJECT:     ReactOS console host
++ * LICENSE:     LGPL-2.1-or-later (https://spdx.org/licenses/LGPL-2.1-or-later)
++ * PURPOSE:     Finnish resource file, the resources of conhost.rc
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++STRINGTABLE
++BEGIN
++    IDS_EDIT,               "&Muokkaa"
++    IDS_DEFAULT,            "&Oletusasetukset"
++    IDS_PROPERTIES,         "&Ominaisuudet"
++    IDS_MARK,               "&Merkitse"
++    IDS_COPY,               "&Kopioi"
++    IDS_PASTE,              "L&iitä"
++    IDS_SELECTALL,          "&Valitse kaikki"
++    IDS_SCROLL,             "&Vieritä"
++    IDS_SEARCH,             "&Etsi"
++    IDS_FNT_DISPLAY,        "Jokainen merkki on %1!u! kuvapistettä leveä ja %2!u! kuvapistettä korkea"
++    IDS_FNT_PREVIEW,        "Tämä on testi"
++    IDS_DLG_TIT_DEFAULT,    "Asetukset - oletusasetukset"
++    IDS_DLG_TIT_CURRENT,    "Asetukset - nykyiset asetukset"
++    IDS_DLG_TIT_ERROR,      "Määritysvirhe"
++    IDS_DLG_ERR_SBWINSIZE,  "Näyttöpuskurin koon on oltava vähintään ikkunan kokoinen."
++END
++
++IDD_OPTION DIALOG 36, 24, 140, 109
++STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Asetukset"
++FONT 8, "MS Shell Dlg"
++{
++        GROUPBOX "Kohdistimen koko", -1, 5, 5, 70, 54, BS_GROUPBOX
++	AUTORADIOBUTTON "&Pieni", IDC_OPT_CURSOR_SMALL, 9, 18, 50, 10, WS_TABSTOP
++	AUTORADIOBUTTON "&Keskikokoinen", IDC_OPT_CURSOR_MEDIUM, 9, 30, 50, 10, WS_TABSTOP
++	AUTORADIOBUTTON "&Suuri", IDC_OPT_CURSOR_LARGE, 9, 42, 50, 10, WS_TABSTOP
++
++        GROUPBOX "Komentohistoria", -1, 80, 5, 120, 54, BS_GROUPBOX
++        LTEXT "&Puskurin koko:", -1, 84, 20, 70, 10
++        EDITTEXT IDC_OPT_HIST_SIZE, 154, 18, 40, 12, WS_TABSTOP|WS_BORDER|ES_NUMBER
++        CONTROL "", IDC_OPT_HIST_SIZE_UD, "msctls_updown32", UDS_SETBUDDYINT|UDS_ALIGNRIGHT|UDS_AUTOBUDDY|UDS_ARROWKEYS|UDS_NOTHOUSANDS, 0, 0, 0, 0
++        AUTOCHECKBOX "Poista &kaksoiskappaleet", IDC_OPT_HIST_NODOUBLE, 84, 36, 100, 10, WS_TABSTOP|BS_MULTILINE
++
++        GROUPBOX "Ponnahdusvalikko", -1, 5, 61, 70, 42, BS_GROUPBOX
++        AUTOCHECKBOX "&Ctrl", IDC_OPT_CONF_CTRL, 9, 74, 60, 10, WS_TABSTOP
++        AUTOCHECKBOX "&Vaihto", IDC_OPT_CONF_SHIFT, 9, 86, 60, 10, WS_TABSTOP
++
++        GROUPBOX "Konsoli", -1, 80, 61, 120, 42, BS_GROUPBOX
++        AUTOCHECKBOX "&Pikamuokkaustila", IDC_OPT_QUICK_EDIT, 84, 74, 100, 10, WS_TABSTOP
++        AUTOCHECKBOX "&Lisäystila", IDC_OPT_INSERT_MODE, 84, 86, 100, 10, WS_TABSTOP
++}
++
++IDD_FONT DIALOG 36, 24, 140, 109
++STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Fontti"
++FONT 8, "MS Shell Dlg"
++{
++	LTEXT "&Fontti", -1, 5, 5, 50, 8
++	LISTBOX IDC_FNT_LIST_FONT, 5, 18, 90, 42, LBS_SORT|WS_VSCROLL
++	LTEXT "&Väri", -1, 100, 5, 50, 8
++	CONTROL "", IDC_FNT_COLOR_FG, "WineConColorPreview", 0L, 100, 18, 48, 16
++	CONTROL "", IDC_FNT_COLOR_BK, "WineConColorPreview", 0L, 100, 40, 48, 16
++	LTEXT "&Koko", -1, 158, 5, 40, 8
++	LISTBOX IDC_FNT_LIST_SIZE, 158, 18, 40, 60, WS_VSCROLL
++	CONTROL "", IDC_FNT_PREVIEW, "WineConFontPreview", 0L, 5, 60, 109, 40
++	LTEXT "", IDC_FNT_FONT_INFO, 128, 73, 80, 27
++}
++
++IDD_CONFIG DIALOG 36, 24, 140, 109
++STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Määritykset"
++FONT 8, "MS Shell Dlg"
++{
++	GROUPBOX "Puskurialue", -1, 10, 11, 100, 42, BS_GROUPBOX
++	LTEXT "&Leveys:", -1, 14, 25, 54, 9
++	EDITTEXT IDC_CNF_SB_WIDTH, 68, 23, 36, 12, WS_TABSTOP|WS_BORDER|ES_NUMBER
++	CONTROL "", IDC_CNF_SB_WIDTH_UD, "msctls_updown32", UDS_SETBUDDYINT|UDS_ALIGNRIGHT|UDS_AUTOBUDDY|UDS_ARROWKEYS|UDS_NOTHOUSANDS, 0, 0, 0, 0
++	LTEXT "&Korkeus:", -1, 14, 39, 54, 9
++	EDITTEXT IDC_CNF_SB_HEIGHT, 68, 37, 36, 12, WS_TABSTOP|WS_BORDER|ES_NUMBER
++	CONTROL "", IDC_CNF_SB_HEIGHT_UD, "msctls_updown32", UDS_SETBUDDYINT|UDS_ALIGNRIGHT|UDS_AUTOBUDDY|UDS_ARROWKEYS|UDS_NOTHOUSANDS, 0, 0, 0, 0
++
++	GROUPBOX "Ikkunan koko", -1, 10, 55, 100, 42
++	LTEXT "L&eveys:", -1, 14, 69, 54, 9
++	EDITTEXT IDC_CNF_WIN_WIDTH, 68, 67, 36, 12, WS_TABSTOP|WS_BORDER|ES_NUMBER
++	CONTROL "", IDC_CNF_WIN_WIDTH_UD, "msctls_updown32", UDS_SETBUDDYINT|UDS_ALIGNRIGHT|UDS_AUTOBUDDY|UDS_ARROWKEYS|UDS_NOTHOUSANDS, 0, 0, 0, 0
++	LTEXT "K&orkeus:", -1, 14, 83, 54, 9
++	EDITTEXT IDC_CNF_WIN_HEIGHT, 68, 81, 36, 12, WS_TABSTOP|WS_BORDER|ES_NUMBER
++	CONTROL "", IDC_CNF_WIN_HEIGHT_UD, "msctls_updown32", UDS_SETBUDDYINT|UDS_ALIGNRIGHT|UDS_AUTOBUDDY|UDS_ARROWKEYS|UDS_NOTHOUSANDS, 0, 0, 0, 0
++
++	GROUPBOX "Ohjelman päättyessä", -1, 115, 11, 85, 42, BS_GROUPBOX
++	AUTOCHECKBOX "&Sulje konsoli", IDC_CNF_CLOSE_EXIT, 119, 25, 75, 20, WS_TABSTOP
++
++	GROUPBOX "Muokkaus", -1, 115, 55, 85, 42
++	COMBOBOX IDC_CNF_EDITION_MODE, 119, 69, 75, 60, CBS_DROPDOWNLIST|WS_VSCROLL|WS_TABSTOP
++}
+-- 
+2.56.0
+
+From 88c3b3fa08660ab8ab482f1f7ece594eafd3219c Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 23:39:41 +0200
+Subject: [PATCH] [TZRES] Add Finnish (fi-FI) time zone names
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Problem: The time zone list of the Date and Time settings showed its
+names in English on a Finnish system.
+
+Why: The registry's MUI time zone values point at tzres's strings, and
+tzres had only English.
+
+How: Add lang/fi-FI.rc with every string of tzres.rc, by the same ids:
+"Länsi-Euroopan normaaliaika", "... kesäaika", and display names with
+the cities as Finnish writes them - "(UTC+02:00) Helsinki, Kiova, Riika,
+Sofia, Tallinna, Vilna". Include it under LANGUAGE_FI_FI.
+---
+ dll/win32/tzres/lang/fi-FI.rc | 435 ++++++++++++++++++++++++++++++++++
+ dll/win32/tzres/tzres.rc      |   5 +
+ 2 files changed, 440 insertions(+)
+ create mode 100644 dll/win32/tzres/lang/fi-FI.rc
+
+diff --git a/dll/win32/tzres/lang/fi-FI.rc b/dll/win32/tzres/lang/fi-FI.rc
+new file mode 100644
+index 00000000000..7784193ca52
+--- /dev/null
++++ b/dll/win32/tzres/lang/fi-FI.rc
+@@ -0,0 +1,435 @@
++/*
++ * PROJECT:     LiberNT Time Zone Resources
++ * LICENSE:     LGPL-2.1-or-later (https://spdx.org/licenses/LGPL-2.1-or-later)
++ * PURPOSE:     Finnish time zone display names
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++STRINGTABLE
++{
++  39616 "Afganistanin normaaliaika"
++  39617 "Afganistanin kesäaika"
++  39618 "(UTC+04:30) Kabul"
++  50192 "Alaskan normaaliaika"
++  50193 "Alaskan kesäaika"
++  50194 "(UTC-09:00) Alaska"
++  55200 "Aleuttien normaaliaika"
++  55201 "Aleuttien kesäaika"
++  55202 "(UTC-10:00) Aleutit"
++   4464 "Altain normaaliaika"
++   4465 "Altain kesäaika"
++   4466 "(UTC+07:00) Barnaul, Gorno-Altaisk"
++  41968 "Arabian normaaliaika"
++  41969 "Arabian kesäaika"
++  41970 "(UTC+03:00) Kuwait, Riad"
++  42704 "Arabian niemimaan normaaliaika"
++  42705 "Arabian niemimaan kesäaika"
++  42706 "(UTC+04:00) Abu Dhabi, Masqat"
++   8768 "Irakin normaaliaika"
++   8769 "Irakin kesäaika"
++   8770 "(UTC+03:00) Bagdad"
++  19584 "Argentiinan normaaliaika"
++  19585 "Argentiinan kesäaika"
++  19586 "(UTC-03:00) Buenos Aires"
++  25104 "Astrahanin normaaliaika"
++  25105 "Astrahanin kesäaika"
++  25106 "(UTC+04:00) Astrahan, Uljanovsk"
++  34224 "Atlantin normaaliaika"
++  34225 "Atlantin kesäaika"
++  34226 "(UTC-04:00) Atlantin aika (Kanada)"
++  47024 "Keski-Australian normaaliaika"
++  47025 "Keski-Australian kesäaika"
++  47026 "(UTC+09:30) Darwin"
++  44672 "Läntisen Keski-Australian normaaliaika"
++  44673 "Läntisen Keski-Australian kesäaika"
++  44674 "(UTC+08:45) Eucla"
++  30368 "Itä-Australian normaaliaika"
++  30369 "Itä-Australian kesäaika"
++  30370 "(UTC+10:00) Canberra, Melbourne, Sydney"
++  11312 "Azerbaidžanin normaaliaika"
++  11313 "Azerbaidžanin kesäaika"
++  11314 "(UTC+04:00) Baku"
++  18832 "Azorien normaaliaika"
++  18833 "Azorien kesäaika"
++  18834 "(UTC-01:00) Azorit"
++  50896 "Bahian normaaliaika"
++  50897 "Bahian kesäaika"
++  50898 "(UTC-03:00) Salvador"
++  48720 "Bangladeshin normaaliaika"
++  48721 "Bangladeshin kesäaika"
++  48722 "(UTC+06:00) Dhaka"
++  56576 "Valko-Venäjän normaaliaika"
++  56577 "Valko-Venäjän kesäaika"
++  56578 "(UTC+03:00) Minsk"
++  51968 "Bougainvillen normaaliaika"
++  51969 "Bougainvillen kesäaika"
++  51970 "(UTC+11:00) Bougainvillensaari"
++  25712 "Keski-Kanadan normaaliaika"
++  25713 "Keski-Kanadan kesäaika"
++  25714 "(UTC-06:00) Saskatchewan"
++   2000 "Kap Verden normaaliaika"
++   2001 "Kap Verden kesäaika"
++   2002 "(UTC-01:00) Kap Verden saaret"
++  29872 "Kaukasuksen normaaliaika"
++  29873 "Kaukasuksen kesäaika"
++  29874 "(UTC+04:00) Jerevan"
++  38928 "Keski-Australian normaaliaika"
++  38929 "Keski-Australian kesäaika"
++  38930 "(UTC+09:30) Adelaide"
++  36656 "Väli-Amerikan normaaliaika"
++  36657 "Väli-Amerikan kesäaika"
++  36658 "(UTC-06:00) Väli-Amerikka"
++   8176 "Keski-Aasian normaaliaika"
++   8177 "Keski-Aasian kesäaika"
++   8178 "(UTC+06:00) Astana"
++  56336 "Keski-Brasilian normaaliaika"
++  56337 "Keski-Brasilian kesäaika"
++  56338 "(UTC-04:00) Cuiabá"
++   4896 "Keski-Euroopan normaaliaika"
++   4897 "Keski-Euroopan kesäaika"
++   4898 "(UTC+01:00) Belgrad, Bratislava, Budapest, Ljubljana, Praha"
++   2976 "Keskieurooppalainen normaaliaika"
++   2977 "Keskieurooppalainen kesäaika"
++   2978 "(UTC+01:00) Sarajevo, Skopje, Varsova, Zagreb"
++  64416 "Keskisen Tyynenmeren normaaliaika"
++  64417 "Keskisen Tyynenmeren kesäaika"
++  64418 "(UTC+11:00) Salomonsaaret, Uusi-Kaledonia"
++  17456 "Keskinen normaaliaika"
++  17457 "Keskinen kesäaika"
++  17458 "(UTC-06:00) Keskinen aika (Yhdysvallat ja Kanada)"
++  32800 "Keskinen normaaliaika (Meksiko)"
++  32801 "Keskinen kesäaika (Meksiko)"
++  32802 "(UTC-06:00) Guadalajara, México, Monterrey"
++  62304 "Chathamsaarten normaaliaika"
++  62305 "Chathamsaarten kesäaika"
++  62306 "(UTC+12:45) Chathamsaaret"
++    160 "Kiinan normaaliaika"
++    161 "Kiinan kesäaika"
++    162 "(UTC+08:00) Peking, Chongqing, Hong Kong, Ürümqi"
++  17136 "Kuuban normaaliaika"
++  17137 "Kuuban kesäaika"
++  17138 "(UTC-05:00) Havanna"
++  50384 "Päivämäärärajan normaaliaika"
++  50385 "Päivämäärärajan kesäaika"
++  50386 "(UTC-12:00) Kansainvälinen päivämääräraja, länsi"
++  62720 "Itä-Afrikan normaaliaika"
++  62721 "Itä-Afrikan kesäaika"
++  62722 "(UTC+03:00) Nairobi"
++  65264 "Itä-Australian normaaliaika"
++  65265 "Itä-Australian kesäaika"
++  65266 "(UTC+10:00) Brisbane"
++  32128 "Itä-Euroopan normaaliaika"
++  32129 "Itä-Euroopan kesäaika"
++  32130 "(UTC+02:00) Chişinău"
++  64096 "Itäisen Etelä-Amerikan normaaliaika"
++  64097 "Itäisen Etelä-Amerikan kesäaika"
++  64098 "(UTC-03:00) Brasília"
++  58592 "Pääsiäissaaren normaaliaika"
++  58593 "Pääsiäissaaren kesäaika"
++  58594 "(UTC-06:00) Pääsiäissaari"
++  30800 "Itäinen normaaliaika"
++  30801 "Itäinen kesäaika"
++  30802 "(UTC-05:00) Itäinen aika (Yhdysvallat ja Kanada)"
++  59536 "Itäinen normaaliaika (Meksiko)"
++  59537 "Itäinen kesäaika (Meksiko)"
++  59538 "(UTC-05:00) Chetumal"
++  59424 "Egyptin normaaliaika"
++  59425 "Egyptin kesäaika"
++  59426 "(UTC+02:00) Kairo"
++  45952 "Jekaterinburgin normaaliaika"
++  45953 "Jekaterinburgin kesäaika"
++  45954 "(UTC+05:00) Jekaterinburg"
++  25680 "Fidžin normaaliaika"
++  25681 "Fidžin kesäaika"
++  25682 "(UTC+12:00) Fidži"
++  63264 "FLE-normaaliaika"
++  63265 "FLE-kesäaika"
++  63266 "(UTC+02:00) Helsinki, Kiova, Riika, Sofia, Tallinna, Vilna"
++    416 "Georgian normaaliaika"
++    417 "Georgian kesäaika"
++    418 "(UTC+04:00) Tbilisi"
++   7408 "GMT-normaaliaika"
++   7409 "GMT-kesäaika"
++   7410 "(UTC+00:00) Dublin, Edinburgh, Lissabon, Lontoo"
++  58096 "Grönlannin normaaliaika"
++  58097 "Grönlannin kesäaika"
++  58098 "(UTC-03:00) Grönlanti"
++  47168 "Greenwichin normaaliaika"
++  47169 "Greenwichin kesäaika"
++  47170 "(UTC+00:00) Monrovia, Reykjavík"
++  24192 "GTB-normaaliaika"
++  24193 "GTB-kesäaika"
++  24194 "(UTC+02:00) Ateena, Bukarest"
++   2896 "Haitin normaaliaika"
++   2897 "Haitin kesäaika"
++   2898 "(UTC-05:00) Haiti"
++  53376 "Havaijin normaaliaika"
++  53377 "Havaijin kesäaika"
++  53378 "(UTC-10:00) Havaiji"
++  22400 "Intian normaaliaika"
++  22401 "Intian kesäaika"
++  22402 "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi"
++   5568 "Iranin normaaliaika"
++   5569 "Iranin kesäaika"
++   5570 "(UTC+03:30) Teheran"
++  47968 "Israelin normaaliaika"
++  47969 "Israelin kesäaika"
++  47970 "(UTC+02:00) Jerusalem"
++  17232 "Jordanian normaaliaika"
++  17233 "Jordanian kesäaika"
++  17234 "(UTC+02:00) Amman"
++  14720 "Kaliningradin normaaliaika"
++  14721 "Kaliningradin kesäaika"
++  14722 "(UTC+02:00) Kaliningrad"
++    982 "Kamtšatkan normaaliaika"
++    981 "Kamtšatkan kesäaika"
++   1420 "(UTC+12:00) Petropavlovsk-Kamtšatski - vanha"
++  62048 "Korean normaaliaika"
++  62049 "Korean kesäaika"
++  62050 "(UTC+09:00) Soul"
++  50768 "Libyan normaaliaika"
++  50769 "Libyan kesäaika"
++  50770 "(UTC+02:00) Tripoli"
++  16768 "Linesaarten normaaliaika"
++  16769 "Linesaarten kesäaika"
++  16770 "(UTC+14:00) Kiritimati"
++   8656 "Lord Howen normaaliaika"
++   8657 "Lord Howen kesäaika"
++   8658 "(UTC+10:30) Lord Howensaari"
++   8832 "Magadanin normaaliaika"
++   8833 "Magadanin kesäaika"
++   8834 "(UTC+11:00) Magadan"
++  13120 "Magallanesin normaaliaika"
++  13121 "Magallanesin kesäaika"
++  13122 "(UTC-03:00) Punta Arenas"
++  20736 "Marquesassaarten normaaliaika"
++  20737 "Marquesassaarten kesäaika"
++  20738 "(UTC-09:30) Marquesassaaret"
++  60896 "Mauritiuksen normaaliaika"
++  60897 "Mauritiuksen kesäaika"
++  60898 "(UTC+04:00) Port Louis"
++     32 "Keski-Atlantin normaaliaika"
++     31 "Keski-Atlantin kesäaika"
++   1760 "(UTC-02:00) Keski-Atlantti - vanha"
++  15968 "Lähi-idän normaaliaika"
++  15969 "Lähi-idän kesäaika"
++  15970 "(UTC+02:00) Beirut"
++  27968 "Montevideon normaaliaika"
++  27969 "Montevideon kesäaika"
++  27970 "(UTC-03:00) Montevideo"
++   2992 "Marokon normaaliaika"
++   2993 "Marokon kesäaika"
++   2994 "(UTC+01:00) Casablanca"
++  34352 "Vuoristonormaaliaika"
++  34353 "Vuoristokesäaika"
++  34354 "(UTC-07:00) Vuoristoaika (Yhdysvallat ja Kanada)"
++   7248 "Vuoristonormaaliaika (Meksiko)"
++   7249 "Vuoristokesäaika (Meksiko)"
++   7250 "(UTC-07:00) Chihuahua, La Paz, Mazatlan"
++  21104 "Myanmarin normaaliaika"
++  21105 "Myanmarin kesäaika"
++  21106 "(UTC+06:30) Yangon (Rangoon)"
++  30704 "Pohjoisen Keski-Aasian normaaliaika"
++  30705 "Pohjoisen Keski-Aasian kesäaika"
++  30706 "(UTC+07:00) Novosibirsk"
++   6208 "Namibian normaaliaika"
++   6209 "Namibian kesäaika"
++   6210 "(UTC+02:00) Windhoek"
++   1216 "Nepalin normaaliaika"
++   1217 "Nepalin kesäaika"
++   1218 "(UTC+05:45) Kathmandu"
++  54896 "Uuden-Seelannin normaaliaika"
++  54897 "Uuden-Seelannin kesäaika"
++  54898 "(UTC+12:00) Auckland, Wellington"
++   9504 "Newfoundlandin normaaliaika"
++   9505 "Newfoundlandin kesäaika"
++   9506 "(UTC-03:30) Newfoundland"
++  47440 "Norfolkin normaaliaika"
++  47441 "Norfolkin kesäaika"
++  47442 "(UTC+11:00) Norfolkinsaari"
++  19056 "Itäisen Pohjois-Aasian normaaliaika"
++  19057 "Itäisen Pohjois-Aasian kesäaika"
++  19058 "(UTC+08:00) Irkutsk"
++    304 "Pohjois-Aasian normaaliaika"
++    305 "Pohjois-Aasian kesäaika"
++    306 "(UTC+07:00) Krasnojarsk"
++  35888 "Pohjois-Korean normaaliaika"
++  35889 "Pohjois-Korean kesäaika"
++  35890 "(UTC+09:00) Pyongyang"
++  55952 "Omskin normaaliaika"
++  55953 "Omskin kesäaika"
++  55954 "(UTC+06:00) Omsk"
++  65008 "Tyynenmeren Etelä-Amerikan normaaliaika"
++  65009 "Tyynenmeren Etelä-Amerikan kesäaika"
++  65010 "(UTC-04:00) Santiago"
++  11232 "Tyynenmeren normaaliaika"
++  11233 "Tyynenmeren kesäaika"
++  11234 "(UTC-08:00) Tyynenmeren aika (Yhdysvallat ja Kanada)"
++  15584 "Tyynenmeren normaaliaika (Meksiko)"
++  15585 "Tyynenmeren kesäaika (Meksiko)"
++  15586 "(UTC-08:00) Baja California"
++  28752 "Pakistanin normaaliaika"
++  28753 "Pakistanin kesäaika"
++  28754 "(UTC+05:00) Islamabad, Karachi"
++  50224 "Paraguayn normaaliaika"
++  50225 "Paraguayn kesäaika"
++  50226 "(UTC-04:00) Asunción"
++  53760 "Qyzylordan normaaliaika"
++  53761 "Qyzylordan kesäaika"
++  53762 "(UTC+05:00) Qyzylorda"
++  45104 "Romaaninen normaaliaika"
++  45105 "Romaaninen kesäaika"
++  45106 "(UTC+01:00) Bryssel, Kööpenhamina, Madrid, Paris"
++  59264 "Venäjän aikavyöhyke 10"
++  59265 "Venäjän aikavyöhyke 10"
++  59266 "(UTC+11:00) Tšokurdah"
++  46000 "Venäjän aikavyöhyke 11"
++  46001 "Venäjän aikavyöhyke 11"
++  46002 "(UTC+12:00) Anadyr, Petropavlovsk-Kamtšatski"
++  17920 "Venäjän aikavyöhyke 3"
++  17921 "Venäjän aikavyöhyke 3"
++  17922 "(UTC+04:00) Izhevsk, Samara"
++  44560 "Venäjän normaaliaika"
++  44561 "Venäjän kesäaika"
++  44562 "(UTC+03:00) Moskova, Pietari"
++  40656 "Itäisen Etelä-Amerikan normaaliaika"
++  40657 "Itäisen Etelä-Amerikan kesäaika"
++  40658 "(UTC-03:00) Cayenne, Fortaleza"
++  49424 "Tyynenmeren Etelä-Amerikan normaaliaika"
++  49425 "Tyynenmeren Etelä-Amerikan kesäaika"
++  49426 "(UTC-05:00) Bogotá, Lima, Quito, Rio Branco"
++  57120 "Läntisen Etelä-Amerikan normaaliaika"
++  57121 "Läntisen Etelä-Amerikan kesäaika"
++  57122 "(UTC-04:00) Georgetown, La Paz, Manaus, San Juan"
++   5584 "Saint-Pierren normaaliaika"
++   5585 "Saint-Pierren kesäaika"
++   5586 "(UTC-03:00) Saint-Pierre ja Miquelon"
++  35104 "Sahalinin normaaliaika"
++  35105 "Sahalinin kesäaika"
++  35106 "(UTC+11:00) Sahalin"
++  14592 "Samoan normaaliaika"
++  14593 "Samoan kesäaika"
++  14594 "(UTC+13:00) Samoa"
++   5984 "São Tomén normaaliaika"
++   5985 "São Tomén kesäaika"
++   5986 "(UTC+00:00) São Tomé"
++  33808 "Saratovin normaaliaika"
++  33809 "Saratovin kesäaika"
++  33810 "(UTC+04:00) Saratov"
++  53728 "Kaakkois-Aasian normaaliaika"
++  53729 "Kaakkois-Aasian kesäaika"
++  53730 "(UTC+07:00) Bangkok, Hanoi, Jakarta"
++  61840 "Singaporen normaaliaika"
++  61841 "Singaporen kesäaika"
++  61842 "(UTC+08:00) Kuala Lumpur, Singapore"
++  38896 "Etelä-Afrikan normaaliaika"
++  38897 "Etelä-Afrikan kesäaika"
++  38898 "(UTC+02:00) Harare, Pretoria"
++   7664 "Etelä-Sudanin normaaliaika"
++   7665 "Etelä-Sudanin kesäaika"
++   7666 "(UTC+02:00) Juba"
++  39408 "Sri Lankan normaaliaika"
++  39409 "Sri Lankan kesäaika"
++  39410 "(UTC+05:30) Sri Jayawardenepura"
++   9792 "Sudanin normaaliaika"
++   9793 "Sudanin kesäaika"
++   9794 "(UTC+02:00) Khartum"
++  46576 "Syyrian normaaliaika"
++  46577 "Syyrian kesäaika"
++  46578 "(UTC+02:00) Damaskos"
++  26432 "Taipein normaaliaika"
++  26433 "Taipein kesäaika"
++  26434 "(UTC+08:00) Taipei"
++  36016 "Tasmanian normaaliaika"
++  36017 "Tasmanian kesäaika"
++  36018 "(UTC+10:00) Hobart"
++  43072 "Tocantinsin normaaliaika"
++  43073 "Tocantinsin kesäaika"
++  43074 "(UTC-03:00) Araguaina"
++  16240 "Tokion normaaliaika"
++  16241 "Tokion kesäaika"
++  16242 "(UTC+09:00) Osaka, Sapporo, Tokio"
++  29136 "Tomskin normaaliaika"
++  29137 "Tomskin kesäaika"
++  29138 "(UTC+07:00) Tomsk"
++   7216 "Tongan normaaliaika"
++   7217 "Tongan kesäaika"
++   7218 "(UTC+13:00) Nukuʻalofa"
++  31472 "Taka-Baikalian normaaliaika"
++  31473 "Taka-Baikalian kesäaika"
++  31474 "(UTC+09:00) Tšita"
++  24848 "Turkin normaaliaika"
++  24849 "Turkin kesäaika"
++  24850 "(UTC+03:00) Istanbul"
++  20560 "Turks- ja Caicossaarten normaaliaika"
++  20561 "Turks- ja Caicossaarten kesäaika"
++  20562 "(UTC-05:00) Turks- ja Caicossaaret"
++  47200 "Ulaanbaatarin normaaliaika"
++  47201 "Ulaanbaatarin kesäaika"
++  47202 "(UTC+08:00) Ulaanbaatar"
++  34928 "Itäisen Yhdysvaltain normaaliaika"
++  34929 "Itäisen Yhdysvaltain kesäaika"
++  34930 "(UTC-05:00) Indiana (itä)"
++  37472 "Yhdysvaltain vuoristonormaaliaika"
++  37473 "Yhdysvaltain vuoristokesäaika"
++  37474 "(UTC-07:00) Arizona"
++  22000 "UTC-aika"
++  22001 "UTC-aika"
++  22002 "(UTC) UTC-aika"
++   1200 "UTC+12"
++   1201 "UTC+12"
++   1202 "(UTC+12:00) UTC+12"
++   8784 "UTC+13"
++   8785 "UTC+13"
++   8786 "(UTC+13:00) UTC+13"
++  37328 "UTC-02"
++  37329 "UTC-02"
++  37330 "(UTC-02:00) UTC-02"
++   3344 "UTC-08"
++   3345 "UTC-08"
++   3346 "(UTC-08:00) UTC-08"
++  39152 "UTC-09"
++  39153 "UTC-09"
++  39154 "(UTC-09:00) UTC-09"
++  19408 "UTC-11"
++  19409 "UTC-11"
++  19410 "(UTC-11:00) UTC-11"
++  51472 "Venezuelan normaaliaika"
++  51473 "Venezuelan kesäaika"
++  51474 "(UTC-04:00) Caracas"
++  61376 "Vladivostokin normaaliaika"
++  61377 "Vladivostokin kesäaika"
++  61378 "(UTC+10:00) Vladivostok"
++  18048 "Volgogradin normaaliaika"
++  18049 "Volgogradin kesäaika"
++  18050 "(UTC+04:00) Volgograd"
++  65376 "Länsi-Australian normaaliaika"
++  65377 "Länsi-Australian kesäaika"
++  65378 "(UTC+08:00) Perth"
++  64976 "Läntisen Keski-Afrikan normaaliaika"
++  64977 "Läntisen Keski-Afrikan kesäaika"
++  64978 "(UTC+01:00) Läntinen Keski-Afrikka"
++  27696 "Länsi-Euroopan normaaliaika"
++  27697 "Länsi-Euroopan kesäaika"
++  27698 "(UTC+01:00) Amsterdam, Berliini, Bern, Rooma, Tukholma, Wien"
++  53952 "Länsi-Mongolian normaaliaika"
++  53953 "Länsi-Mongolian kesäaika"
++  53954 "(UTC+07:00) Hovd"
++  49664 "Länsi-Aasian normaaliaika"
++  49665 "Länsi-Aasian kesäaika"
++  49666 "(UTC+05:00) Ašgabat, Taškent"
++  46160 "Länsirannan normaaliaika"
++  46161 "Länsirannan kesäaika"
++  46162 "(UTC+02:00) Gaza, Hebron"
++  10224 "Läntisen Tyynenmeren normaaliaika"
++  10225 "Läntisen Tyynenmeren kesäaika"
++  10226 "(UTC+10:00) Guam, Port Moresby"
++  40576 "Jakutskin normaaliaika"
++  40577 "Jakutskin kesäaika"
++  40578 "(UTC+09:00) Jakutsk"
++  26288 "Yukonin normaaliaika"
++  26289 "Yukonin kesäaika"
++  26290 "(UTC-07:00) Yukon"
++}
+diff --git a/dll/win32/tzres/tzres.rc b/dll/win32/tzres/tzres.rc
+index 6445803a24a..9d3c12de869 100644
+--- a/dll/win32/tzres/tzres.rc
++++ b/dll/win32/tzres/tzres.rc
+@@ -442,3 +442,8 @@ STRINGTABLE
+   26289 "Yukon Daylight Time"
+   26290 "(UTC-07:00) Yukon"
+ }
++
++#ifdef LANGUAGE_FI_FI
++#pragma code_page(65001)
++    #include "lang/fi-FI.rc"
++#endif
+-- 
+2.56.0
+
+From 2045f953d90839b3a0f4f6c9c7cd2badf60048a0 Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 23:41:30 +0200
+Subject: [PATCH] [SHELLBTRFS] Add Finnish (fi-FI) translation
+
+Problem: The Btrfs pages of Explorer - properties, balance, scrub,
+devices, send and receive - were in English on a Finnish system.
+
+Why: shellbtrfs.rc, as WinBtrfs has it, carries only English (United
+Kingdom) and no lang/ files.
+
+How: Translate its dialogs and string tables into lang/fi-FI.rc with
+the same ids, controls and printf inserts; API names, RAID levels and
+compression names stay as they are. Include it under LANGUAGE_FI_FI
+with the UTF-8 code page.
+---
+ dll/shellext/shellbtrfs/lang/fi-FI.rc | 571 ++++++++++++++++++++++++++
+ dll/shellext/shellbtrfs/shellbtrfs.rc |   5 +
+ 2 files changed, 576 insertions(+)
+ create mode 100644 dll/shellext/shellbtrfs/lang/fi-FI.rc
+
+diff --git a/dll/shellext/shellbtrfs/lang/fi-FI.rc b/dll/shellext/shellbtrfs/lang/fi-FI.rc
+new file mode 100644
+index 00000000000..a8c78a69e27
+--- /dev/null
++++ b/dll/shellext/shellbtrfs/lang/fi-FI.rc
+@@ -0,0 +1,571 @@
++/*
++ * PROJECT:     WinBtrfs shell extension
++ * LICENSE:     LGPL-3.0-or-later (https://spdx.org/licenses/LGPL-3.0-or-later)
++ * PURPOSE:     Finnish resource file, the dialogs and strings of shellbtrfs.rc
++ * TRANSLATOR:  Copyright 2026 Lauri Ojansivu <x@xet7.org>
++ */
++
++LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
++
++IDD_PROP_SHEET DIALOGEX 0, 0, 235, 271
++STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
++CAPTION "Inoden ominaisuussivu"
++FONT 8, "MS Shell Dlg", 400, 0, 0x0
++BEGIN
++    LTEXT           "Alitaltio:",IDC_STATIC,14,21,38,8
++    LTEXT           "Inode:",IDC_STATIC,14,35,21,8
++    GROUPBOX        "Tietoja",IDC_GROUP_INFORMATION,7,7,221,99
++    LTEXT           "Tyyppi:",IDC_STATIC,14,49,18,8
++    GROUPBOX        "POSIX-käyttöoikeudet",IDC_STATIC,7,110,221,102
++    LTEXT           "Käyttäjä:",IDC_STATIC,14,125,17,8
++    LTEXT           "Ryhmä:",IDC_STATIC,14,141,22,8
++    EDITTEXT        IDC_UID,94,123,40,14,ES_AUTOHSCROLL | ES_NUMBER
++    EDITTEXT        IDC_GID,94,139,40,14,ES_AUTOHSCROLL | ES_NUMBER
++    LTEXT           "Käyttäjä",IDC_STATIC,14,175,15,8
++    LTEXT           "Ryhmä",IDC_STATIC,14,186,20,8
++    LTEXT           "Muut",IDC_STATIC,14,196,22,8
++    LTEXT           "Luku",IDC_STATIC,50,162,17,8
++    LTEXT           "Kirjoitus",IDC_STATIC,89,162,18,8
++    LTEXT           "Suoritus",IDC_STATIC,129,162,30,8
++    CONTROL         "",IDC_USERR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,54,175,16,10
++    CONTROL         "",IDC_GROUPR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,54,186,16,10
++    CONTROL         "",IDC_OTHERR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,54,196,16,10
++    CONTROL         "",IDC_USERW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,93,175,16,10
++    CONTROL         "",IDC_GROUPW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,93,186,16,10
++    CONTROL         "",IDC_OTHERW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,93,196,16,10
++    CONTROL         "",IDC_USERX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,135,175,16,10
++    CONTROL         "",IDC_GROUPX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,135,186,16,10
++    CONTROL         "",IDC_OTHERX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,135,196,16,10
++    GROUPBOX        "Liput",IDC_STATIC,7,218,221,48
++    CONTROL         "Poista Copy-on-Write käytöstä",IDC_NODATACOW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,232,86,10
++    LTEXT           "(tyhjä)",IDC_INODE,78,35,70,8
++    LTEXT           "(tyhjä)",IDC_TYPE,78,49,116,8
++    CONTROL         "Pakkaa",IDC_COMPRESS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,246,46,10
++    LTEXT           "Koko levyllä:",IDC_STATIC,14,63,61,8
++    CONTROL         "%s (<a>Tiedot</a>)",IDC_SIZE_ON_DISK,"SysLink",WS_TABSTOP,78,63,142,8
++    COMBOBOX        IDC_COMPRESS_TYPE,63,245,48,13,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
++    CONTROL         "Vain luku -alitaltio",IDC_SUBVOL_RO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,124,232,80,10
++    LTEXT           "(tyhjä)",IDC_SUBVOL,78,21,70,8
++    PUSHBUTTON      "&Avaa järjestelmänvalvojana",IDC_OPEN_ADMIN,151,21,70,14
++    CONTROL         "Aseta UID",IDC_SETUID,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,177,175,40,10
++    CONTROL         "Aseta GID",IDC_SETGID,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,177,186,40,10
++    CONTROL         "Tahmea",IDC_STICKY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,177,196,34,10
++    LTEXT           "Pakkaussuhde:",IDC_STATIC,14,77,61,8
++    LTEXT           "%1.1f%%",IDC_COMPRESSION_RATIO,78,77,116,8
++    LTEXT           "Pirstoutuminen:",IDC_STATIC,14,91,61,8
++    LTEXT           "%1.1f%%",IDC_FRAGMENTATION,78,91,116,8
++END
++
++IDD_SIZE_DETAILS DIALOGEX 0, 0, 212, 98
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Koon tiedot"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,81,77,50,14
++    LTEXT           "Upotettu:",IDC_STATIC,7,7,21,8
++    LTEXT           "Pakkaamaton:",IDC_STATIC,7,20,49,8
++    LTEXT           "ZLIB:",IDC_STATIC,7,33,18,8
++    LTEXT           "LZO:",IDC_STATIC,7,46,16,8
++    LTEXT           "(tyhjä)",IDC_SIZE_INLINE,63,7,142,8
++    LTEXT           "(tyhjä)",IDC_SIZE_UNCOMPRESSED,63,20,142,8
++    LTEXT           "(tyhjä)",IDC_SIZE_ZLIB,63,33,142,8
++    LTEXT           "(tyhjä)",IDC_SIZE_LZO,63,46,142,8
++    LTEXT           "Zstd:",IDC_STATIC,7,59,16,8
++    LTEXT           "(tyhjä)",IDC_SIZE_ZSTD,63,59,142,8
++END
++
++IDD_VOL_PROP_SHEET DIALOGEX 0, 0, 235, 273
++STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
++CAPTION "s"
++FONT 8, "MS Shell Dlg", 400, 0, 0x0
++BEGIN
++    LTEXT           "UUID:",IDC_STATIC,7,15,20,8
++    LTEXT           "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",IDC_UUID,32,15,294,8
++    PUSHBUTTON      "Vaihda aseman &kirjain...",IDC_VOL_CHANGE_DRIVE_LETTER,7,30,101,19
++    PUSHBUTTON      "Näytä &käyttö...",IDC_VOL_SHOW_USAGE,154,69,67,19
++    PUSHBUTTON      "&Tasapainota...",IDC_VOL_BALANCE,154,127,67,19
++    PUSHBUTTON      "&Laitteet...",IDC_VOL_DEVICES,154,184,67,19
++    GROUPBOX        "Käyttö",IDC_STATIC,7,53,221,53
++    LTEXT           "Näytä yksityiskohtaiset tiedot tiedostojärjestelmän sisäisestä käytöstä. Tämä vastaa Linuxin komentoa ""btrfs fi usage"".",IDC_STATIC,14,66,131,33
++    GROUPBOX        "Tasapainotus",IDC_STATIC,7,109,221,53
++    LTEXT           "Tasapainotus lukee ja kirjoittaa uudelleen tiedot ja metatiedot. Sillä voi koota vapaata tilaa yhteen sekä muuntaa RAID-tyypistä toiseen.",IDC_STATIC,15,120,131,39
++    GROUPBOX        "Laitteet",IDC_STATIC,7,168,221,45
++    LTEXT           "Voit lisätä tähän tiedostojärjestelmään levyjä tai osioita tai poistaa jo olemassa olevia.",IDC_STATIC,14,181,131,30
++    GROUPBOX        "Tarkistus",IDC_STATIC,7,221,221,45
++    LTEXT           "Tarkistus varmistaa tiedostojärjestelmän tiedot ja metatiedot ja korjaa virheet aina kun mahdollista.",IDC_STATIC,15,234,131,27
++    PUSHBUTTON      "&Tarkista...",IDC_VOL_SCRUB,154,237,67,19
++END
++
++IDD_VOL_USAGE DIALOGEX 0, 0, 235, 242
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Taltion käyttö"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,62,221,50,14
++    PUSHBUTTON      "&Päivitä",IDC_USAGE_REFRESH,124,221,50,14
++    EDITTEXT        IDC_USAGE_BOX,7,7,221,208,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL
++END
++
++IDD_BALANCE_OPTIONS DIALOGEX 0, 0, 303, 138
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Tasapainotuksen asetukset"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,91,117,50,14
++    PUSHBUTTON      "Peruuta",IDCANCEL,161,117,50,14
++    CONTROL         "&Profiilit:",IDC_PROFILES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,6,41,10
++    CONTROL         "Yksittäinen",IDC_PROFILES_SINGLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,19,35,10
++    CONTROL         "DUP",IDC_PROFILES_DUP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,30,29,10
++    CONTROL         "RAID0",IDC_PROFILES_RAID0,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,41,36,10
++    CONTROL         "RAID1",IDC_PROFILES_RAID1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,52,36,10
++    CONTROL         "RAID10",IDC_PROFILES_RAID10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,63,39,10
++    CONTROL         "RAID5",IDC_PROFILES_RAID5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,19,36,10
++    CONTROL         "RAID6",IDC_PROFILES_RAID6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,30,36,10
++    CONTROL         "RAID1C3",IDC_PROFILES_RAID1C3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,41,44,10
++    CONTROL         "RAID1C4",IDC_PROFILES_RAID1C4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,52,44,10
++    CONTROL         "&Käyttö:",IDC_USAGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,80,37,10
++    EDITTEXT        IDC_USAGE_START,7,94,19,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "",IDC_USAGE_START_SPINNER,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,25,94,11,14
++    EDITTEXT        IDC_USAGE_END,58,94,19,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "",IDC_USAGE_END_SPINNER,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,77,94,11,14
++    LTEXT           "% –",IDC_STATIC,39,97,16,8
++    CONTROL         "&Laite:",IDC_DEVID,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,104,6,34,10
++    COMBOBOX        IDC_DEVID_COMBO,141,6,155,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
++    LTEXT           "%",IDC_STATIC,91,97,8,8
++    CONTROL         "Laite&alue:",IDC_DRANGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,104,19,59,10
++    EDITTEXT        IDC_DRANGE_END,159,32,40,14,ES_AUTOHSCROLL | ES_NUMBER
++    LTEXT           "–",IDC_STATIC,148,34,8,8
++    EDITTEXT        IDC_DRANGE_START,104,32,40,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "&Virtuaalialue:",IDC_VRANGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,104,49,59,10
++    EDITTEXT        IDC_VRANGE_END,160,62,40,14,ES_AUTOHSCROLL | ES_NUMBER
++    LTEXT           "–",IDC_STATIC,148,64,8,8
++    EDITTEXT        IDC_VRANGE_START,104,62,40,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "&Raja:",IDC_LIMIT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,104,80,33,10
++    EDITTEXT        IDC_LIMIT_START,104,94,19,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "",IDC_LIMIT_START_SPINNER,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,123,94,11,14
++    EDITTEXT        IDC_LIMIT_END,150,94,19,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "",IDC_LIMIT_END_SPINNER,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,169,94,11,14
++    LTEXT           "–",IDC_STATIC,139,97,8,8
++    CONTROL         "&Raidat:",IDC_STRIPES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,210,19,40,10
++    EDITTEXT        IDC_STRIPES_START,210,32,19,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "",IDC_STRIPES_START_SPINNER,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,228,32,11,14
++    EDITTEXT        IDC_STRIPES_END,253,32,19,14,ES_AUTOHSCROLL | ES_NUMBER
++    CONTROL         "",IDC_STRIPES_END_SPINNER,"msctls_updown32",UDS_SETBUDDYINT | UDS_AUTOBUDDY | UDS_ARROWKEYS,272,32,11,14
++    LTEXT           "–",IDC_STATIC,242,35,8,8
++    CONTROL         "&Muunna:",IDC_CONVERT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,210,49,36,10
++    COMBOBOX        IDC_CONVERT_COMBO,248,49,48,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
++    CONTROL         "&Pehmeä",IDC_SOFT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,210,64,28,10
++END
++
++IDD_BALANCE DIALOGEX 0, 0, 254, 167
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Tasapainotus"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,102,146,50,14
++    CONTROL         "",IDC_BALANCE_PROGRESS,"msctls_progress32",WS_BORDER,7,95,240,14
++    CONTROL         "&Tiedot",IDC_DATA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,7,30,10
++    CONTROL         "&Metatiedot",IDC_METADATA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,28,45,10
++    CONTROL         "&Järjestelmä",IDC_SYSTEM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,51,38,10
++    PUSHBUTTON      "Asetukset...",IDC_DATA_OPTIONS,70,6,50,14
++    PUSHBUTTON      "Asetukset...",IDC_METADATA_OPTIONS,70,26,50,14
++    PUSHBUTTON      "Asetukset...",IDC_SYSTEM_OPTIONS,70,47,50,14
++    LTEXT           "Tila",IDC_BALANCE_STATUS,8,80,239,8
++    PUSHBUTTON      "&Aloita tasapainotus",IDC_START_BALANCE,13,117,69,14
++    PUSHBUTTON      "&Keskeytä / jatka",IDC_PAUSE_BALANCE,93,117,69,14
++    PUSHBUTTON      "&Peruuta tasapainotus",IDC_CANCEL_BALANCE,173,117,69,14
++END
++
++IDD_DEVICES DIALOGEX 0, 0, 318, 203
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Laitteet"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,207,182,50,14
++    PUSHBUTTON      "Peruuta",IDCANCEL,261,182,50,14
++    CONTROL         "",IDC_DEVLIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,304,144
++    PUSHBUTTON      "&Lisää laite...",IDC_DEVICE_ADD,7,182,76,14
++    PUSHBUTTON      "&Päivitä",IDC_DEVICE_REFRESH,7,159,76,14
++    PUSHBUTTON      "Poista &laite",IDC_DEVICE_REMOVE,93,182,76,14
++    PUSHBUTTON      "Näytä &tilastot...",IDC_DEVICE_SHOW_STATS,235,159,76,14,WS_DISABLED
++    PUSHBUTTON      "&Muuta kokoa...",IDC_DEVICE_RESIZE,149,159,76,14,WS_DISABLED
++END
++
++IDD_DEVICE_ADD DIALOGEX 0, 0, 261, 185
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Lisää laite"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,66,164,50,14
++    PUSHBUTTON      "Peruuta",IDCANCEL,145,164,50,14
++    CONTROL         "",IDC_DEVICE_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_SHOWSELALWAYS | WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,7,247,148
++END
++
++IDD_SCRUB DIALOGEX 0, 0, 254, 162
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Tarkistus"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,102,141,50,14
++    CONTROL         "",IDC_SCRUB_PROGRESS,"msctls_progress32",WS_BORDER,7,95,240,14
++    LTEXT           "Tila",IDC_SCRUB_STATUS,8,81,239,8
++    PUSHBUTTON      "&Aloita tarkistus",IDC_START_SCRUB,13,117,69,14
++    PUSHBUTTON      "&Keskeytä / jatka",IDC_PAUSE_SCRUB,93,117,69,14
++    PUSHBUTTON      "&Peruuta tarkistus",IDC_CANCEL_SCRUB,173,117,69,14
++    EDITTEXT        IDC_SCRUB_INFO,7,7,240,69,ES_MULTILINE | ES_READONLY | WS_VSCROLL
++END
++
++IDD_DEVICE_STATS DIALOGEX 0, 0, 159, 113
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Laitteen tilastot"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,24,91,50,14
++    LTEXT           "Laite %llx:",IDC_DEVICE_ID,7,7,40,8
++    LTEXT           "Kirjoitusvirheet:",IDC_STATIC,7,21,79,8
++    LTEXT           "Lukuvirheet:",IDC_STATIC,7,34,79,8
++    LTEXT           "Tyhjennysvirheet:",IDC_STATIC,7,47,79,8
++    LTEXT           "Vioittumisvirheet:",IDC_STATIC,7,60,79,8
++    LTEXT           "Sukupolvivirheet:",IDC_STATIC,7,73,79,8
++    RTEXT           "%llu",IDC_WRITE_ERRS,87,21,65,8
++    RTEXT           "%llu",IDC_READ_ERRS,87,34,65,8
++    RTEXT           "%llu",IDC_FLUSH_ERRS,87,47,65,8
++    RTEXT           "%llu",IDC_CORRUPTION_ERRS,87,60,65,8
++    RTEXT           "%llu",IDC_GENERATION_ERRS,87,73,65,8
++    PUSHBUTTON      "&Nollaa",IDC_RESET_STATS,85,91,50,14
++END
++
++IDD_RECV_PROGRESS DIALOGEX 0, 0, 311, 83
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Vastaanotetaan alitaltiota"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    PUSHBUTTON      "Peruuta",IDCANCEL,130,62,50,14
++    CONTROL         "",IDC_RECV_PROGRESS,"msctls_progress32",WS_BORDER,7,33,297,24
++    LTEXT           "Vastaanotetaan alitaltiota...",IDC_RECV_MSG,7,7,297,18
++END
++
++IDD_SEND_SUBVOL DIALOGEX 0, 0, 288, 149
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Lähetä alitaltio"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "&Kirjoitus",IDOK,83,128,50,14
++    PUSHBUTTON      "&Sulje",IDCANCEL,156,128,50,14
++    EDITTEXT        IDC_STREAM_DEST,57,7,166,14,ES_AUTOHSCROLL
++    LTEXT           "Virta:",IDC_STATIC,7,11,26,8
++    PUSHBUTTON      "&Selaa...",IDC_BROWSE,231,7,50,14
++    LTEXT           "Valitse alitaltiovirran kohde.",IDC_SEND_STATUS,7,93,274,22
++    CONTROL         "Lisäävä",IDC_INCREMENTAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,32,54,10
++    EDITTEXT        IDC_PARENT_SUBVOL,69,29,154,14,ES_AUTOHSCROLL | WS_DISABLED
++    PUSHBUTTON      "&Selaa...",IDC_PARENT_BROWSE,231,29,50,14,WS_DISABLED
++    LTEXT           "Kloonauslähteet:",IDC_STATIC,7,52,46,8
++    LISTBOX         IDC_CLONE_LIST,69,50,154,36,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
++    PUSHBUTTON      "&Lisää...",IDC_CLONE_ADD,231,50,50,14
++    PUSHBUTTON      "&Poista",IDC_CLONE_REMOVE,231,69,50,14,WS_DISABLED
++END
++
++IDD_RESIZE DIALOGEX 0, 0, 279, 133
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Muuta laitteen kokoa"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,81,112,50,14
++    PUSHBUTTON      "Peruuta",IDCANCEL,148,112,50,14
++    LTEXT           "Laite %llx:",IDC_RESIZE_DEVICE_ID,18,21,238,8
++    LTEXT           "Nykyinen koko: %s",IDC_RESIZE_CURSIZE,18,37,238,8
++    CONTROL         "",IDC_RESIZE_SLIDER,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,74,265,24
++    LTEXT           "Uusi koko: %s",IDC_RESIZE_NEWSIZE,18,53,238,8
++END
++
++IDD_DRIVE_LETTER DIALOGEX 0, 0, 131, 61
++STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
++CAPTION "Vaihda aseman kirjain"
++FONT 8, "MS Shell Dlg", 400, 0, 0x1
++BEGIN
++    DEFPUSHBUTTON   "OK",IDOK,7,40,50,14
++    PUSHBUTTON      "Peruuta",IDCANCEL,74,40,50,14
++    COMBOBOX        IDC_DRIVE_LETTER_COMBO,64,17,60,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
++    LTEXT           "Aseman kirjain:",IDC_STATIC,15,19,45,8
++END
++
++
++/////////////////////////////////////////////////////////////////////////////
++//
++// DESIGNINFO
++//
++
++
++STRINGTABLE
++BEGIN
++    IDS_NEW_SUBVOL_HELP_TEXT "Luo uuden Btrfs-alitaltion."
++    IDS_NEW_SUBVOL          "&Uusi alitaltio"
++    IDS_NEW_SUBVOL_FILENAME "Uusi alitaltio"
++    IDS_CREATE_SNAPSHOT     "Luo tilannevedos"
++    IDS_CREATE_SNAPSHOT_HELP_TEXT "Luo Btrfs-alitaltiosta tilannevedoksen."
++    IDS_SNAPSHOT_FILENAME   "Tilannevedos kohteesta %s (%04u-%02u-%02u)"
++    IDS_PROP_SHEET_TITLE    "Btrfs-ominaisuudet"
++    IDS_INODE_FILE          "Tiedosto"
++    IDS_INODE_DIR           "Hakemisto"
++    IDS_INODE_CHAR          "Merkkilaite (pää %llu, ala %llu)"
++END
++
++STRINGTABLE
++BEGIN
++    IDS_INODE_BLOCK         "Lohkolaite (pää %llu, ala %llu)"
++    IDS_INODE_FIFO          "FIFO"
++    IDS_INODE_SOCKET        "Pistoke"
++    IDS_INODE_SYMLINK       "Symbolinen linkki"
++    IDS_INODE_UNKNOWN       "Tuntematon inoden tyyppi %x"
++    IDS_CANNOT_FIND_DEVICE  "Laitetta ei löydy."
++    IDS_SIZE_BYTE           "%s tavu"
++    IDS_SIZE_BYTES          "%s tavua"
++    IDS_SIZE_KB             "%1.1f KB"
++    IDS_SIZE_MB             "%1.1f MB"
++    IDS_SIZE_GB             "%1.1f GB"
++    IDS_SIZE_TB             "%1.1f TB"
++    IDS_SIZE_PB             "%1.1f PB"
++    IDS_SIZE_EB             "%1.1f EB"
++    IDS_VARIOUS             "(useita)"
++    IDS_INODE_CHAR_SIMPLE   "Merkkilaite"
++END
++
++STRINGTABLE
++BEGIN
++    IDS_INODE_BLOCK_SIMPLE  "Lohkolaite"
++    IDS_VOL_PROP_SHEET_TITLE "Btrfs"
++    IDS_SIZE_LARGE          "%s (%s)"
++    IDS_SINGLE              "yksittäinen"
++    IDS_DUP                 "DUP"
++    IDS_RAID0               "RAID0"
++    IDS_RAID1               "RAID1"
++    IDS_RAID10              "RAID10"
++    IDS_RAID5               "RAID5"
++    IDS_RAID6               "RAID6"
++    IDS_USAGE_DATA          "Tiedot, %s: koko: %s, käytetty: %s"
++    IDS_USAGE_MIXED         "Tiedot / metatiedot, %s: koko: %s, käytetty: %s"
++    IDS_USAGE_METADATA      "Metatiedot, %s: koko: %s, käytetty: %s"
++    IDS_USAGE_SYSTEM        "Järjestelmä, %s: koko: %s, käytetty: %s"
++    IDS_USAGE_UNALLOC       "Varaamatta:"
++    IDS_UNKNOWN_DEVICE      "(tuntematon laite %llu)"
++END
++
++STRINGTABLE
++BEGIN
++    IDS_USAGE_DEV_SIZE      "Laitteen koko:\t\t%s"
++    IDS_USAGE_DEV_ALLOC     "Laitteesta varattu:\t\t%s"
++    IDS_USAGE_DEV_UNALLOC   "Laitteesta varaamatta:\t\t%s"
++    IDS_USAGE_DATA_RATIO    "Tietojen suhde:\t\t%1.2f"
++    IDS_USAGE_METADATA_RATIO "Metatietojen suhde:\t\t%1.2f"
++    IDS_NO_BALANCE          "Tasapainotus ei ole käynnissä."
++    IDS_SINGLE2             "Yksittäinen"
++    IDS_DEVID_LIST          "%llu: %s"
++    IDS_BALANCE_RUNNING     "Tasapainotus on käynnissä (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_DRANGE_END_BEFORE_START "Laitealueen loppu on ennen alkua."
++    IDS_VRANGE_END_BEFORE_START "Virtuaalialueen loppu on ennen alkua."
++    IDS_LIMIT_END_BEFORE_START "Rajan loppu on ennen alkua."
++    IDS_STRIPES_END_BEFORE_START "Raitojen loppu on ennen alkua."
++    IDS_USAGE_END_BEFORE_START "Käytön loppu on ennen alkua."
++    IDS_ERROR               "Virhe"
++    IDS_BALANCE_COMPLETE    "Tasapainotus valmistui onnistuneesti."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_BALANCE_PAUSED      "Tasapainotus on keskeytetty (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_BALANCE_CANCELLED   "Tasapainotus peruutettiin."
++    IDS_DEVLIST_ID          "ID"
++    IDS_DEVLIST_DESC        "Kuvaus"
++    IDS_DEVLIST_READONLY    "Vain luku"
++    IDS_DEVLIST_SIZE        "Koko"
++    IDS_DEVLIST_READONLY_YES "Kyllä"
++    IDS_DEVLIST_READONLY_NO "Ei"
++    IDS_DEVLIST_ALLOC       "Varattu"
++    IDS_DEVLIST_ALLOC_PC    "%"
++    IDS_BALANCE_RUNNING_REMOVAL
++                            "Poistetaan laitetta %llu (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_BALANCE_PAUSED_REMOVAL
++                            "Laitteen %llu poisto keskeytetty (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_BALANCE_CANCELLED_REMOVAL "Laitteen poisto peruutettiin."
++    IDS_BALANCE_COMPLETE_REMOVAL "Laitteen poisto valmistui onnistuneesti."
++    IDS_PARTITION           "Osio %u"
++    IDS_WHOLE_DISK          "Koko levy"
++END
++
++STRINGTABLE
++BEGIN
++    IDS_CANNOT_REMOVE_RAID  "Nykyiset RAID-tasot eivät salli tämän laitteen poistamista. Sinun on tehtävä muuntava tasapainotus ennen kuin voit jatkaa."
++    IDS_REMOVE_DEVICE_CONFIRMATION
++                            "Haluatko varmasti poistaa laitteen %s, %s?"
++    IDS_CONFIRMATION_TITLE  "Vahvistus"
++    IDS_ADD_DEVICE_CONFIRMATION
++                            "Haluatko varmasti lisätä tämän laitteen?"
++    IDS_ADD_DEVICE_CONFIRMATION_FS
++                            "Haluatko varmasti lisätä tämän laitteen? Siinä näyttää jo olevan tiedostojärjestelmä (%s)."
++    IDS_BALANCE_FAILED      "Tasapainotus epäonnistui (virhe %08x, %s)"
++    IDS_BALANCE_FAILED_REMOVAL "Laitteen poisto epäonnistui (virhe %08x, %s)"
++    IDS_DISK_NUM            "Levy %u"
++    IDS_DISK_PART_NUM       "Levy %u, osio %u"
++    IDS_NO_SCRUB            "Tarkistus ei ole käynnissä."
++    IDS_SCRUB_RUNNING       "Tarkistus käynnissä (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_SCRUB_FINISHED      "Tarkistus päättyi."
++    IDS_SCRUB_PAUSED        "Tarkistus keskeytetty (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_SCRUB_MSG_STARTED   "Tarkistus alkoi %s %s."
++    IDS_SCRUB_MSG_RECOVERABLE_DATA
++                            "Toivuttiin tietojen tarkistussummavirheestä kohdassa %llx laitteella %llx."
++    IDS_SCRUB_MSG_RECOVERABLE_METADATA
++                            "Toivuttiin metatietojen tarkistussummavirheestä kohdassa %llx laitteella %llx."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_SCRUB_MSG_UNRECOVERABLE_DATA
++                            "Korjaamaton tietojen tarkistussummavirhe kohdassa %llx laitteella %llx (%.*s, siirtymä %llx)"
++    IDS_SCRUB_MSG_UNRECOVERABLE_DATA_SUBVOL
++                            "Korjaamaton tietojen tarkistussummavirhe kohdassa %llx laitteella %llx (alitaltio %llx, %.*s, siirtymä %llx)"
++    IDS_SCRUB_MSG_UNRECOVERABLE_METADATA
++                            "Korjaamaton metatietojen tarkistussummavirhe kohdassa %llx laitteella %llx (juuri %llx, taso %x)"
++    IDS_SCRUB_MSG_UNRECOVERABLE_METADATA_FIRSTITEM
++                            "Korjaamaton metatietojen tarkistussummavirhe kohdassa %llx laitteella %llx (juuri %llx, taso %x, ensimmäinen kohde %llx,%x,%llx)"
++    IDS_SCRUB_MSG_FINISHED  "Tarkistus päättyi %s %s."
++    IDS_SCRUB_MSG_SUMMARY   "Tarkistettiin %s %llu sekunnissa (%s/s)."
++    IDS_BALANCE_SCRUB_RUNNING "Tasapainotusta ei voi aloittaa tarkistuksen aikana."
++    IDS_SCRUB_BALANCE_RUNNING "Tarkistusta ei voi aloittaa tasapainotuksen aikana."
++    IDS_SCRUB_MSG_SUMMARY_ERRORS_RECOVERABLE "Toivuttiin %llu virheestä."
++    IDS_SCRUB_MSG_SUMMARY_ERRORS_UNRECOVERABLE
++                            "Löytyi %llu korjaamatonta virhettä."
++    IDS_SCRUB_FAILED        "Tarkistus epäonnistui virheellä %08x."
++    IDS_LOCK_FAILED         "Taltiota ei voi lukita: virhe %08x. Varmista, ettei tiedostoja ole auki ja että olet sulkenut kaikki Resurssienhallinnan ikkunat."
++    IDS_SCRUB_MSG_RECOVERABLE_PARITY
++                            "Toivuttiin pariteettivirheestä kohdassa %llx laitteella %llx."
++    IDS_COMPRESS_ANY        "(mikä tahansa)"
++    IDS_COMPRESS_ZLIB       "Zlib"
++    IDS_COMPRESS_LZO        "LZO"
++END
++
++STRINGTABLE
++BEGIN
++    IDS_STANDALONE_PROPSHEET_TITLE "Inoden ominaisuussivu"
++    IDS_REFLINK_PASTE       "Liitä &viitelinkkinä"
++    IDS_REFLINK_PASTE_HELP  "Tee tiedostoista kevyt kopio viitelaskennan avulla."
++    IDS_RECV_SUBVOL         "&Vastaanota alitaltio..."
++    IDS_RECV_SUBVOL_HELP    "Luo uudelleen aiemmin viety alitaltio."
++    IDS_RECV_CANT_OPEN_FILE "%S: kohdetta %s ei voitu avata (virhe %u, %s)."
++    IDS_RECV_READFILE_FAILED "ReadFile epäonnistui (virhe %u, %s)."
++    IDS_OUT_OF_MEMORY       "Muisti loppui."
++    IDS_RECV_UNKNOWN_COMMAND "Havaittiin tunnistamaton komento %u."
++    IDS_RECV_CANT_OPEN_PATH "Polkua %s ei voitu avata (virhe %u, %s)."
++    IDS_RAID1C3             "RAID1C3"
++    IDS_RECV_CREATE_SUBVOL_FAILED
++                            "FSCTL_BTRFS_CREATE_SUBVOL palautti %08x (%s)."
++    IDS_RECV_MISSING_PARAM  "%S: parametria %s ei löytynyt."
++    IDS_RECV_SHORT_PARAM    "%S: parametrin %s pituus oli %u, odotettiin %u."
++    IDS_RECV_MKNOD_FAILED   "FSCTL_BTRFS_MKNOD palautti %08x (%s)."
++    IDS_RECV_SET_REPARSE_POINT_FAILED
++                            "FSCTL_SET_REPARSE_POINT palautti %08x (%s)."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_RECV_MOVEFILE_FAILED "MoveFile (%s -> %s) epäonnistui (virhe %u, %s)."
++    IDS_RECV_SETFILEPOINTER_FAILED "SetFilePointer epäonnistui (virhe %u, %s)."
++    IDS_RECV_WRITEFILE_FAILED "WriteFile epäonnistui (virhe %u, %s)."
++    IDS_RECV_CREATEHARDLINK_FAILED
++                            "CreateHardLink (%s -> %s) epäonnistui (virhe %u, %s)."
++    IDS_RECV_SETENDOFFILE_FAILED "SetEndOfFile epäonnistui (virhe %u, %s)."
++    IDS_RECV_CANT_CREATE_FILE "Kohdetta %s ei voitu luoda (virhe %u, %s)."
++    IDS_RAID1C4             "RAID1C4"
++    IDS_RECV_SETINODEINFO_FAILED
++                            "FSCTL_BTRFS_SET_INODE_INFO palautti %08x (%s)."
++    IDS_RECV_SUCCESS        "Vastaanotettiin onnistuneesti 1 alitaltio."
++    IDS_RECV_BUTTON_OK      "OK"
++    IDS_RECV_SETFILEATTRIBUTES_FAILED
++                            "SetFileAttributes epäonnistui (virhe %u, %s)."
++    IDS_RECV_GETFILEATTRIBUTES_FAILED
++                            "GetFileAttributes epäonnistui (virhe %u, %s)."
++    IDS_RECV_CSUM_ERROR     "Tarkistussummavirhe."
++    IDS_RECV_NOT_A_SEND_STREAM "Tiedosto ei ollut lähetysvirta."
++    IDS_RECV_UNSUPPORTED_VERSION "Versiota %u ei tueta."
++    IDS_RECV_SETEAFILE_FAILED "NtSetEaFile palautti %08x (%s)."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_RECV_RECEIVED_SUBVOL_FAILED
++                            "FSCTL_BTRFS_RECEIVED_SUBVOL palautti %08x (%s)."
++    IDS_RECV_SETSECURITYOBJECT_FAILED
++                            "NtSetSecurityObject palautti %08x (%s)."
++    IDS_RECV_SETXATTR_FAILED "FSCTL_BTRFS_SET_XATTR palautti %08x (%s)."
++    IDS_RECV_CREATETHREAD_FAILED "CreateThread epäonnistui (virhe %u, %s)."
++    IDS_RECV_FILE_TRUNCATED "Tiedosto oli katkaistu."
++    IDS_RECV_RESERVE_SUBVOL_FAILED
++                            "FSCTL_BTRFS_RESERVE_SUBVOL palautti %08x (%s)."
++    IDS_RECV_CANCELLED      "Vastaanotto peruutettiin."
++    IDS_RECV_CANT_FIND_PARENT_SUBVOL "Ylätason alitaltiota ei löytynyt."
++    IDS_RECV_FIND_SUBVOL_FAILED "FSCTL_BTRFS_FIND_SUBVOL palautti %08x (%s)."
++    IDS_RECV_CREATE_SNAPSHOT_FAILED
++                            "FSCTL_BTRFS_CREATE_SNAPSHOT palautti %08x (%s)."
++    IDS_RECV_GETVOLUMEPATHNAME_FAILED
++                            "GetVolumePathName epäonnistui (virhe %u, %s)."
++    IDS_RECV_DELETEFILE_FAILED "DeleteFile epäonnistui kohteelle %s (virhe %u, %s)."
++    IDS_RECV_REMOVEDIRECTORY_FAILED
++                            "RemoveDirectory epäonnistui kohteelle %s (virhe %u, %s)."
++    IDS_RECV_CANT_FIND_CLONE_SUBVOL "Kloonattavaa alitaltiota ei löytynyt."
++    IDS_RECV_GETFILESIZEEX_FAILED "GetFileSizeEx epäonnistui (virhe %u, %s)."
++    IDS_RECV_DUPLICATE_EXTENTS_FAILED
++                            "FSCTL_DUPLICATE_EXTENTS_TO_FILE palautti %08x (%s)."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_RECV_SUCCESS_PLURAL "Vastaanotettiin onnistuneesti %u alitaltiota."
++    IDS_SEND_SUBVOL         "&Lähetä alitaltio..."
++    IDS_SEND_SUBVOL_HELP    "Vie alitaltion, jotta sen voi luoda uudelleen toiselle taltiolle."
++    IDS_SEND_CANT_OPEN_FILE "Virhe avattaessa tiedostoa %s (virhe %u, %s)."
++    IDS_SEND_CANT_OPEN_DIR  "Virhe avattaessa hakemistoa %s (virhe %u, %s)."
++    IDS_SEND_FSCTL_BTRFS_SEND_SUBVOL_FAILED
++                            "FSCTL_BTRFS_SEND_SUBVOL palautti virheen %08x (%s)."
++    IDS_SEND_FSCTL_BTRFS_READ_SEND_BUFFER_FAILED
++                            "FSCTL_BTRFS_READ_SEND_BUFFER palautti virheen %08x (%s)."
++    IDS_SEND_SUCCESS        "Virta kirjoitettiin onnistuneesti."
++    IDS_SEND_WRITEFILE_FAILED "Tiedostoon kirjoittaminen epäonnistui (virhe %u, %s)."
++    IDS_SEND_GET_FILE_INFO_FAILED
++                            "GetFileInformationByHandle epäonnistui (virhe %u, %s)."
++    IDS_SEND_NOT_READONLY   "Alitaltio ei ole vain luku -tilassa."
++    IDS_NOT_SUBVOL          "Hakemisto ei ollut alitaltio."
++    IDS_GET_FILE_IDS_FAILED "FSCTL_BTRFS_GET_FILE_IDS palautti virheen %08x (%s)."
++    IDS_SHPARSEDISPLAYNAME_FAILED "SHParseDisplayName epäonnistui."
++    IDS_SHGETPATHFROMIDLIST_FAILED "SHGetPathFromIDList epäonnistui."
++    IDS_SEND_PARENT_NOT_READONLY "Ylätason alitaltio ei ole vain luku -tilassa."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_SEND_CANCEL         "&Peruuta"
++    IDS_SEND_WRITING        "Kirjoitetaan..."
++    IDS_MISSING             "(puuttuu)"
++    IDS_RESIZE_SUCCESSFUL   "Laitteen %llx koko muutettiin onnistuneesti: %s."
++    IDS_BALANCE_RUNNING_SHRINK
++                            "Pienennetään laitetta %llu (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_BALANCE_PAUSED_SHRINK
++                            "Laitteen %llu pienentäminen keskeytetty (%llu / %llu lohkoa käsitelty, %1.1f%%)"
++    IDS_BALANCE_CANCELLED_SHRINK "Laitteen pienentäminen peruutettiin."
++    IDS_BALANCE_COMPLETE_SHRINK "Laite pienennettiin onnistuneesti."
++    IDS_BALANCE_FAILED_SHRINK "Laitteen pienentäminen epäonnistui (virhe %08x, %s)"
++    IDS_COMPRESS_ZSTD       "Zstd"
++    IDS_REGCREATEKEY_FAILED "RegCreateKey palautti %08x"
++    IDS_REGSETVALUEEX_FAILED "RegSetValueEx palautti %08x"
++    IDS_REGCLOSEKEY_FAILED  "RegCloseKey palautti %08x"
++    IDS_CANT_REFLINK_DIFFERENT_FS
++                            "Kahden eri tiedostojärjestelmän välille ei voi luoda viitelinkkiä."
++END
++
++STRINGTABLE
++BEGIN
++    IDS_INITCOMMONCONTROLSEX_FAILED "InitCommonControlsEx epäonnistui."
++    IDS_CANT_OPEN_MOUNTMGR  "Liitoshallinnan kahvaa ei saatu."
++    IDS_TVM_INSERTITEM_FAILED "TVM_INSERTITEM epäonnistui."
++    IDS_RECV_PATH_TOO_LONG  "%S: polku oli liian pitkä."
++END
++
++
+diff --git a/dll/shellext/shellbtrfs/shellbtrfs.rc b/dll/shellext/shellbtrfs/shellbtrfs.rc
+index 5140d8d3498..ba374eaf297 100644
+--- a/dll/shellext/shellbtrfs/shellbtrfs.rc
++++ b/dll/shellext/shellbtrfs/shellbtrfs.rc
+@@ -835,3 +835,8 @@ END
+ /////////////////////////////////////////////////////////////////////////////
+ #endif    // not APSTUDIO_INVOKED
+ 
++
++#ifdef LANGUAGE_FI_FI
++#pragma code_page(65001)
++    #include "lang/fi-FI.rc"
++#endif
+-- 
+2.56.0
+

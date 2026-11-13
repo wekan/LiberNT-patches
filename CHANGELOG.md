@@ -15,16 +15,6 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 # TODO Later
 
 <details>
-<summary>Not translated into Finnish yet</summary>
-
-- Modules whose `.rc` includes none of its language files, so a fi-FI file
-  would not be used: joy, storprop, winmm, write, and the English-only
-  resources of tzres, shellbtrfs, wordpad, progman and conhost among others.
-  Their `.rc` has to include its language files first.
-
-</details>
-
-<details>
 <summary>Left in English on purpose</summary>
 
 - bugcodes.mc, the bug check screen: the kernel looks its text up with
@@ -32,6 +22,9 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
   keeps it English too.
 - eventcreate's evtmsgstr.mc: its 65,536 messages are all `%1`, nothing to
   translate.
+- storprop's disk policies page: its only resource is a dialog upstream has
+  not finished - both radio buttons at one place, no handler - and does not
+  build in, so nothing of it is shown in any language.
 
 </details>
 

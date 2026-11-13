@@ -37,7 +37,8 @@ want="$(cat "$ROOT"/dist/all/*.patch "$ROOT"/dist/translations/*.patch | grep -c
 git -C "$TMP/one" log --format=%s -"$want" > "$TMP/subjects.txt"
 grep -qx '\[TRANSLATION\] Translate the user interface into Finnish (fi-FI)' "$TMP/subjects.txt" && ok "the [TRANSLATION] subject is kept" || fail "translation subject: $(head -1 "$TMP/subjects.txt")"
 grep -q '^\[CI\] ' "$TMP/subjects.txt" && ok "the [CI] subject is kept" || fail "CI subject"
-[ "$(grep -c '^\[[A-Z0-9:_]*\] ' "$TMP/subjects.txt")" = "$want" ] && ok "every commit keeps its [COMPONENT] subject" || fail "a subject lost its [COMPONENT]: $(grep -v '^\[' "$TMP/subjects.txt" | head -1)"
+# One component or several, as LiberNT writes them: [WORDPAD][WRITE] Add ...
+[ "$(grep -cE '^(\[[A-Z0-9:_]+\])+ ' "$TMP/subjects.txt")" = "$want" ] && ok "every commit keeps its [COMPONENT] subject" || fail "a subject lost its [COMPONENT]: $(grep -vE '^(\[[A-Z0-9:_]+\])+ ' "$TMP/subjects.txt" | head -1)"
 for f in release-all.yml release-all-missing.yml release-build.yml; do
   [ -f "$TMP/one/.github/workflows/$f" ] || fail "no .github/workflows/$f"
 done
@@ -80,6 +81,14 @@ fi
 vfdcmd="$TMP/one/modules/rosapps/applications/cmdutils/vfdcmd/vfdcmd.c"
 n="$(grep -c 'CharToOemA(' "$vfdcmd" || true)"
 [ "$n" = 5 ] && ok "vfd.exe converts its 5 printed message texts to the OEM code page" || fail "vfd.exe has $n CharToOemA calls, want 5"
+# The modules whose .rc carries its English itself include their Finnish file.
+nmod=0
+for rc in base/applications/wordpad/rsrc.rc base/applications/write/rsrc.rc dll/cpl/joy/joy.rc \
+          dll/win32/winmm/winmm.rc base/system/conhost/conhost.rc base/shell/progman/progman.rc \
+          dll/win32/tzres/tzres.rc dll/shellext/shellbtrfs/shellbtrfs.rc; do
+  if grep -A2 'LANGUAGE_FI_FI' "$TMP/one/$rc" | grep -q '#include "lang/'; then nmod=$((nmod + 1)); else fail "$rc does not include a Finnish file"; fi
+done
+ok "$nmod modules that carried only English include their Finnish file"
 # getuname's Finnish names: the same ids as en-US.rc, and exactly what
 # tools/getuname-fi/gen.py makes of the patched tree's en-US.rc - so the file
 # is regenerated, not hand-edited, when upstream changes the English names.
