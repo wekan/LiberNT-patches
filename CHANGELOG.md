@@ -17,8 +17,6 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 <details>
 <summary>Not translated into Finnish yet</summary>
 
-- The ReactOS virtual floppy tool's tables in modules/rosapps (vfdmsg.mc 151,
-  vfdmsg_lib.mc 63).
 - getuname's Unicode character names, about 38,000 lines.
 - Modules whose `.rc` includes none of its language files, so a fi-FI file
   would not be used: joy, storprop, winmm, write, and the English-only

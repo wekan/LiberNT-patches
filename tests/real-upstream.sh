@@ -58,18 +58,28 @@ done < <(git -C "$TMP/one" diff --name-only "$(val one UPSTREAM_COMMIT)" HEAD | 
 if command -v gcc >/dev/null && command -v iconv >/dev/null; then
   gcc -O1 -o "$TMP/windmc" "$TMP/one/sdk/tools/windmc/windmc.c" 2>"$TMP/windmc.log" || fail "windmc does not build: $(tail -2 "$TMP/windmc.log")"
   mcs="$(git -C "$TMP/one" diff --name-only "$(val one UPSTREAM_COMMIT)" HEAD | grep '\.mc$' || true)"
-  nmc=0
+  nmc=0; nansi=0
   for mc in $mcs; do
     d="$TMP/mc/$(basename "$mc" .mc)"; mkdir -p "$d"
     iconv -f UTF-8 -t UTF-16LE "$TMP/one/$mc" > "$d/$(basename "$mc")"
-    if ( cd "$d" && "$TMP/windmc" -u -U -b -h ./ -r ./ "$(basename "$mc")" ) > "$d/log" 2>&1 && ls "$d" | grep -q '_MSG0040B\.bin$'; then
+    # ANSI or Unicode, as the CMakeLists beside the table lists it: the
+    # (...) group that names the table says ANSI or not.
+    mode=U
+    if tr '\n' ' ' < "$TMP/one/$(dirname "$mc")/CMakeLists.txt" | grep -oE '\([^()]*\)' \
+       | grep -F "$(basename "$mc")" | grep -q ANSI; then mode=A; nansi=$((nansi + 1)); fi
+    if ( cd "$d" && "$TMP/windmc" -u -$mode -b -h ./ -r ./ "$(basename "$mc")" ) > "$d/log" 2>&1 && ls "$d" | grep -q '_MSG0040B\.bin$'; then
       nmc=$((nmc + 1))
     else
       fail "$mc does not compile to a Finnish binary: $(tail -2 "$d/log")"
     fi
   done
-  ok "$nmc message table(s) compile with windmc, each with a Finnish binary"
+  ok "$nmc message table(s) compile with windmc, each with a Finnish binary ($nansi of them ANSI)"
 fi
+# vfd.exe prints its ANSI messages and the system error texts to the console,
+# which is OEM: each of its five places converts with CharToOemA first.
+vfdcmd="$TMP/one/modules/rosapps/applications/cmdutils/vfdcmd/vfdcmd.c"
+n="$(grep -c 'CharToOemA(' "$vfdcmd" || true)"
+[ "$n" = 5 ] && ok "vfd.exe converts its 5 printed message texts to the OEM code page" || fail "vfd.exe has $n CharToOemA calls, want 5"
 if [ -n "${EXPECT_TREE:-}" ]; then
   [ "$(git -C "$TMP/one" rev-parse 'HEAD^{tree}')" = "$EXPECT_TREE" ] && ok "the patched tree is the expected one" || fail "tree $(git -C "$TMP/one" rev-parse 'HEAD^{tree}'), want $EXPECT_TREE"
 fi

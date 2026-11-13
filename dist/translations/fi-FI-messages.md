@@ -19,6 +19,8 @@ switches, values typed as shown and column layouts stay as they are.
 | sdk/include/reactos/mc/ntstatus.mc | 693 | the NTSTATUS texts |
 | sdk/include/reactos/mc/errcodes.mc | 2191 | the system error texts of FormatMessage |
 | sdk/include/reactos/mc/netmsgmsg.mc | 1416 | the network messages: NET command output, NERR_*, alerts, event texts |
+| modules/rosapps/applications/cmdutils/vfdcmd/vfdmsg.mc | 151 | vfd.exe, the virtual floppy tool: errors, prompts, help |
+| modules/rosapps/lib/vfdlib/vfdmsg_lib.mc | 63 | vfd.dll's dialogs, which take their labels from it |
 
 sacmsg.mc had no `LanguageNames`; English is listed as windmc's default
 `English=0x409:MSG00001`, so its binary and header stay byte for byte the same.
@@ -28,6 +30,12 @@ A text that an earlier table already has gets the same Finnish. In
 netmsgmsg.mc the day names and AM/PM suffixes are Finnish because NET USER
 /TIMES reads them from the table to parse what is typed, and column headers
 keep their column positions.
+
+vfd.exe compares a typed answer with fixed letters, so its prompts keep Y, N,
+R, F, C, O and T and say them in Finnish. The patch also makes vfd.exe convert
+what it prints with `CharToOemA`: it printed the ANSI texts to the OEM console
+as they were, which only ASCII survives. `tests/real-upstream.sh` compiles each
+table as ANSI or Unicode as its CMakeLists says, and checks that conversion.
 `tests/real-upstream.sh` compiles every changed table with the windmc of the
 patched tree and requires a Finnish binary from each.
 
