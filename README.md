@@ -1,1 +1,56 @@
-# LiberNT patches, like translations to Finnish, etc
+# LiberNT-patches
+
+Patches and translations to upstream [LiberNT](https://github.com/LiberNT/LiberNT),
+and the scripts that release LiberNT with them at
+[wekan/LiberNT releases](https://github.com/wekan/LiberNT/releases).
+
+This repository carries **no LiberNT source**. A release clones upstream
+`main-nt10` (or a branch, tag or commit you name) **with its whole history**,
+applies these patches on top as ordinary **git commits** on a branch named
+`libernt-patches`, and attaches to a release of
+[wekan/LiberNT](https://github.com/wekan/LiberNT):
+
+| File | What it is |
+|------|------------|
+| `LiberNT-<tag>-source-with-history.zip` | the patched source as a git repository: `LiberNT/` with `LiberNT/.git`, upstream's history and the LiberNT-patches commits |
+| `LiberNT-<tag>-source-without-history.zip` | the same source without `LiberNT/.git`, much smaller - **the images are built from it** |
+| `LiberNT-<tag>-source.env` | the upstream and LiberNT-patches commits the source was made of |
+| `LiberNT-<tag>-<platform>-<image>.zip` | `bootcd.iso`, `LiberNT.img`, `LiberNT.vhd` and `LiberNT.vhdx` of i386, amd64, arm64-raspberry, riscv64-spacemit-k1 and ppc |
+
+Every file has a `.sha256` beside it. Upstream's own releases - its builds and
+its ICU, FFmpeg and Mesa payloads - are mirrored to wekan/LiberNT's releases
+as well. Same model as [wekan/gitea-patches](https://github.com/wekan/gitea-patches),
+[wekan/node-patches](https://github.com/wekan/node-patches) and
+[wekan/mongo-tools-patches](https://github.com/wekan/mongo-tools-patches).
+
+## What is changed
+
+- **Finnish** ([dist/translations/fi-FI.md](dist/translations/fi-FI.md)): the
+  LiberNT user interface in Finnish - 213 fi-FI resource files added or
+  completed, and the shell folders named alike in every module.
+- **Release workflows** ([dist/all/0010-release-workflows.md](dist/all/0010-release-workflows.md)):
+  Release All and Release All Missing of wekan/LiberNT, which build releases
+  from upstream and this repository.
+
+See [the patch format](docs/Design/Patch-format.md).
+
+## Making a release
+
+From wekan/LiberNT's Actions tab, or with `gh`:
+
+```sh
+gh workflow run release-all.yml -R wekan/LiberNT                          # upstream main-nt10
+gh workflow run release-all.yml -R wekan/LiberNT -f ref=<branch, tag or commit>
+gh workflow run release-all-missing.yml -R wekan/LiberNT                  # complete the newest release
+```
+
+`./build.sh` has the same as a menu, and also prepares the patched source and
+its zips locally, and runs the tests. See
+[how the build works](docs/Design/How-the-build-works.md).
+
+## Tests
+
+```sh
+./build.sh test        # offline, on a fixture repository
+./build.sh test-real   # the real patches on real upstream LiberNT
+```

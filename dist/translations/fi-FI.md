@@ -1,0 +1,33 @@
+# fi-FI
+
+LiberNT's user interface in Finnish: 213 fi-FI resource files, added or
+completed, and the 196 module `.rc` files that include them.
+
+## What it changes
+
+- Every module that includes its language files gets a fi-FI resource with the
+  same controls, ids, sizes and format specifiers as its en-US one, and an
+  `#ifdef LANGUAGE_FI_FI` include beside the others, in alphabetical order.
+- Finnish resources that had English left in them are translated, LiberNT
+  Setup's upgrade, update and install-from-Windows pages among them.
+- The shell folders are named as the Finnish userenv, mmsys and syssetup
+  create them - "Käynnistä-valikko\\Kaikki ohjelmat", "Ohjelmat\\Yhteiset
+  tiedostot" - so shell32 names the folders that exist and
+  interop:LocaleTests finds them alike.
+- kernel32's code page and location names (winnls) are in Finnish.
+
+## What it leaves in English, on purpose
+
+Names that Finnish Windows shows in English too: country names that are the
+same in Finnish, protocol and standard names (ISDN, PPTP, EBCDIC, KOI8),
+property and identifier names, file extensions, key names on keyboards, and
+the GPL license text.
+
+## Not translated yet
+
+- The message tables of sdk/include/reactos/mc (errcodes.mc, netmsgmsg.mc,
+  ntstatus.mc and the rest), which have no Finnish at all.
+- getuname's Unicode character names (about 38,000 lines).
+- Modules whose `.rc` includes none of its language files, so a fi-FI file
+  would not be used: joy, storprop, winmm, write, and the English-only
+  resources of tzres, shellbtrfs, wordpad, progman and conhost among others.

@@ -1,0 +1,541 @@
+From 3ee4b9b2ba2a932a2c12bb95d71b59ca5e60c30d Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 22:01:59 +0200
+Subject: [PATCH] [CI] Release LiberNT from upstream and wekan/LiberNT-patches
+
+feat: Release All clones upstream LiberNT/LiberNT, applies
+wekan/LiberNT-patches, and releases the source zipped with and without
+its git history, the boot CD and disk images, and upstream's releases.
+---
+ .github/workflows/release-all-missing.yml |  35 ++
+ .github/workflows/release-all.yml         |  49 +++
+ .github/workflows/release-build.yml       | 419 ++++++++++++++++++++++
+ 3 files changed, 503 insertions(+)
+ create mode 100644 .github/workflows/release-all-missing.yml
+ create mode 100644 .github/workflows/release-all.yml
+ create mode 100644 .github/workflows/release-build.yml
+
+diff --git a/.github/workflows/release-all-missing.yml b/.github/workflows/release-all-missing.yml
+new file mode 100644
+index 00000000000..0bc1c33f305
+--- /dev/null
++++ b/.github/workflows/release-all-missing.yml
+@@ -0,0 +1,35 @@
++name: Release All Missing
++
++# Complete a release Release All made: make again only the source files and
++# build only the platforms it lacks a file of, and upload only the files it
++# does not have - a build that failed, or an upload that did. Files already on
++# the release are never replaced. The source is made from the upstream and
++# LiberNT-patches commits in the release's LiberNT-<tag>-source.env, which
++# gives the same commits, or the release's own source zip when it has one.
++# Upstream's releases are mirrored as well. The steps are in release-build.yml.
++#
++# Usage:
++#   gh workflow run release-all-missing.yml -R wekan/LiberNT             # the newest Release All release
++#   gh workflow run release-all-missing.yml -R wekan/LiberNT -f tag=v0.4.17-dev-wekan-20261113-d02ef2e0db2
++
++on:
++  workflow_dispatch:
++    inputs:
++      tag:
++        description: 'Release tag to complete (empty = the newest Release All release)'
++        required: false
++        type: string
++
++permissions:
++  contents: write
++
++concurrency:
++  group: libernt-release-${{ inputs.tag || 'newest' }}
++  cancel-in-progress: false
++
++jobs:
++  release:
++    uses: ./.github/workflows/release-build.yml
++    with:
++      mode: missing
++      tag: ${{ inputs.tag }}
+diff --git a/.github/workflows/release-all.yml b/.github/workflows/release-all.yml
+new file mode 100644
+index 00000000000..fb399e8454b
+--- /dev/null
++++ b/.github/workflows/release-all.yml
+@@ -0,0 +1,49 @@
++name: Release All
++
++# Make a release of wekan/LiberNT from upstream LiberNT/LiberNT and
++# wekan/LiberNT-patches: clone upstream with its whole history, apply the
++# patches (the Finnish translation, these workflows) as git commits, and put
++# on a GitHub Release of this repository the patched source zipped with its
++# git history and without it, and the boot CD and disk images of every
++# platform LiberNT's own CI builds images for, built from that source. Files
++# of the same name are replaced. Upstream's own releases are mirrored here as
++# well. The steps are in release-build.yml.
++#
++# Usage:
++#   gh workflow run release-all.yml -R wekan/LiberNT                     # upstream main-nt10, LiberNT-patches main
++#   gh workflow run release-all.yml -R wekan/LiberNT -f ref=<upstream branch, tag or commit>
++#   gh workflow run release-all.yml -R wekan/LiberNT -f tag=v0.4.17-dev-wekan-20261113-d02ef2e0db2
++#
++# To fill in only what a release is missing, use release-all-missing.yml.
++
++on:
++  workflow_dispatch:
++    inputs:
++      ref:
++        description: 'Upstream LiberNT/LiberNT branch, tag or commit (empty = main-nt10)'
++        required: false
++        type: string
++      patches_ref:
++        description: 'wekan/LiberNT-patches branch, tag or commit (empty = main)'
++        required: false
++        type: string
++      tag:
++        description: 'Release tag (empty = v<version>-wekan-<date>-<upstream commit>)'
++        required: false
++        type: string
++
++permissions:
++  contents: write
++
++concurrency:
++  group: libernt-release-${{ inputs.tag || inputs.ref || github.sha }}
++  cancel-in-progress: false
++
++jobs:
++  release:
++    uses: ./.github/workflows/release-build.yml
++    with:
++      mode: all
++      tag: ${{ inputs.tag }}
++      ref: ${{ inputs.ref }}
++      patches_ref: ${{ inputs.patches_ref }}
+diff --git a/.github/workflows/release-build.yml b/.github/workflows/release-build.yml
+new file mode 100644
+index 00000000000..09b7e9315a1
+--- /dev/null
++++ b/.github/workflows/release-build.yml
+@@ -0,0 +1,419 @@
++name: Release build
++
++# Shared by "Release All" (release-all.yml) and "Release All Missing"
++# (release-all-missing.yml). It is called, never run by itself, so the steps
++# exist once and the two cannot drift apart.
++#
++# THE SOURCE IS UPSTREAM PLUS wekan/LiberNT-patches. The source job clones
++# upstream LiberNT/LiberNT with its whole history and applies
++# wekan/LiberNT-patches on top as git commits (releases/apply-patches.sh
++# there), so a release is built from upstream as it is, with the Finnish
++# translation and these workflows added - never from a fork that drifts. The
++# commits are reproducible: the same upstream commit and the same patches give
++# the same commit hashes, which is what lets Release All Missing make the
++# source of an existing release again.
++#
++# WHAT A RELEASE OF wekan/LiberNT CARRIES:
++#
++#   LiberNT-<tag>-source-with-history.zip     LiberNT/ with LiberNT/.git:
++#                                             upstream's history and the
++#                                             LiberNT-patches commits
++#   LiberNT-<tag>-source-without-history.zip  the same without LiberNT/.git;
++#                                             the images are built from it
++#   LiberNT-<tag>-source.env                  which upstream and which
++#                                             LiberNT-patches commit it is
++#   LiberNT-<tag>-<id>-<image>.zip            the boot CD and disk images of
++#                                             every platform LiberNT's own CI
++#                                             builds images for:
++#
++#   id                    compiler  arch     profile
++#   i386                  gcc       i386     -
++#   amd64                 clang     amd64    -
++#   arm64-raspberry       clang     arm64    profile_raspberry
++#   riscv64-spacemit-k1   clang     riscv64  profile_spacemit_k1
++#   ppc                   clang     ppc      -
++#
++# Each image is bootcd.iso, LiberNT.img, LiberNT.vhd or LiberNT.vhdx, zipped
++# (a GitHub release asset must be under 2 GiB, and an image compresses well).
++# Every file has a .sha256 beside it.
++#
++# UPSTREAM'S OWN RELEASES: the mirror job copies every release of
++# LiberNT/LiberNT - its builds and its ICU, FFmpeg and Mesa payloads - to a
++# release of the same tag, name, notes and files here, adding what is missing
++# and never replacing a file.
++#
++# mode: all      a new release (or the named one) made in full, uploads with
++#                --clobber; upstream's releases mirrored.
++#       missing  the newest release (or the named one) completed: only the
++#                source files and platforms it lacks a file of, uploading only
++#                absent files; upstream's releases mirrored.
++
++on:
++  workflow_call:
++    inputs:
++      mode:
++        description: 'all or missing'
++        required: true
++        type: string
++      tag:
++        description: 'Release tag (empty = a new one for "all", the newest release for "missing")'
++        required: false
++        type: string
++        default: ''
++      ref:
++        description: 'Upstream LiberNT/LiberNT branch, tag or commit (empty = its default branch, main-nt10); "all" only'
++        required: false
++        type: string
++        default: ''
++      patches_ref:
++        description: 'wekan/LiberNT-patches branch, tag or commit (empty = main); "all" only'
++        required: false
++        type: string
++        default: ''
++
++permissions:
++  contents: write
++
++env:
++  IMAGES: bootcd.iso LiberNT.img LiberNT.vhd LiberNT.vhdx
++  UPSTREAM_REPO: LiberNT/LiberNT
++  PATCHES_REPO: wekan/LiberNT-patches
++
++jobs:
++  source:
++    name: patched source
++    runs-on: ubuntu-24.04
++    outputs:
++      tag: ${{ steps.plan.outputs.tag }}
++      matrix: ${{ steps.plan.outputs.matrix }}
++      count: ${{ steps.plan.outputs.count }}
++    steps:
++      - name: Free disk space
++        run: |
++          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
++          df -h /
++
++      - name: Plan the release and make its source
++        id: plan
++        env:
++          GH_TOKEN: ${{ github.token }}
++          MODE: ${{ inputs.mode }}
++          TAG: ${{ inputs.tag }}
++          REF: ${{ inputs.ref }}
++          PATCHES_REF: ${{ inputs.patches_ref }}
++        run: |
++          set -euo pipefail
++          PLATFORMS='[
++            {"id": "i386",                "compiler": "gcc",   "arch": "i386",    "profile": ""},
++            {"id": "amd64",               "compiler": "clang", "arch": "amd64",   "profile": ""},
++            {"id": "arm64-raspberry",     "compiler": "clang", "arch": "arm64",   "profile": "profile_raspberry"},
++            {"id": "riscv64-spacemit-k1", "compiler": "clang", "arch": "riscv64", "profile": "profile_spacemit_k1"},
++            {"id": "ppc",                 "compiler": "clang", "arch": "ppc",     "profile": ""}
++          ]'
++          mkdir -p dist
++
++          # The release to complete, and the commits its source was made of.
++          UPSTREAM_COMMIT=""; PATCHES_COMMIT=""
++          if [ "$MODE" = "missing" ]; then
++            if [ -z "$TAG" ]; then
++              TAG="$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 100 --json tagName --jq '.[].tagName' | grep -- '-wekan-' | head -n 1 || true)"
++              [ -n "$TAG" ] || { echo "::error::There is no Release All release yet. Run Release All first."; exit 1; }
++            fi
++            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "LiberNT-$TAG-source.env" --dir . ||
++              { echo "::error::$TAG has no LiberNT-$TAG-source.env, so its source cannot be made again."; exit 1; }
++            # shellcheck disable=SC1090
++            . "./LiberNT-$TAG-source.env"
++            REF="$UPSTREAM_COMMIT"; PATCHES_REF="$PATCHES_COMMIT"
++          fi
++
++          git clone --quiet "https://github.com/$PATCHES_REPO.git" patches
++          [ -z "$PATCHES_REF" ] || git -C patches checkout --quiet "$PATCHES_REF"
++          PATCHES_COMMIT="$(git -C patches rev-parse HEAD)"
++
++          UPSTREAM_URL="https://github.com/$UPSTREAM_REPO.git" PATCHES_ENV=patches.env \
++            bash patches/releases/apply-patches.sh patches LiberNT "$REF"
++          UPSTREAM_COMMIT="$(sed -n 's/^UPSTREAM_COMMIT=//p' patches.env)"
++          UPSTREAM_SHORT="${UPSTREAM_COMMIT::11}"
++          LIBERNT_VERSION="$(sed -n 's/^LIBERNT_VERSION=//p' patches.env)"
++          BUILD_TYPE="$(sed -n 's/^LIBERNT_BUILD_TYPE=//p' patches.env)"
++
++          if [ -z "$TAG" ]; then
++            TAG="v${LIBERNT_VERSION}${BUILD_TYPE:+-$BUILD_TYPE}-wekan-$(date -u +%Y%m%d)-${UPSTREAM_SHORT}"
++          fi
++          printf 'UPSTREAM_REPO=%s\nUPSTREAM_COMMIT=%s\nPATCHES_REPO=%s\nPATCHES_COMMIT=%s\nPATCHED_COMMIT=%s\n' \
++            "$UPSTREAM_REPO" "$UPSTREAM_COMMIT" "$PATCHES_REPO" "$PATCHES_COMMIT" "$(git -C LiberNT rev-parse HEAD)" > "dist/LiberNT-$TAG-source.env"
++
++          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
++            PRE=""; [ -n "$BUILD_TYPE" ] && PRE="--prerelease"
++            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" $PRE --title "LiberNT $TAG" --notes "$(cat <<NOTES
++          LiberNT with the Finnish translation, built by the Release All workflow of wekan/LiberNT from upstream [$UPSTREAM_REPO@${UPSTREAM_SHORT}](https://github.com/$UPSTREAM_REPO/commit/$UPSTREAM_COMMIT) and [$PATCHES_REPO@${PATCHES_COMMIT::11}](https://github.com/$PATCHES_REPO/commit/$PATCHES_COMMIT).
++
++          | File | What it is |
++          | --- | --- |
++          | LiberNT-$TAG-source-with-history.zip | the patched source with LiberNT/.git: upstream's history and the LiberNT-patches commits |
++          | LiberNT-$TAG-source-without-history.zip | the same source without LiberNT/.git; the images are built from it |
++          | LiberNT-$TAG-source.env | the upstream and LiberNT-patches commits of this source |
++          | LiberNT-$TAG-&lt;platform&gt;-&lt;image&gt;.zip | bootcd.iso, LiberNT.img, LiberNT.vhd and LiberNT.vhdx of i386 (GCC), amd64, arm64-raspberry, riscv64-spacemit-k1 and ppc (Clang) |
++
++          Every file has a .sha256 beside it.
++          NOTES
++          )"
++          fi
++          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | sort > existing.txt
++          has() { grep -qxF "$1" existing.txt; }
++
++          # The source zips: made when "all", or when the release lacks one.
++          SOURCE_FILES="LiberNT-$TAG-source-with-history.zip LiberNT-$TAG-source-without-history.zip"
++          need_source=""
++          for f in $SOURCE_FILES; do has "$f" && has "$f.sha256" || need_source=1; done
++          has "LiberNT-$TAG-source.env" || need_source=1
++          if [ "$MODE" = "all" ] || [ -n "$need_source" ]; then
++            python3 -I patches/releases/source-zips.py LiberNT dist "$TAG"
++            for z in dist/*.zip; do
++              size="$(stat -c %s "$z")"
++              [ "$size" -lt $((2 * 1024 * 1024 * 1024)) ] || { echo "::error::$z is $size bytes, over GitHub's 2 GiB asset limit."; exit 1; }
++            done
++            ( cd dist && sha256sum "LiberNT-$TAG-source.env" > "LiberNT-$TAG-source.env.sha256" )
++            upload=()
++            for f in dist/*; do
++              if [ "$MODE" = "all" ] || ! has "$(basename "$f")"; then upload+=( "$f" ); fi
++            done
++            if [ "${#upload[@]}" -gt 0 ]; then
++              if [ "$MODE" = "all" ]; then gh release upload "$TAG" "${upload[@]}" --repo "$GITHUB_REPOSITORY" --clobber
++              else gh release upload "$TAG" "${upload[@]}" --repo "$GITHUB_REPOSITORY"; fi
++              printf 'Uploaded %s\n' "${upload[@]#dist/}"
++            fi
++          else
++            # The release has its source: the images are built from that same zip.
++            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir dist \
++              --pattern "LiberNT-$TAG-source-without-history.zip" --pattern "LiberNT-$TAG-source-without-history.zip.sha256"
++            ( cd dist && sha256sum -c "LiberNT-$TAG-source-without-history.zip.sha256" )
++          fi
++          mkdir -p artifact
++          mv "dist/LiberNT-$TAG-source-without-history.zip" artifact/source.zip
++
++          # A platform is complete when every image zip AND its .sha256 is on
++          # the release: an image whose checksum upload failed is half-published.
++          echo "$PLATFORMS" | jq -c '.[]' > platforms.jsonl
++          : > wanted.jsonl
++          while IFS= read -r p; do
++            id="$(jq -r .id <<<"$p")"
++            missing=""
++            for img in $IMAGES; do
++              for f in "LiberNT-$TAG-$id-$img.zip" "LiberNT-$TAG-$id-$img.zip.sha256"; do
++                has "$f" || missing="$missing $f"
++              done
++            done
++            if [ "$MODE" = "all" ] || [ -n "$missing" ]; then
++              echo "$p" >> wanted.jsonl
++              echo "  $id: build${missing:+ (missing:$missing)}"
++            else
++              echo "  $id: complete"
++            fi
++          done < platforms.jsonl
++
++          MATRIX="$(jq -cs '{include: .}' wanted.jsonl)"
++          COUNT="$(wc -l < wanted.jsonl | tr -d ' ')"
++          { echo "tag=$TAG"; echo "matrix=$MATRIX"; echo "count=$COUNT"; } >> "$GITHUB_OUTPUT"
++          {
++            echo "### $TAG ($MODE)"
++            echo ""
++            echo "Upstream \`$UPSTREAM_COMMIT\`, LiberNT-patches \`$PATCHES_COMMIT\`."
++            echo ""
++            if [ "$COUNT" -eq 0 ]; then echo "Every platform is complete."
++            else echo "Building: $(jq -r '[.include[].id] | join(", ")' <<<"$MATRIX")"; fi
++          } >> "$GITHUB_STEP_SUMMARY"
++
++      - name: Hand the source to the builds
++        if: ${{ steps.plan.outputs.count != '0' }}
++        uses: actions/upload-artifact@v4
++        with:
++          name: source
++          path: artifact/source.zip
++          retention-days: 3
++          compression-level: 0
++
++  build:
++    name: build ${{ matrix.id }}
++    needs: source
++    if: ${{ needs.source.outputs.count != '0' }}
++    strategy:
++      matrix: ${{ fromJSON(needs.source.outputs.matrix) }}
++      fail-fast: false
++    runs-on: ubuntu-24.04
++    timeout-minutes: 360
++    env:
++      TAG: ${{ needs.source.outputs.tag }}
++    steps:
++    - name: Free disk space
++      run: |
++        df -h /
++        sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL /usr/share/swift /usr/lib/jvm /usr/local/share/powershell /usr/local/share/chromium
++        sudo docker system prune --all --force
++        df -h /
++
++    - name: Get the patched source
++      uses: actions/download-artifact@v4
++      with:
++        name: source
++
++    - name: Unpack the patched source
++      run: |
++        set -euo pipefail
++        # unzip restores the file modes source-zips.py stored: the build's
++        # scripts stay executable.
++        unzip -q source.zip
++        rm source.zip
++        test -x LiberNT/configure.sh
++
++    - name: Install host build tools
++      run: |
++        sudo apt-get update
++        sudo apt-get install -y cmake ninja-build flex bison ccache wget xz-utils tar python3-mako python3-yaml python3-packaging glslang-tools msitools zip
++
++    - name: Compute RosBE bootstrap SHA
++      id: rosbe_spec
++      run: |
++        curl -fsSL https://raw.githubusercontent.com/LiberNT/libernt-build-toolchain/main/rosbe-unix-bootstrap.sh -o /tmp/rosbe-bootstrap.sh
++        echo "sha=$(sha1sum /tmp/rosbe-bootstrap.sh | awk '{print $1}')" >> "$GITHUB_OUTPUT"
++
++    - name: Cache RosBE
++      id: cache_rosbe
++      uses: actions/cache@v5
++      with:
++        path: ~/.local/opt/rosbe
++        key: rosbe-${{runner.os}}-${{steps.rosbe_spec.outputs.sha}}
++
++    - name: Install RosBE
++      if: ${{ steps.cache_rosbe.outputs.cache-hit != 'true' }}
++      run: sh /tmp/rosbe-bootstrap.sh
++
++    - name: Configure
++      id: configure
++      working-directory: LiberNT
++      run: |
++        . "$HOME/.local/opt/rosbe/rosbe-env.sh"
++        FLAGS=""
++        [ "${{matrix.compiler}}" = "clang" ] && FLAGS="$FLAGS --clang"
++        [ "${{matrix.compiler}}" = "gcc" ] && FLAGS="$FLAGS --gcc"
++        [ -n "${{matrix.profile}}" ] && FLAGS="$FLAGS -DROSCONFIG_PROFILE=${{matrix.profile}}"
++        [ "${{matrix.compiler}}" = "clang" ] && case "${{matrix.arch}}" in amd64|arm64|riscv64) FLAGS="$FLAGS -DENABLE_MESA_LLVMPIPE=ON" ;; esac
++        ./configure.sh $FLAGS -a ${{matrix.arch}} \
++          -DREACTOS_TARGET_NT=0xA00 \
++          -DDIAGDATA_CHANNEL= \
++          -DENABLE_CCACHE=0
++        ENV_NAME=$([ "${{matrix.compiler}}" = "clang" ] && echo Clang || echo GCC)
++        echo "outdir=output-$ENV_NAME-${{matrix.arch}}-debug" >> "$GITHUB_OUTPUT"
++
++    - name: Build submodules
++      working-directory: LiberNT
++      run: |
++        . "$HOME/.local/opt/rosbe/rosbe-env.sh"
++        ninja -C ${{steps.configure.outputs.outdir}} submodules
++
++    - name: Build images
++      working-directory: LiberNT
++      run: |
++        . "$HOME/.local/opt/rosbe/rosbe-env.sh"
++        ninja -C ${{steps.configure.outputs.outdir}} bootcd liberntimg liberntvhd -k0
++
++    - name: Package the images
++      env:
++        OUTDIR: LiberNT/${{steps.configure.outputs.outdir}}
++        ID: ${{ matrix.id }}
++      run: |
++        set -euo pipefail
++        mkdir -p dist
++        for img in $IMAGES; do
++          # `-k0` keeps building past a failure, so an image can be absent:
++          # that is a failed platform, not one to publish without it.
++          [ -f "$OUTDIR/$img" ] || { echo "::error::$ID: $img was not built."; exit 1; }
++          zip -9 -j "dist/LiberNT-$TAG-$ID-$img.zip" "$OUTDIR/$img"
++        done
++        cd dist
++        for z in *.zip; do
++          size="$(stat -c %s "$z")"
++          [ "$size" -lt $((2 * 1024 * 1024 * 1024)) ] || { echo "::error::$z is $size bytes, over GitHub's 2 GiB asset limit."; exit 1; }
++          sha256sum "$z" > "$z.sha256"
++        done
++        ls -l
++
++    - name: Upload to the release
++      env:
++        GH_TOKEN: ${{ github.token }}
++        MODE: ${{ inputs.mode }}
++      run: |
++        set -euo pipefail
++        shopt -s nullglob
++        files=( dist/* )
++        if [ "$MODE" = "all" ]; then
++          gh release upload "$TAG" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber
++          echo "Uploaded ${#files[@]} file(s) to $TAG."
++          exit 0
++        fi
++        # missing: only files the release does not have, so a platform rebuilt
++        # for one absent file does not replace the bytes of the others.
++        gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | sort > existing.txt
++        new=()
++        for f in "${files[@]}"; do
++          grep -qxF "$(basename "$f")" existing.txt || new+=( "$f" )
++        done
++        if [ "${#new[@]}" -eq 0 ]; then
++          echo "::notice::$TAG already had every file of ${{ matrix.id }}."
++          exit 0
++        fi
++        gh release upload "$TAG" "${new[@]}" --repo "$GITHUB_REPOSITORY"
++        printf 'Added %s\n' "${new[@]#dist/}"
++
++  mirror:
++    name: mirror upstream's releases
++    runs-on: ubuntu-24.04
++    timeout-minutes: 360
++    steps:
++      - name: Free disk space
++        run: |
++          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
++          df -h /
++
++      - name: Copy what this repository's releases lack
++        env:
++          GH_TOKEN: ${{ github.token }}
++        run: |
++          set -euo pipefail
++          # Upstream's releases, oldest first, so they are listed here in the
++          # order upstream made them.
++          gh api --paginate "repos/$UPSTREAM_REPO/releases" --jq '.[].tag_name' | tac > upstream-tags.txt
++          echo "$UPSTREAM_REPO has $(wc -l < upstream-tags.txt | tr -d ' ') release(s)."
++          added=0
++          while IFS= read -r tag; do
++            gh api "repos/$UPSTREAM_REPO/releases/tags/$tag" > rel.json
++            if ! gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
++              # The tag points at upstream's commit when this repository has it
++              # (it carries upstream's history), else at this workflow's commit.
++              target="$(jq -r .target_commitish rel.json)"
++              sha="$(gh api "repos/$UPSTREAM_REPO/commits/$tag" --jq .sha 2>/dev/null || true)"
++              if [ -n "$sha" ] && gh api "repos/$GITHUB_REPOSITORY/commits/$sha" --jq .sha >/dev/null 2>&1; then target="$sha"; else target="$GITHUB_SHA"; fi
++              flags=()
++              [ "$(jq -r .prerelease rel.json)" = "true" ] && flags+=( --prerelease )
++              jq -r '.body // ""' rel.json > notes.md
++              printf '\n\nMirrored from [%s %s](%s).\n' "$UPSTREAM_REPO" "$tag" "$(jq -r .html_url rel.json)" >> notes.md
++              gh release create "$tag" --repo "$GITHUB_REPOSITORY" --target "$target" "${flags[@]}" \
++                --title "$(jq -r '.name // .tag_name' rel.json)" --notes-file notes.md --latest=false
++              echo "Created $tag."
++            fi
++            gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | sort > have.txt
++            # One file at a time, deleted after its upload: upstream's files
++            # together are larger than a runner's disk.
++            jq -r '.assets[] | [.name, .url] | @tsv' rel.json | while IFS=$'\t' read -r name url; do
++              grep -qxF "$name" have.txt && continue
++              mkdir -p mirror
++              curl -fsSL -H "Accept: application/octet-stream" -H "Authorization: Bearer $GH_TOKEN" -o "mirror/$name" "$url"
++              gh release upload "$tag" "mirror/$name" --repo "$GITHUB_REPOSITORY"
++              rm -f "mirror/$name"
++              echo "  $tag: added $name"
++            done
++            added=$((added + 1))
++          done < upstream-tags.txt
++          echo "### Upstream releases" >> "$GITHUB_STEP_SUMMARY"
++          echo "" >> "$GITHUB_STEP_SUMMARY"
++          echo "Checked $added release(s) of $UPSTREAM_REPO; every one is here with its files." >> "$GITHUB_STEP_SUMMARY"
+-- 
+2.56.0
+
