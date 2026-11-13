@@ -28,6 +28,10 @@ as well. Same model as [wekan/gitea-patches](https://github.com/wekan/gitea-patc
 - **Finnish** ([dist/translations/fi-FI.md](dist/translations/fi-FI.md)): the
   LiberNT user interface in Finnish - 213 fi-FI resource files added or
   completed, and the shell folders named alike in every module.
+- **Finnish messages** ([dist/translations/fi-FI-messages.md](dist/translations/fi-FI-messages.md)):
+  Finnish in nine message tables - DiskPart's help, the net and arp commands,
+  the event log, driver I/O errors, PCI device classes, the Special
+  Administration Console and more.
 - **Release workflows** ([dist/all/0010-release-workflows.md](dist/all/0010-release-workflows.md)):
   Release All and Release All Missing of wekan/LiberNT, which build releases
   from upstream and this repository.

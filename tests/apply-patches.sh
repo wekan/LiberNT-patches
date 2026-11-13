@@ -90,9 +90,12 @@ if run conflict; then fail "a conflicting patch was applied"; else grep -q 'does
 Z1="$TMP/z1"; Z2="$TMP/z2"
 if python3 -I "$ROOT/releases/source-zips.py" "$TMP/one" "$Z1" v1-test > /dev/null && python3 -I "$ROOT/releases/source-zips.py" "$TMP/two" "$Z2" v1-test > /dev/null; then
   names() { python3 -I -c 'import sys,zipfile; print("\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))' "$1"; }
-  names "$Z1/LiberNT-v1-test-source-with-history.zip" | grep -qx 'LiberNT/.git/HEAD' && ok "the zip with history has LiberNT/.git" || fail "no .git in the zip with history"
-  if names "$Z1/LiberNT-v1-test-source-without-history.zip" | grep -q '^LiberNT/\.git/'; then fail "the zip without history has .git"; else ok "the zip without history has no LiberNT/.git"; fi
-  names "$Z1/LiberNT-v1-test-source-without-history.zip" | grep -qx 'LiberNT/base/app/lang/fi-FI.rc' && ok "the patched files are in it, under LiberNT/" || fail "patched file missing from the zip"
+  # Listed into files first: `| grep -q` under pipefail fails when grep stops early.
+  names "$Z1/LiberNT-v1-test-source-with-history.zip" > "$TMP/with.txt"
+  names "$Z1/LiberNT-v1-test-source-without-history.zip" > "$TMP/without.txt"
+  grep -qx 'LiberNT/.git/HEAD' "$TMP/with.txt" && ok "the zip with history has LiberNT/.git" || fail "no .git in the zip with history"
+  if grep -q '^LiberNT/\.git/' "$TMP/without.txt"; then fail "the zip without history has .git"; else ok "the zip without history has no LiberNT/.git"; fi
+  grep -qx 'LiberNT/base/app/lang/fi-FI.rc' "$TMP/without.txt" && ok "the patched files are in it, under LiberNT/" || fail "patched file missing from the zip"
   ( cd "$Z1" && sha256sum --quiet -c ./*.sha256 ) && ok "both .sha256 files verify" || fail ".sha256 files"
   cmp -s "$Z1/LiberNT-v1-test-source-without-history.zip" "$Z2/LiberNT-v1-test-source-without-history.zip" && ok "the zip without history is byte-identical on a second run" || fail "the zip without history differs between runs"
   mkdir -p "$TMP/unz" && ( cd "$TMP/unz" && unzip -q "$Z1/LiberNT-v1-test-source-without-history.zip" ) && [ -x "$TMP/unz/LiberNT/configure.sh" ] && ok "unzip keeps configure.sh executable" || fail "executable bit lost"

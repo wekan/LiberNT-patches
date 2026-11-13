@@ -17,14 +17,28 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 <details>
 <summary>Not translated into Finnish yet</summary>
 
-- The message tables of `sdk/include/reactos/mc` (errcodes.mc, netmsgmsg.mc,
-  ntstatus.mc and the rest): no Finnish at all, about 22,000 lines in the two
-  largest.
+- The largest message tables of `sdk/include/reactos/mc`: errcodes.mc (2,191
+  messages, the system error texts of FormatMessage), netmsgmsg.mc (1,416, the
+  network errors) and ntstatus.mc (693, the NTSTATUS texts). The other nine
+  tables are done (dist/translations/fi-FI-messages.md).
+- The ReactOS virtual floppy tool's tables in modules/rosapps (vfdmsg.mc 151,
+  vfdmsg_lib.mc 63).
 - getuname's Unicode character names, about 38,000 lines.
 - Modules whose `.rc` includes none of its language files, so a fi-FI file
   would not be used: joy, storprop, winmm, write, and the English-only
   resources of tzres, shellbtrfs, wordpad, progman and conhost among others.
   Their `.rc` has to include its language files first.
+
+</details>
+
+<details>
+<summary>Left in English on purpose</summary>
+
+- bugcodes.mc, the bug check screen: the kernel looks its text up with
+  LANG_NEUTRAL, which finds English, and draws it in the boot font; Windows
+  keeps it English too.
+- eventcreate's evtmsgstr.mc: its 65,536 messages are all `%1`, nothing to
+  translate.
 
 </details>
 

@@ -1,0 +1,5674 @@
+From 8f3255a6f62ed2c713e9fd56b86d651af91459f7 Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 22:16:17 +0200
+Subject: [PATCH 1/4] [TRANSLATION] Add Finnish (fi-FI) to the DiskPart, RAPPS
+ and boot message tables
+
+Problem: DiskPart's command help, RAPPS's install messages and the boot
+manager's messages had no Finnish, so a Finnish LiberNT showed them in
+English.
+
+Why: The message tables are the last part of these programs' text.
+
+How: Add Finnish=0x40B to each table's LanguageNames and a Finnish block
+to every message, with the same inserts as the English; command names,
+parameters and examples stay as they are typed. The tables compile with
+windmc, giving a MSG0040B binary each.
+---
+ base/applications/rapps/rappsmsg.mc  |    9 +-
+ base/system/diskpart/diskpart_msg.mc | 1020 ++++++++++++++++++++++++++
+ sdk/include/reactos/mc/bootmsg.mc    |   12 +-
+ 3 files changed, 1039 insertions(+), 2 deletions(-)
+
+diff --git a/base/applications/rapps/rappsmsg.mc b/base/applications/rapps/rappsmsg.mc
+index 4681eeeacae..c6344041820 100644
+--- a/base/applications/rapps/rappsmsg.mc
++++ b/base/applications/rapps/rappsmsg.mc
+@@ -9,7 +9,8 @@ FacilityNames=(System=0x0:FACILITY_SYSTEM)
+ 
+ LanguageNames=(English=0x409:MSG00409
+                Polish=0x415:MSG00415
+-               Romanian=0x418:MSG00418)
++               Romanian=0x418:MSG00418
++               Finnish=0x40B:MSG0040B)
+ 
+ MessageId=1
+ Severity=Success
+@@ -24,6 +25,9 @@ Wywołano instalację programu "%1".
+ Language=Romanian
+ Este apelată instalarea programului "%1".
+ .
++Language=Finnish
++Ohjelman "%1" asennus on käynnistetty.
++.
+ 
+ MessageId=2
+ Severity=Success
+@@ -38,4 +42,7 @@ Wywołano usunięcie programu "%1".
+ Language=Romanian
+ Este apelată îndepărtarea programului "%1".
+ .
++Language=Finnish
++Ohjelman "%1" poisto on käynnistetty.
++.
+ 
+diff --git a/base/system/diskpart/diskpart_msg.mc b/base/system/diskpart/diskpart_msg.mc
+index e47dcf602f4..7df6229988a 100644
+--- a/base/system/diskpart/diskpart_msg.mc
++++ b/base/system/diskpart/diskpart_msg.mc
+@@ -20,6 +20,7 @@ LanguageNames=(English=0x409:MSG00409
+                Turkish=0x41F:MSG0041F
+                Chinese=0x804:MSG00804
+                Taiwanese=0x404:MSG00404
++               Finnish=0x40B:MSG0040B
+               )
+ 
+ 
+@@ -267,6 +268,29 @@ Language=Taiwanese
+ 
+     ACTIVE
+ .
++Language=Finnish
++    Merkitsee aktiiviseksi valittuna olevan osion levyillä, joilla on
++    pääkäynnistystietueen (MBR) osiointi.
++
++Syntaksi:  ACTIVE
++
++    Kirjoittaa levylle arvon, jonka BIOS (perustason syöttö- ja
++    tulostusjärjestelmä) lukee käynnistyksen aikana. Arvo kertoo, että osio
++    on kelvollinen järjestelmäosio.
++
++    Toiminto onnistuu vain, jos osio on valittuna.
++
++    Varoitus:
++
++        DiskPart tarkistaa vain, että osiolle voi tallentaa käyttöjärjestelmän
++        käynnistystiedostot. DiskPart ei tarkista osion sisältöä. Jos merkitset
++        aktiiviseksi vahingossa osion, jolla ei ole käyttöjärjestelmän
++        käynnistystiedostoja, tietokone ei ehkä käynnisty.
++
++Esimerkki:
++
++    ACTIVE
++.
+ 
+ 
+ MessageId=10001
+@@ -303,6 +327,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add ADD command help text here>
+ .
++Language=Finnish
++<Add ADD command help text here>
++.
+ 
+ 
+ MessageId=10002
+@@ -664,6 +691,40 @@ Example:
+ 
+     ASSIGN LETTER=D
+ .
++Language=Finnish
++    Määrittää valittuna olevalle taltiolle aseman tunnuksen tai liitetyn
++    kansion polun.
++
++Syntaksi:  ASSIGN [LETTER=<D> | MOUNT=<PATH>] [NOERR]
++
++    LETTER=<D>  Taltiolle määritettävä aseman tunnus.
++
++    MOUNT=<PATH>
++                Taltiolle määritettävä liitetyn kansion polku.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Jos aseman tunnusta tai liitettyä kansiota ei anneta, taltiolle
++    määritetään seuraava vapaa aseman tunnus. Jos aseman tunnus tai liitetty
++    kansio on jo käytössä, tulee virhe.
++
++    ASSIGN-komennolla voit vaihtaa siirrettävän aseman tunnuksen.
++
++    Aseman tunnusta ei voi määrittää käynnistystaltioille eikä taltioille,
++    joilla on sivutustiedosto. Aseman tunnusta ei myöskään voi määrittää
++    laitevalmistajan (OEM) osiolle, ellei käynnistetty Windows PE:hen, eikä
++    millekään GUID-osiotaulukon (GPT) osiolle, joka ei ole perustietoosio,
++    ESP-osio tai palautusosio.
++
++    Toiminto onnistuu vain, jos taltio on valittuna.
++
++Esimerkki:
++
++    ASSIGN LETTER=D
++.
+ 
+ 
+ MessageId=10003
+@@ -700,6 +761,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add ATTACH command help text here>
+ .
++Language=Finnish
++<Add ATTACH command help text here>
++.
+ 
+ 
+ MessageId=10004
+@@ -736,6 +800,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add ATTRIBUTES command help text here>
+ .
++Language=Finnish
++<Add ATTRIBUTES command help text here>
++.
+ 
+ 
+ MessageId=10005
+@@ -1106,6 +1173,42 @@ Example:
+     AUTOMOUNT ENABLE
+     AUTOMOUNT DISABLE
+ .
++Language=Finnish
++    Ottaa automaattisen liittämisen käyttöön tai poistaa sen käytöstä.
++
++Syntaksi:  AUTOMOUNT [ENABLE] [DISABLE] [SCRUB] [NOERR]
++
++    ENABLE      Sallii LiberNT:n määrittää aseman tunnukset automaattisesti
++                järjestelmään lisätyille taltioille.
++
++    DISABLE     Estää LiberNT:tä määrittämästä aseman tunnuksia automaattisesti
++                järjestelmään lisätyille taltioille.
++
++    SCRUB       Poistaa liitettyjen kansioiden polut, aseman tunnukset,
++                liitettyjen kansioiden hakemistot ja rekisteriasetukset
++                taltioilta, jotka eivät enää ole järjestelmässä. Näin
++                järjestelmässä aiemmin olleille taltioille ei määritetä
++                automaattisesti niiden entisiä aseman tunnuksia ja liitettyjen
++                kansioiden polkuja, kun ne lisätään järjestelmään uudelleen.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Kun automaattinen liittäminen on käytössä, LiberNT ottaa taltion käyttöön
++    ja määrittää sille aseman tunnuksen ja taltion GUID-polun automaattisesti,
++    kun taltio lisätään järjestelmään. Tallennusverkoissa (SAN) automaattisen
++    liittämisen poistaminen käytöstä estää LiberNT:tä ottamasta taltioita
++    käyttöön automaattisesti ja määrittämästä aseman tunnuksia tai taltion
++    GUID-polkuja uusille taltioille, jotka näkyvät järjestelmälle.
++
++Esimerkki:
++
++    AUTOMOUNT
++    AUTOMOUNT ENABLE
++    AUTOMOUNT DISABLE
++.
+ 
+ 
+ MessageId=10006
+@@ -1142,6 +1245,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add BREAK command help text here>
+ .
++Language=Finnish
++<Add BREAK command help text here>
++.
+ 
+ 
+ MessageId=10007
+@@ -1359,6 +1465,26 @@ Language=Taiwanese
+ 
+     CLEAN
+ .
++Language=Finnish
++    Poistaa valittuna olevalta levyltä kaiken osioinnin ja taltioiden
++    alustuksen.
++
++Syntaksi:  CLEAN [ALL]
++
++    ALL         Määrittää, että levyn jokainen tavu\sektori nollataan, mikä
++                poistaa kaikki levyn tiedot kokonaan.
++
++    Pääkäynnistystietueen (MBR) levyillä korvataan vain MBR-osiointitiedot ja
++    piilotettujen sektoreiden tiedot. GUID-osiotaulukon (GPT) levyillä
++    korvataan GPT-osiointitiedot, suojaava MBR mukaan lukien. Jos
++    ALL-parametria ei käytetä, levyn ensimmäinen ja viimeinen megatavu
++    nollataan. Tämä poistaa kaiken levylle aiemmin tehdyn alustuksen. Levyn
++    tila puhdistuksen jälkeen on 'UNINITIALIZED' (alustamaton).
++
++Esimerkki:
++
++    CLEAN
++.
+ 
+ 
+ MessageId=10008
+@@ -1395,6 +1521,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add COMPACT command help text here>
+ .
++Language=Finnish
++<Add COMPACT command help text here>
++.
+ 
+ 
+ MessageId=10010
+@@ -1624,6 +1753,28 @@ Syntax:  CONVERT GPT [NOERR]
+ Example:
+     CONVERT GPT
+ .
++Language=Finnish
++    Muuntaa pääkäynnistystietueen (MBR) osiotaulukkoa käyttävän levyn
++    GUID-osiotaulukkoa (GPT) käyttäväksi levyksi.
++
++Syntaksi:  CONVERT GPT [NOERR]
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Toiminto onnistuu vain, jos MBR-levy on valittuna.
++
++    Levyn koon on oltava vähintään 128 Mt.
++
++    Tärkeää:
++        Vain tyhjät levyt voi muuntaa GPT-levyiksi. Varmuuskopioi kaikki tiedot
++        ja poista kaikki osiot tai taltiot ennen levyn muuntamista.
++
++Esimerkki:
++    CONVERT GPT
++.
+ 
+ 
+ MessageId=10011
+@@ -1833,6 +1984,26 @@ Syntax:  CONVERT MBR [NOERR]
+ Example:
+     CONVERT MBR
+ .
++Language=Finnish
++    Muuntaa GUID-osiotaulukkoa (GPT) käyttävän levyn pääkäynnistystietueen
++    (MBR) osiotaulukkoa käyttäväksi levyksi.
++
++Syntaksi:  CONVERT MBR [NOERR]
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Toiminto onnistuu vain, jos GPT-levy on valittuna.
++
++    Tärkeää:
++        Vain tyhjät levyt voi muuntaa MBR-levyiksi. Varmuuskopioi kaikki tiedot
++        ja poista kaikki osiot tai taltiot ennen levyn muuntamista.
++
++Esimerkki:
++    CONVERT MBR
++.
+ 
+ 
+ MessageId=10012
+@@ -2121,6 +2292,32 @@ Example:
+ 
+     CREATE PARTITION EFI SIZE=1000
+ .
++Language=Finnish
++    Luo EFI (Extensible Firmware Interface) -järjestelmäosion
++    GUID-osiotaulukon (GPT) levylle.
++
++Syntaksi:  CREATE PARTITION EFI [SIZE=<N>] [OFFSET=<N>] [NOERR]
++
++    SIZE=<N>    Osion koko megatavuina (Mt). Jos kokoa ei anneta, osio jatkuu,
++                kunnes nykyisellä alueella ei ole enää vapaata tilaa.
++
++    OFFSET=<N>  Siirtymä kilotavuina (Kt), johon osio luodaan. Jos siirtymää ei
++                anneta, osio sijoitetaan levyn ensimmäiseen alueeseen, joka on
++                tarpeeksi suuri.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Kun osio on luotu, uusi osio on valittuna.
++
++    Toiminto onnistuu vain, jos GPT-peruslevy on valittuna.
++
++Esimerkki:
++
++    CREATE PARTITION EFI SIZE=1000
++.
+ 
+ 
+ MessageId=10013
+@@ -2504,6 +2701,40 @@ Language=Taiwanese
+ 
+     CREATE PARTITION EXTENDED SIZE=1000
+ .
++Language=Finnish
++    Luo laajennetun osion valittuna olevalle levylle.
++    Koskee vain pääkäynnistystietueen (MBR) levyjä.
++
++Syntaksi:  CREATE PARTITION EXTENDED [SIZE=<N>] [OFFSET=<N>] [ALIGN=<N>] [NOERR]
++
++    SIZE=<N>    Osion koko megatavuina (Mt). Jos kokoa ei anneta, osio jatkuu,
++                kunnes laajennetussa osiossa ei ole enää vapaata tilaa.
++
++    OFFSET=<N>  Siirtymä kilotavuina (Kt), johon osio luodaan. Jos siirtymää ei
++                anneta, osio alkaa levyn ensimmäisen sellaisen vapaan tilan
++                alusta, joka on tarpeeksi suuri uudelle osiolle.
++
++    ALIGN=<N>   Käytetään yleensä laitteisto-RAIDin loogisten yksikkönumeroiden
++                (LUN) ryhmien kanssa suorituskyvyn parantamiseksi. Osion
++                siirtymä on luvun <N> monikerta. Jos OFFSET-parametri on
++                annettu, se pyöristetään lähimpään luvun <N> monikertaan.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Kun osio on luotu, uusi osio tulee automaattisesti valituksi. Levylle voi
++    luoda vain yhden laajennetun osion. Komento epäonnistuu, jos yrität luoda
++    laajennetun osion toisen laajennetun osion sisään. Laajennettu osio on
++    luotava ennen kuin voit luoda loogisia osioita.
++
++    Toiminto onnistuu vain, jos MBR-peruslevy on valittuna.
++
++Esimerkki:
++
++    CREATE PARTITION EXTENDED SIZE=1000
++.
+ 
+ 
+ MessageId=10014
+@@ -2871,6 +3102,39 @@ Language=Taiwanese
+ 
+     CREATE PARTITION LOGICAL SIZE=1000
+ .
++Language=Finnish
++    Luo loogisen osion laajennettuun osioon.
++    Koskee vain pääkäynnistystietueen (MBR) levyjä.
++
++Syntaksi:  CREATE PARTITION LOGICAL [SIZE=<N>] [OFFSET=<N>] [ALIGN=<N>] [NOERR]
++
++    SIZE=<N>    Osion koko megatavuina (Mt). Osio on tavuina vähintään luvun N
++                kokoinen. Jos annat loogiselle osiolle koon, sen on oltava
++                laajennettua osiota pienempi. Jos kokoa ei anneta, osio jatkuu,
++                kunnes laajennetussa osiossa ei ole enää vapaata tilaa.
++
++    OFFSET=<N>  Siirtymä kilotavuina (Kt), johon osio luodaan. Jos siirtymää ei
++                anneta, osio sijoitetaan levyn ensimmäiseen alueeseen, joka on
++                tarpeeksi suuri.
++
++    ALIGN=<N>   Käytetään yleensä laitteisto-RAIDin loogisten yksikkönumeroiden
++                (LUN) ryhmien kanssa suorituskyvyn parantamiseksi. Osion
++                siirtymä on luvun <N> monikerta. Jos OFFSET-parametri on
++                annettu, se pyöristetään lähimpään luvun <N> monikertaan.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Kun osio on luotu, uusi looginen osio tulee automaattisesti valituksi.
++
++    Toiminto onnistuu vain, jos MBR-peruslevy on valittuna.
++
++Esimerkki:
++
++    CREATE PARTITION LOGICAL SIZE=1000
++.
+ 
+ 
+ MessageId=10015
+@@ -3272,6 +3536,43 @@ Example:
+ 
+     CREATE PARTITION MSR SIZE=1000
+ .
++Language=Finnish
++    Luo Microsoftin varatun osion (MSR) GUID-osiotaulukon (GPT) levylle.
++
++Syntaksi:  CREATE PARTITION MSR [SIZE=<N>] [OFFSET=<N>] [NOERR]
++
++    SIZE=<N>    Osion koko megatavuina (Mt). Osio on tavuina vähintään luvun N
++                kokoinen. Jos kokoa ei anneta, osio jatkuu, kunnes nykyisellä
++                alueella ei ole enää vapaata tilaa.
++
++    OFFSET=<N>  Siirtymä kilotavuina (Kt), johon osio luodaan. Jos siirtymää ei
++                anneta, osio sijoitetaan levyn ensimmäiseen alueeseen, joka on
++                tarpeeksi suuri.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Toiminto onnistuu vain, jos GPT-peruslevy on valittuna.
++
++    Varoitus:
++
++        Ole tämän komennon kanssa hyvin varovainen. GPT-levyt vaativat tietyn
++        osioasettelun, joten Microsoftin varattujen osioiden luominen voi tehdä
++        levystä lukukelvottoman. GPT-levyillä, joilta LiberNT käynnistetään,
++        EFI-järjestelmäosio on levyn ensimmäinen osio ja sen jälkeen tulee
++        Microsoftin varattu osio. Pelkkään tietojen tallennukseen käytetyillä
++        GPT-levyillä ei ole EFI-järjestelmäosiota, joten niillä Microsoftin
++        varattu osio on ensimmäinen osio.
++
++    LiberNT ei ota Microsoftin varattuja osioita käyttöön. Niille ei voi
++    tallentaa tietoja, eikä niitä voi poistaa.
++
++Esimerkki:
++
++    CREATE PARTITION MSR SIZE=1000
++.
+ 
+ 
+ MessageId=10016
+@@ -4354,6 +4655,109 @@ Language=Taiwanese
+     CREATE PARTITION PRIMARY SIZE=10000 ID=12
+     CREATE PARTITION PRIMARY SIZE=10000 ID=DE
+ .
++Language=Finnish
++    Luo ensisijaisen osion valittuna olevalle peruslevylle.
++
++Syntaksi:  CREATE PARTITION PRIMARY [SIZE=<N>] [OFFSET=<N>] [ID={<BYTE> | <GUID>}]
++            [ALIGN=<N>] [NOERR]
++
++    SIZE=<N>    Osion koko megatavuina (Mt). Jos kokoa ei anneta, osio jatkuu,
++                kunnes nykyisellä alueella ei ole enää varaamatonta tilaa.
++
++    OFFSET=<N>  Siirtymä kilotavuina (Kt), johon osio luodaan. Jos siirtymää ei
++                anneta, osio sijoitetaan levyn ensimmäiseen alueeseen, joka on
++                tarpeeksi suuri.
++
++    ID={<BYTE> | <GUID>}
++
++                Määrittää osion tyypin.
++
++                Tarkoitettu vain laitevalmistajien (OEM) käyttöön.
++
++                Pääkäynnistystietueen (MBR) levyille voit antaa osiolle
++                osiotyypin tavun heksadesimaalimuodossa. Jos tätä parametria ei
++                anneta MBR-levylle, komento luo osion, jonka tyyppi on 0x06
++                (ei asennettua tiedostojärjestelmää).
++
++                    LDM-tieto-osio:
++                        0x42
++
++                    Palautusosio:
++                        0x27
++
++                    Tunnistetut OEM-tunnukset:
++                        0x12
++                        0x84
++                        0xDE
++                        0xFE
++                        0xA0
++
++                GUID-osiotaulukon (GPT) levyille voit antaa luotavalle osiolle
++                osiotyypin GUID-tunnuksen. Tunnistettuja GUID-tunnuksia ovat:
++
++                    EFI-järjestelmäosio:
++                        c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++
++                    Microsoftin varattu osio:
++                        e3c9e316-0b5c-4db8-817d-f92df00215ae
++
++                    Perustieto-osio:
++                        ebd0a0a2-b9e5-4433-87c0-68b6b72699c7
++
++                    Dynaamisen levyn LDM-metatieto-osio:
++                        5808c8aa-7e8f-42e0-85d2-e1e90434cfb3
++
++                    Dynaamisen levyn LDM-tieto-osio:
++                        af9b60a0-1431-4f62-bc68-3311714a69ad
++
++                    Palautusosio:
++                        de94bba4-06d1-4d40-a16a-bfd50179d6ac
++
++                Jos tätä parametria ei anneta GPT-levylle, komento luo
++                perustieto-osion.
++
++                Tällä parametrilla voi antaa minkä tahansa osiotyypin tavun tai
++                GUID-tunnuksen. DiskPart ei tarkista osiotyypin kelvollisuutta
++                muuten kuin varmistamalla, että se on heksadesimaalimuotoinen
++                tavu tai GUID-tunnus.
++
++                Varoitus:
++
++                    Osioiden luominen tällä parametrilla voi aiheuttaa
++                    tietokoneen toimintahäiriön tai estää sen käynnistymisen.
++                    Älä luo osioita GPT-levyille tällä parametrilla, ellet ole
++                    laitevalmistaja tai GPT-levyihin perehtynyt IT-ammattilainen.
++                    Käytä sen sijaan aina CREATE PARTITION EFI -komentoa
++                    EFI-järjestelmäosioiden luomiseen, CREATE PARTITION MSR
++                    -komentoa Microsoftin varattujen osioiden luomiseen ja
++                    CREATE PARTITION PRIMARY -komentoa ilman tätä parametria
++                    ensisijaisten osioiden luomiseen GPT-levyille.
++
++    ALIGN=<N>   Käytetään yleensä laitteisto-RAIDin loogisten yksikkönumeroiden
++                (LUN) ryhmien kanssa suorituskyvyn parantamiseksi. Osion
++                siirtymä on luvun <N> monikerta. Jos OFFSET-parametri on
++                annettu, se pyöristetään lähimpään luvun <N> monikertaan.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Kun luot osion, uusi osio tulee automaattisesti valituksi. Osio ei saa
++    aseman tunnusta. Määritä osiolle aseman tunnus assign-komennolla.
++
++    Toiminto onnistuu vain, jos peruslevy on valittuna.
++
++    Jos osiotyyppiä ei anneta, levy on alustamaton ja levyn koko on yli 2 Tt,
++    levy alustetaan GPT-levyksi.
++
++Esimerkki:
++
++    CREATE PARTITION PRIMARY SIZE=1000
++    CREATE PARTITION PRIMARY SIZE=128 ID=c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++    CREATE PARTITION PRIMARY SIZE=10000 ID=12
++    CREATE PARTITION PRIMARY SIZE=10000 ID=DE
++.
+ 
+ 
+ MessageId=10017
+@@ -4390,6 +4794,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add DELETE DISK command help text here>
+ .
++Language=Finnish
++<Add DELETE DISK command help text here>
++.
+ 
+ 
+ MessageId=10018
+@@ -4658,6 +5065,32 @@ Language=Taiwanese
+ 
+     DELETE PARTITION
+ .
++Language=Finnish
++Poistaa valittuna olevan osion.
++
++Syntaksi:  DELETE PARTITION [NOERR] [OVERRIDE]
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    OVERRIDE    Sallii DiskPartin poistaa minkä tahansa osion tyypistä
++                riippumatta. Yleensä DiskPart sallii poistaa vain tunnettuja
++                tieto-osioita.
++
++    Järjestelmäosiota, käynnistysosiota tai osiota, jolla on käytössä oleva
++    sivutustiedosto tai muistivedostiedosto, ei voi poistaa.
++
++    Toiminto onnistuu vain, jos osio on valittuna.
++
++    Dynaamisilta levyiltä ei voi poistaa osioita, eikä niille voi luoda
++    osioita.
++
++Esimerkki:
++
++    DELETE PARTITION
++.
+ 
+ 
+ MessageId=10019
+@@ -4694,6 +5127,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add DELETE VOLUME command help text here>
+ .
++Language=Finnish
++<Add DELETE VOLUME command help text here>
++.
+ 
+ 
+ MessageId=10020
+@@ -4820,6 +5256,17 @@ Language=Taiwanese
+ 
+     DETAIL DISK
+ .
++Language=Finnish
++    Näyttää valitun levyn ominaisuudet ja levyllä olevien taltioiden luettelon.
++
++Syntaksi:  DETAIL DISK
++
++    Toiminto onnistuu vain, jos levy on valittuna.
++
++Esimerkki:
++
++    DETAIL DISK
++.
+ 
+ MessageId=10021
+ SymbolicName=MSG_COMMAND_DETAIL_PARTITION
+@@ -4937,6 +5384,17 @@ Language=Taiwanese
+ 
+     DETAIL PARTITION
+ .
++Language=Finnish
++    Näyttää valitun osion ominaisuudet.
++
++Syntaksi:  DETAIL PARTITION
++
++    Toiminto onnistuu vain, jos osio on valittuna.
++
++Esimerkki:
++
++    DETAIL PARTITION
++.
+ 
+ MessageId=10022
+ SymbolicName=MSG_COMMAND_DETAIL_VOLUME
+@@ -5062,6 +5520,18 @@ Language=Taiwanese
+ 
+     DETAIL VOLUME
+ .
++Language=Finnish
++    Näyttää valitun taltion ominaisuudet ja niiden levyjen luettelon, joilla
++    taltio on.
++
++Syntaksi:  DETAIL VOLUME
++
++    Toiminto onnistuu vain, jos taltio on valittuna.
++
++Esimerkki:
++
++    DETAIL VOLUME
++.
+ 
+ 
+ MessageId=10023
+@@ -5098,6 +5568,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add DETACH command help text here>
+ .
++Language=Finnish
++<Add DETACH command help text here>
++.
+ 
+ 
+ MessageId=10024
+@@ -5194,6 +5667,15 @@ Language=Taiwanese
+ 
+     EXIT
+ .
++Language=Finnish
++    Lopettaa DiskPartin komentotulkin.
++
++Syntaksi:  EXIT
++
++Esimerkki:
++
++    EXIT
++.
+ 
+ 
+ MessageId=10025
+@@ -5230,6 +5712,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add EXPAND command help text here>
+ .
++Language=Finnish
++<Add EXPAND command help text here>
++.
+ 
+ 
+ MessageId=10026
+@@ -5266,6 +5751,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add EXTEND command help text here>
+ .
++Language=Finnish
++<Add EXTEND command help text here>
++.
+ 
+ 
+ MessageId=10027
+@@ -5395,6 +5883,18 @@ Language=Taiwanese
+ 
+     FILESYSTEMS
+ .
++Language=Finnish
++    Näyttää tiedot valitun taltion nykyisestä tiedostojärjestelmästä ja
++    tiedostojärjestelmistä, joilla taltion voi alustaa.
++
++Syntaksi:  FILESYSTEMS
++
++    Toiminto onnistuu vain, jos taltio on valittuna.
++
++Esimerkki:
++
++    FILESYSTEMS
++.
+ 
+ 
+ MessageId=10028
+@@ -6052,6 +6552,69 @@ Language=Taiwanese
+     FORMAT FS=NTFS LABEL="New Volume" QUICK COMPRESS
+     FORMAT RECOMMENDED OVERRIDE
+ .
++Language=Finnish
++    Alustaa määritetyn taltion LiberNT:n käyttöön.
++
++Syntaksi:  FORMAT [[FS=<FS>] [REVISION=<X.XX>] | RECOMMENDED] [LABEL=<"label">]
++                [UNIT=<N>] [QUICK] [COMPRESS] [OVERRIDE] [DUPLICATE] [NOWAIT]
++                [NOERR]
++
++    FS=<FS>     Määrittää tiedostojärjestelmän tyypin. Jos tiedostojärjestelmää
++                ei anneta, käytetään FILESYSTEMS-komennon näyttämää
++                oletustiedostojärjestelmää.
++
++    REVISION=<X.XX>
++
++                Määrittää tiedostojärjestelmän version (jos tarpeen).
++
++    RECOMMENDED Jos tämä on annettu, käytetään suositeltua tiedostojärjestelmää
++                ja versiota oletusarvon sijaan, jos suositus on olemassa.
++                Suositeltu tiedostojärjestelmä (jos sellainen on) näkyy
++                FILESYSTEMS-komennolla.
++
++    LABEL=<"label">
++
++                Määrittää taltion nimen.
++
++    UNIT=<N>    Ohittaa varausyksikön oletuskoon. Oletusasetuksia suositellaan
++                vahvasti tavalliseen käyttöön. Tiedostojärjestelmän varausyksikön
++                oletuskoko näkyy FILESYSTEMS-komennolla.
++
++                NTFS-pakkausta ei tueta, kun varausyksikkö on yli 4096.
++
++    QUICK       Suorittaa pika-alustuksen.
++
++    COMPRESS    Vain NTFS: uudelle taltiolle luodut tiedostot pakataan
++                oletuksena.
++
++    OVERRIDE    Pakottaa tiedostojärjestelmän ensin irrotettavaksi tarvittaessa.
++                Kaikki taltioon avatut kahvat lakkaavat olemasta kelvollisia.
++
++    DUPLICATE   Vain UDF: tämä valinta koskee UDF-alustusta, versiota 2.5 tai
++                uudempaa.
++                Valinta käskee alustustoimintoa kopioimaan tiedostojärjestelmän
++                metatiedot levyn toiseen sektorijoukkoon. Sovellukset, kuten
++                korjaus- tai palautussovellukset, käyttävät kopioituja
++                metatietoja. Jos ensisijaisten metatietojen sektorit ovat
++                vioittuneet, tiedostojärjestelmän metatiedot luetaan kopioiduista
++                sektoreista.
++
++    NOWAIT      Saa komennon palaamaan heti, vaikka alustus on yhä kesken. Jos
++                NOWAIT-valintaa ei anneta, DiskPart näyttää alustuksen
++                edistymisen prosentteina.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Toiminto onnistuu vain, jos taltio on valittuna.
++
++Esimerkkejä:
++
++    FORMAT FS=NTFS LABEL="New Volume" QUICK COMPRESS
++    FORMAT RECOMMENDED OVERRIDE
++.
+ 
+ 
+ MessageId=10029
+@@ -6827,6 +7390,80 @@ Example:
+     GPT ATTRIBUTES=0x8000000000000000
+     GPT ATTRIBUTES=0xF000000000000001
+ .
++Language=Finnish
++    Määrittää GUID-osiotaulukon (GPT) peruslevyillä valittuna olevalle osiolle
++    GPT-määritteet.
++
++Syntaksi:  GPT ATTRIBUTES=<N>
++
++    ATTRIBUTES=<N>
++
++                Heksadesimaaliarvo, joka ilmaisee valittuna olevaan osioon
++                asetettavat määritteet. GPT-määritekenttä on 64-bittinen kenttä,
++                jossa on kaksi alikenttää. Ylempi kenttä tulkitaan vain tietyn
++                osiotyypin GUID-tunnuksen yhteydessä, alempi kenttä on yhteinen
++                kaikille osiotyypeille.
++
++                Seuraavan määritteen voi asettaa mille tahansa osiolle:
++
++                0x0000000000000001 merkitsee osion pakolliseksi. Se kertoo
++                kaikille levynhallinnan apuohjelmille, että osiota ei saa
++                poistaa. EFI-järjestelmäosio sisältää vain käyttöjärjestelmän
++                käynnistämiseen tarvittavat binaarit. Näin laitevalmistajien
++                (OEM) tai käyttöjärjestelmäkohtaiset binaarit on helppo
++                sijoittaa muille osioille.
++
++                Perustieto-osioille on määritetty seuraavat määritteet:
++
++                0x8000000000000000
++                GPT_BASIC_DATA_ATTRIBUTE_NO_DRIVE_LETTER
++                Estää aseman tunnuksen automaattisen määrittämisen osiolle.
++                Oletuksena jokaiselle osiolle määritetään uusi aseman tunnus ja
++                taltion GUID-polku. Sekä aseman tunnuksella että taltion
++                GUID-polulla voi avata taltion Win32-ohjelmointirajapinnoilla.
++                Tämän määritteen asettaminen varmistaa, että kun levy siirretään
++                uuteen tietokoneeseen, uutta aseman tunnusta ei luoda
++                automaattisesti. Sen sijaan käyttäjä voi määrittää aseman
++                tunnukset itse.
++
++                0x4000000000000000
++                GPT_BASIC_DATA_ATTRIBUTE_HIDDEN
++                Määrittää osion taltion piilotetuksi.
++                Tämän määritteen asettaminen tarkoittaa, että taltiolle ei
++                määritetä aseman tunnusta eikä taltion GUID-polkua. Sekä aseman
++                tunnuksella että taltion GUID-polulla voi avata taltion
++                Win32-ohjelmointirajapinnoilla. Win32-rajapinnat, kuten
++                FindFirstVolume ja FindNextVolume, eivät ilmoita piilotetun
++                osion taltiota.
++
++                0x2000000000000000
++                GPT_BASIC_DATA_ATTRIBUTE_SHADOW_COPY
++                Määrittää osion taltion varjokopiopalvelun (Volume Snapshot
++                Service) varjokopiotaltioksi. Tiedostojärjestelmän suodattimet
++                käyttävät tätä valintaa, jotta suodatin ei liity taltioon.
++
++                0x1000000000000000
++                GPT_BASIC_DATA_ATTRIBUTE_READ_ONLY
++                Estää taltiolle kirjoittamisen.
++
++                Muita määritteitä voidaan lisätä milloin tahansa.
++
++    GPT-osion määritteet antavat lisätietoja osion käytöstä.
++
++    Toiminto onnistuu vain, jos GPT-perusosio on valittuna.
++
++    Varoitus:
++
++        GPT-määritteiden muuttaminen voi estää aseman tunnusten määrittämisen
++        perustietotaltioille tai tiedostojärjestelmän liittämisen. Älä muuta
++        GPT-määritteitä, ellet ole laitevalmistaja (OEM) tai GPT-levyihin
++        perehtynyt IT-ammattilainen.
++
++Esimerkki:
++
++    GPT ATTRIBUTES=0x8000000000000000
++    GPT ATTRIBUTES=0xF000000000000001
++.
+ 
+ 
+ MessageId=10030
+@@ -6987,6 +7624,21 @@ Language=Taiwanese
+     HELP
+     HELP CREATE PARTITION PRIMARY
+ .
++Language=Finnish
++    Näyttää käytettävissä olevien komentojen luettelon tai tietyn komennon
++    yksityiskohtaisen ohjeen.
++
++Syntaksi:  HELP [<COMMAND>]
++
++    <COMMAND>   Komento, jonka yksityiskohtainen ohje näytetään.
++
++    Jos komentoa ei anneta, HELP näyttää kaikki komennot.
++
++Esimerkki:
++
++    HELP
++    HELP CREATE PARTITION PRIMARY
++.
+ 
+ 
+ MessageId=10031
+@@ -7023,6 +7675,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add IMPORT command help text here>
+ .
++Language=Finnish
++<Add IMPORT command help text here>
++.
+ 
+ 
+ MessageId=10032
+@@ -7264,6 +7919,29 @@ Language=Taiwanese
+ 
+     INACTIVE
+ .
++Language=Finnish
++    Merkitsee ei-aktiiviseksi valittuna olevan osion levyillä, joilla on
++    pääkäynnistystietueen (MBR) osiointi.
++
++Syntaksi:  INACTIVE
++
++    Kun käynnistät tietokoneen uudelleen, se voi käynnistyä BIOSissa määritetystä
++    seuraavasta vaihtoehdosta, kuten CD-ROM-asemasta tai PXE (Pre-Boot eXecution
++    Environment) -pohjaisesta käynnistysympäristöstä (kuten Remote Installation
++    Services (RIS)).
++
++    Toiminto onnistuu vain, jos osio on valittuna.
++
++    Varoitus:
++
++        Tietokone ei ehkä käynnisty ilman aktiivista osiota. Älä merkitse
++        järjestelmä- tai käynnistysosiota ei-aktiiviseksi, ellet ole kokenut
++        käyttäjä, joka tuntee LiberNT:n tallennustilan hallinnan perusteellisesti.
++
++Esimerkki:
++
++    INACTIVE
++.
+ 
+ 
+ MessageId=10033
+@@ -7520,6 +8198,29 @@ Language=Taiwanese
+ 
+     LIST DISK
+ .
++Language=Finnish
++    Näyttää levyjen luettelon.
++
++Syntaksi:  LIST DISK
++
++    Näyttää levyjen luettelon ja niiden tiedot, kuten koon, käytettävissä
++    olevan vapaan tilan, onko levy perus- vai dynaaminen levy ja käyttääkö levy
++    pääkäynnistystietueen (MBR) vai GUID-osiotaulukon (GPT) osiotyyliä.
++    Tähdellä (*) merkitty levy on valittuna.
++
++    Huomaa, että FREE-sarake ei näytä levyn vapaan tilan kokonaismäärää vaan
++    levylle jääneen käytettävissä olevan vapaan tilan määrän. Jos sinulla on
++    esimerkiksi 10 Gt:n levy, jolla on 4 ensisijaista osiota yhteensä 5 Gt,
++    käytettävissä olevaa vapaata tilaa ei ole jäljellä (osioita ei voi luoda
++    enempää). Toinen esimerkki: sinulla on 10 Gt:n levy, jolla on 3
++    ensisijaista osiota ja laajennettu osio yhteensä 8 Gt. Laajennettu osio on
++    3 Gt, ja siinä on yksi 2 Gt:n looginen asema. Levy näyttää vapaana vain
++    1 Gt - laajennetun osion 1 Gt:n vapaan tilan.
++
++Esimerkki:
++
++    LIST DISK
++.
+ 
+ MessageId=10034
+ SymbolicName=MSG_COMMAND_LIST_PARTITION
+@@ -7678,6 +8379,21 @@ Language=Taiwanese
+ 
+     LIST PARTITION
+ .
++Language=Finnish
++    Näyttää valitun levyn osiotaulukon osioiden luettelon.
++
++Syntaksi:  LIST PARTITION
++
++    Dynaamisilla levyillä osiot eivät välttämättä vastaa levyn dynaamisia
++    taltioita. Dynaamisille levyille ei voi luoda osioita, eikä niiltä voi
++    poistaa osioita.
++
++    Toiminto onnistuu vain, jos levy on valittuna.
++
++Esimerkki:
++
++    LIST PARTITION
++.
+ 
+ 
+ MessageId=10035
+@@ -7783,6 +8499,16 @@ Language=Taiwanese
+ 
+     LIST VOLUME
+ .
++Language=Finnish
++    Näyttää paikalliseen tietokoneeseen asennettujen perus- ja dynaamisten
++    taltioiden luettelon.
++
++Syntaksi:  LIST VOLUME
++
++Esimerkki:
++
++    LIST VOLUME
++.
+ 
+ 
+ MessageId=10036
+@@ -7819,6 +8545,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add LIST VDISK command help text here>
+ .
++Language=Finnish
++<Add LIST VDISK command help text here>
++.
+ 
+ 
+ MessageId=10037
+@@ -7855,6 +8584,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add MERGE command help text here>
+ .
++Language=Finnish
++<Add MERGE command help text here>
++.
+ 
+ 
+ MessageId=10038
+@@ -7891,6 +8623,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add OFFLINE command help text here>
+ .
++Language=Finnish
++<Add OFFLINE command help text here>
++.
+ 
+ 
+ MessageId=10039
+@@ -7927,6 +8662,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add ONLINE command help text here>
+ .
++Language=Finnish
++<Add ONLINE command help text here>
++.
+ 
+ 
+ MessageId=10040
+@@ -7963,6 +8701,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add RECOVER command help text here>
+ .
++Language=Finnish
++<Add RECOVER command help text here>
++.
+ 
+ 
+ MessageId=10041
+@@ -8158,6 +8899,25 @@ Language=Taiwanese
+     CREATE PARTITION LOGICAL
+     ASSIGN f:
+ .
++Language=Finnish
++    Tarjoaa tavan lisätä kommentteja komentosarjaan.
++
++Syntaksi:  REM
++
++Esimerkki:
++
++    Tässä esimerkkikomentosarjassa REM-komennolla lisätään kommentti siitä,
++    mitä komentosarja tekee.
++
++    REM These commands set up 3 drives.
++    CREATE PARTITION PRIMARY SIZE=2048
++    ASSIGN d:
++    CREATE PARTITION EXTEND
++    CREATE PARTITION LOGICAL SIZE=2048
++    ASSIGN e:
++    CREATE PARTITION LOGICAL
++    ASSIGN f:
++.
+ 
+ 
+ MessageId=10042
+@@ -8673,6 +9433,56 @@ Example:
+     REMOVE MOUNT=G:\\MountH
+     REMOVE ALL DISMOUNT
+ .
++Language=Finnish
++    Poistaa valittuna olevalta taltiolta aseman tunnuksen tai liitetyn
++    kansion polun.
++
++Syntaksi:  REMOVE [LETTER=<D> | MOUNT=<PATH> | ALL] [DISMOUNT] [NOERR]
++
++    LETTER=<D>  Poistettava aseman tunnus.
++
++    MOUNT=<PATH>
++                Poistettava liitetyn kansion polku.
++
++    ALL         Poistaa kaikki nykyiset aseman tunnukset ja liitettyjen
++                kansioiden polut.
++
++    DISMOUNT    Tätä parametria voi käyttää, jos 1) taltiolta on poistettu
++                kaikki aseman tunnukset ja liitettyjen kansioiden polut tai
++                2) ALL-parametri on annettu. Parametri määrittää, että
++                tiedostojärjestelmä irrotetaan ja taltio poistetaan käytöstä.
++                Jos muut prosessit käyttävät taltiota, DiskPart sulkee kaikki
++                avoimet kahvat ennen tiedostojärjestelmän irrottamista ja
++                taltion poistamista käytöstä. Voit ottaa taltion takaisin
++                käyttöön määrittämällä sille aseman tunnuksen, luomalla taltioon
++                liitetyn kansion polun tai ONLINE-komennolla. DISMOUNT
++                epäonnistuu, jos taltiolla on vielä aseman tunnuksia tai
++                liitettyjen kansioiden polkuja. Komentosarjoissa suositellaan
++                komentoa REMOVE ALL DISMOUNT.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Jos aseman tunnusta tai liitetyn kansion polkua ei anneta, DiskPart
++    poistaa ensimmäisen löytämänsä aseman tunnuksen tai liitetyn kansion
++    polun. Jos ALL-parametria käytetään, kaikki nykyiset aseman tunnukset ja
++    liitettyjen kansioiden polut poistetaan. Jos DISMOUNT-parametria
++    käytetään, DiskPart sulkee kaikki taltion avoimet kahvat, irrottaa
++    taltion ja poistaa sen käytöstä.
++
++    REMOVE-komennolla voi vaihtaa siirrettävän aseman tunnuksen.
++    Käynnistys- tai sivutustaltioiden aseman tunnuksia ei voi poistaa.
++
++    Toiminto onnistuu vain, jos taltio on valittuna.
++
++Esimerkki:
++
++    REMOVE LETTER=K
++    REMOVE MOUNT=G:\\MountH
++    REMOVE ALL DISMOUNT
++.
+ 
+ 
+ MessageId=10043
+@@ -8709,6 +9519,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add REPAIR command help text here>
+ .
++Language=Finnish
++<Add REPAIR command help text here>
++.
+ 
+ 
+ MessageId=10044
+@@ -8806,6 +9619,15 @@ Language=Taiwanese
+ 
+     RESCAN
+ .
++Language=Finnish
++    Etsii uusia levyjä, jotka on ehkä lisätty tietokoneeseen.
++
++Syntaksi:  RESCAN
++
++Esimerkki:
++
++    RESCAN
++.
+ 
+ 
+ MessageId=10045
+@@ -8842,6 +9664,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add RETAIN command help text here>
+ .
++Language=Finnish
++<Add RETAIN command help text here>
++.
+ 
+ 
+ MessageId=10046
+@@ -8878,6 +9703,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add SAN command help text here>
+ .
++Language=Finnish
++<Add SAN command help text here>
++.
+ 
+ 
+ MessageId=10047
+@@ -9299,6 +10127,44 @@ Language=Taiwanese
+     SELECT DISK=NEXT
+     SELECT DISK=PCIROOT(0)#PCI(0100)#ATA(C00T00L01)
+ .
++Language=Finnish
++    Valitsee määritetyn levyn.
++
++Syntaksi:  SELECT DISK=<N>
++         SELECT DISK=SYSTEM
++         SELECT DISK=NEXT
++         SELECT DISK=<Path>
++
++    DISK=<N>
++                Valittavan levyn DiskPart-indeksinumero.
++
++    DISK=<Path>
++                Valittavan levyn sijaintipolku.
++
++    DISK=SYSTEM
++                BIOS-tietokoneissa valitaan BIOS-levy 0. EFI-tietokoneissa
++                valitaan levy, jolla on nykyiseen käynnistykseen käytetty
++                ESP-osio. EFI-tietokoneissa komento epäonnistuu, jos ESP-osiota
++                ei ole, niitä on enemmän kuin yksi tai tietokone on
++                käynnistetty Windows PE:hen.
++
++    DISK=NEXT
++                Kun levy on valittu, tällä komennolla käydään läpi kaikki
++                levyluettelon levyt. Luettelon seuraava levy valitaan. Jos
++                seuraava levy on luettelon alku, komento epäonnistuu eikä mikään
++                levy ole valittuna.
++
++    Jos valintoja ei anneta, select-komento näyttää valittuna olevan levyn.
++    Tietokoneen kaikkien levyjen DiskPart-indeksinumerot näet LIST DISK
++    -komennolla.
++
++Esimerkki:
++
++    SELECT DISK=1
++    SELECT DISK=SYSTEM
++    SELECT DISK=NEXT
++    SELECT DISK=PCIROOT(0)#PCI(0100)#ATA(C00T00L01)
++.
+ 
+ 
+ MessageId=10048
+@@ -9513,6 +10379,26 @@ Language=Taiwanese
+ 
+     SELECT PARTITION=1
+ .
++Language=Finnish
++    Valitsee määritetyn osion.
++
++Syntaksi:  SELECT PARTITION=<N>
++
++    PARTITION=<N>
++
++                Valittavan osion numero.
++
++    Jos osiota ei anneta, select-komento näyttää valittuna olevan osion. Osion
++    voi määrittää sen numerolla. Nykyisen levyn kaikkien osioiden numerot näet
++    list partition -komennolla.
++
++    Levy on valittava DiskPartin select disk -komennolla ennen kuin voit
++    valita osion.
++
++Esimerkki:
++
++    SELECT PARTITION=1
++.
+ 
+ 
+ MessageId=10049
+@@ -9741,6 +10627,26 @@ Language=Taiwanese
+     SELECT VOLUME=C
+     SELECT VOLUME=C:\\MountH
+ .
++Language=Finnish
++    Valitsee määritetyn taltion.
++
++Syntaksi:  SELECT VOLUME={<N> | <D>}
++
++    VOLUME=<N>  Valittavan taltion numero.
++
++    VOLUME=<D>  Valittavan taltion aseman tunnus tai liitetyn kansion polku.
++
++    Jos taltiota ei anneta, select-komento näyttää valittuna olevan taltion.
++    Taltion voi määrittää numerolla, aseman tunnuksella tai liitetyn kansion
++    polulla. Peruslevyllä taltion valitseminen valitsee myös vastaavan osion.
++    Tietokoneen kaikkien taltioiden numerot näet list volume -komennolla.
++
++Esimerkki:
++
++    SELECT VOLUME=1
++    SELECT VOLUME=C
++    SELECT VOLUME=C:\\MountH
++.
+ 
+ 
+ MessageId=10050
+@@ -9777,6 +10683,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add SELECT VDISK command help text here>
+ .
++Language=Finnish
++<Add SELECT VDISK command help text here>
++.
+ 
+ 
+ MessageId=10051
+@@ -10617,6 +11526,87 @@ Language=Taiwanese
+     SET ID=07 OVERRIDE
+     SET ID=ebd0a0a2-b9e5-4433-87c0-68b6b72699c7
+ .
++Language=Finnish
++    Muuttaa valittuna olevan osion osiotyyppikentän.
++
++Syntaksi:  SET ID={<BYTE> | <GUID>} [OVERRIDE] [NOERR]
++
++    ID={<BYTE> | <GUID>}
++
++                Määrittää uuden osiotyypin.
++                Pääkäynnistystietueen (MBR) levyille voit antaa osiolle
++                osiotyypin tavun heksadesimaalimuodossa. Tällä parametrilla voi
++                antaa minkä tahansa osiotyypin tavun paitsi tyypin 0x42
++                (LDM-osio). Huomaa, että alun '0x' jätetään pois, kun osiotyyppi
++                annetaan heksadesimaalimuodossa.
++
++                GUID-osiotaulukon (GPT) levyille voit antaa osiolle osiotyypin
++                GUID-tunnuksen. Tunnistettuja GUID-tunnuksia ovat:
++
++                    EFI-järjestelmäosio:
++                        c12a7328-f81f-11d2-ba4b-00a0c93ec93b
++
++                    Perustieto-osio:
++                        ebd0a0a2-b9e5-4433-87c0-68b6b72699c7
++
++                Tällä parametrilla voi antaa minkä tahansa osiotyypin
++                GUID-tunnuksen paitsi seuraavat:
++
++                    Microsoftin varattu osio:
++                        e3c9e316-0b5c-4db8-817d-f92df00215a
++
++                    Dynaamisen levyn LDM-metatieto-osio:
++                        5808c8aa-7e8f-42e0-85d2-e1e90434cfb3
++
++                    Dynaamisen levyn LDM-tieto-osio:
++                        af9b60a0-1431-4f62-bc68-3311714a69ad
++
++                    Klusterin metatieto-osio:
++                        db97dba9-0840-4bae-97f0-ffb9a327c7e1
++
++
++                Mainittuja rajoituksia lukuun ottamatta DiskPart ei tarkista
++                osiotyypin kelvollisuutta muuten kuin varmistamalla, että se on
++                heksadesimaalimuotoinen tavu tai GUID-tunnus.
++
++    OVERRIDE    Sallii DiskPartin pakottaa taltion tiedostojärjestelmän
++                irrotettavaksi ennen osiotyypin muuttamista. Osiotyyppiä
++                muutettaessa DiskPart yrittää lukita ja irrottaa taltion
++                tiedostojärjestelmän. Jos tätä parametria ei anneta ja
++                tiedostojärjestelmän lukitseminen epäonnistuu (koska jollakin
++                toisella sovelluksella on taltioon avoin kahva), koko toiminto
++                epäonnistuu. Kun parametri annetaan, irrottaminen pakotetaan,
++                vaikka tiedostojärjestelmän lukitseminen epäonnistuisi. Kun
++                tiedostojärjestelmä irrotetaan, kaikki taltioon avatut kahvat
++                lakkaavat olemasta kelvollisia.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Tarkoitettu vain laitevalmistajien (OEM) käyttöön.
++
++    Toiminto onnistuu vain, jos osio on valittuna.
++
++    Varoitus:
++
++        Osiotyyppikenttien muuttaminen tällä parametrilla voi aiheuttaa
++        tietokoneen toimintahäiriön tai estää sen käynnistymisen. Älä muuta
++        GPT-levyjen osiotyyppikenttiä tällä parametrilla, ellet ole
++        laitevalmistaja tai GPT-levyihin perehtynyt IT-ammattilainen. Käytä
++        sen sijaan aina CREATE PARTITION EFI -komentoa EFI-järjestelmäosioiden
++        luomiseen, CREATE PARTITION MSR -komentoa Microsoftin varattujen
++        osioiden luomiseen ja CREATE PARTITION PRIMARY -komentoa ilman
++        ID-parametria ensisijaisten osioiden luomiseen GPT-levyille.
++
++    Tämä komento ei toimi dynaamisilla levyillä eikä Microsoftin varatuilla
++    osioilla.
++
++Esimerkki:
++    SET ID=07 OVERRIDE
++    SET ID=ebd0a0a2-b9e5-4433-87c0-68b6b72699c7
++.
+ 
+ 
+ MessageId=10052
+@@ -10653,6 +11643,9 @@ Language=Chinese
+ Language=Taiwanese
+ <Add SHRINK command help text here>
+ .
++Language=Finnish
++<Add SHRINK command help text here>
++.
+ 
+ 
+ MessageId=10053
+@@ -10933,3 +11926,30 @@ Language=Taiwanese
+     UNIQUEID DISK ID=5f1b2c36
+     UNIQUEID DISK ID=baf784e7-6bbd-4cfb-aaac-e86c96e166ee
+ .
++Language=Finnish
++    Näyttää tai asettaa valittuna olevan levyn GUID-osiotaulukon (GPT)
++    tunnuksen tai pääkäynnistystietueen (MBR) allekirjoituksen.
++
++Syntaksi:  UNIQUEID DISK [ID={<DWORD> | <GUID>}]  [NOERR]
++
++    ID={<DWORD> | <GUID>}
++
++                MBR-levyille voit antaa allekirjoitukseksi neljän tavun (DWORD)
++                arvon heksadesimaalimuodossa.
++
++                GPT-levyille anna tunnukseksi GUID-tunnus.
++
++    NOERR       Vain komentosarjoille. Kun tapahtuu virhe, DiskPart jatkaa
++                komentojen käsittelyä ikään kuin virhettä ei olisi tapahtunut.
++                Ilman NOERR-parametria virhe saa DiskPartin lopettamaan
++                virhekoodilla.
++
++    Toiminto onnistuu vain, jos levy on valittuna. Komento toimii perus- ja
++    dynaamisilla levyillä.
++
++Esimerkki:
++
++    UNIQUEID DISK
++    UNIQUEID DISK ID=5f1b2c36
++    UNIQUEID DISK ID=baf784e7-6bbd-4cfb-aaac-e86c96e166ee
++.
+diff --git a/sdk/include/reactos/mc/bootmsg.mc b/sdk/include/reactos/mc/bootmsg.mc
+index f8e120008c8..09adf188d69 100644
+--- a/sdk/include/reactos/mc/bootmsg.mc
++++ b/sdk/include/reactos/mc/bootmsg.mc
+@@ -1,6 +1,7 @@
+ LanguageNames=(English=0x409:MSG00409
+                Polish=0x415:MSG00415
+-               Romanian=0x418:MSG00418)
++               Romanian=0x418:MSG00418
++               Finnish=0x40B:MSG0040B)
+ 
+ MessageId=9001
+ SymbolicName=BM_MSG_FIRST
+@@ -13,6 +14,9 @@ BM_MSG_FIRST
+ Language=Romanian
+ BM_MSG_FIRST
+ .
++Language=Finnish
++BM_MSG_FIRST
++.
+ 
+ MessageId=9002
+ SymbolicName=BM_MSG_BCD_ERROR
+@@ -25,6 +29,9 @@ Dane konfiguracji rozruchu komputera nie istnieją lub zawierają błędy.
+ Language=Romanian
+ Datele de configurare de pornire pentru calculatorului dumneavoastră fie lipsesc, fie conțin erori.
+ .
++Language=Finnish
++Tietokoneen käynnistysmääritystiedot (BCD) puuttuvat tai ovat virheellisiä.
++.
+ 
+ MessageId=9999
+ SymbolicName=BM_MSG_TEST
+@@ -37,3 +44,6 @@ Wszystko jest OK!!!
+ Language=Romanian
+ Totul este foarte bine!!!
+ .
++Language=Finnish
++Kaikki kunnossa!!!
++.
+-- 
+2.56.0
+
+
+From 5403fa3aee6005ea69f4b83cfb513fa59403129e Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 22:19:02 +0200
+Subject: [PATCH 2/4] [TRANSLATION] Add Finnish (fi-FI) to the event log, I/O
+ error and PCI class message tables
+
+Problem: The event log and Service Control Manager's messages, the I/O
+errors drivers log, and the PCI device class names Device Manager shows
+had no Finnish.
+
+Why: They are shown to the user in Event Viewer and Device Manager.
+
+How: Add Finnish=0x40B and a Finnish block to every message of
+neteventmsg.mc, ntiologc.mc and pciclass.mc, with the same %1, %n and %0
+inserts as the English. The tables compile with windmc.
+---
+ sdk/include/reactos/mc/neteventmsg.mc | 208 +++++++++++++++++-
+ sdk/include/reactos/mc/ntiologc.mc    | 144 +++++++++++-
+ sdk/include/reactos/mc/pciclass.mc    | 303 +++++++++++++++++++++++++-
+ 3 files changed, 652 insertions(+), 3 deletions(-)
+
+diff --git a/sdk/include/reactos/mc/neteventmsg.mc b/sdk/include/reactos/mc/neteventmsg.mc
+index a0269f745cf..43f6a717993 100644
+--- a/sdk/include/reactos/mc/neteventmsg.mc
++++ b/sdk/include/reactos/mc/neteventmsg.mc
+@@ -24,7 +24,8 @@ LanguageNames=(English=0x409:MSG00409
+                Russian=0x419:MSG00419
+                French=0x040c:MSG0040c
+                Polish=0x415:MSG00415
+-               Romanian=0x418:MSG00418)
++               Romanian=0x418:MSG00418
++               Finnish=0x40B:MSG0040B)
+ 
+ ;
+ ; message definitions
+@@ -55,6 +56,9 @@ Plik dziennika %1 jest zapełniony.
+ Language=Romanian
+ Fișierul de jurnalizare %1 e plin.
+ .
++Language=Finnish
++Lokitiedosto %1 on täynnä.
++.
+ 
+ MessageId=6001
+ Severity=Warning
+@@ -75,6 +79,9 @@ Nie można otworzyć pliku dziennika %1.
+ Language=Romanian
+ Fișierul de jurnalizare %1 nu poate fi deschis.
+ .
++Language=Finnish
++Lokitiedostoa %1 ei voi avata.
++.
+ 
+ MessageId=6002
+ Severity=Warning
+@@ -95,6 +102,9 @@ Plik dziennika "%1" jest uszkodzony i zostanie wyczyszczony.
+ Language=Romanian
+ Fișierul de jurnalizare %1 este corupt și va fi golit.
+ .
++Language=Finnish
++Lokitiedosto %1 on vioittunut, ja se tyhjennetään.
++.
+ 
+ MessageId=6003
+ Severity=Warning
+@@ -115,6 +125,9 @@ Nie można otworzyć pliku dziennika aplikacji. Jako domyślny plik dziennika zo
+ Language=Romanian
+ Fișierul de jurnalizare al aplicației nu a putut fi deschis.  %1 va fi folosit ca fișier de jurnalizare implicit.
+ .
++Language=Finnish
++Sovellusten lokitiedostoa ei voitu avata.  Oletuslokitiedostona käytetään tiedostoa %1.
++.
+ 
+ MessageId=6004
+ Severity=Warning
+@@ -135,6 +148,9 @@ Pakiet sterownika otrzymany z podsystemu wejścia/wyjścia jest niepoprawny. Prz
+ Language=Romanian
+ Un pachet al driverului primit de la subsistemul de In/Ex a fost nevalid. Datele sunt pachetul însuși.
+ .
++Language=Finnish
++I/O-alijärjestelmältä vastaanotettu ajuripaketti oli virheellinen.  Tiedot ovat paketti.
++.
+ 
+ MessageId=6005
+ Severity=Warning
+@@ -155,6 +171,9 @@ Uruchomiono usługę Dziennik zdarzeń.
+ Language=Romanian
+ Serviciul fișierului de jurnalizare al evenimentelor a fost pornit.
+ .
++Language=Finnish
++Tapahtumalokipalvelu käynnistettiin.
++.
+ 
+ MessageId=6006
+ Severity=Warning
+@@ -175,6 +194,9 @@ Zatrzymano usługę Dziennik zdarzeń.
+ Language=Romanian
+ Serviciul fișierului de jurnalizare al evenimentelor a fost oprit.
+ .
++Language=Finnish
++Tapahtumalokipalvelu pysäytettiin.
++.
+ 
+ MessageId=6007
+ Severity=Warning
+@@ -204,6 +226,9 @@ Usługa Dziennik zdarzeń "%0"
+ Language=Romanian
+ Serviciul fișierului de jurnalizare %0
+ .
++Language=Finnish
++Tapahtumalokipalvelu %0
++.
+ 
+ MessageId=6008
+ Severity=Warning
+@@ -224,6 +249,9 @@ Poprzednie zamknięcie systemu o godzinie %1 na %2 było nieoczekiwane.
+ Language=Romanian
+ Închiderea anterioară a sistemului la %1 pe %2 a fost neașteptată.
+ .
++Language=Finnish
++Edellinen järjestelmän sammutus %1 %2 oli odottamaton.
++.
+ 
+ MessageId=6009
+ Severity=Warning
+@@ -244,6 +272,9 @@ LiberNT %1 %2 %3 %4.
+ Language=Romanian
+ LiberNT %1 %2 %3 %4.
+ .
++Language=Finnish
++LiberNT %1 %2 %3 %4.
++.
+ 
+ MessageId=6010
+ Severity=Error
+@@ -264,6 +295,9 @@ Usługa %1 nie mogła skonfigurować źródła zdarzenia.
+ Language=Romanian
+ Serviciul %1 nu a putut configura o sursă de evenimente.
+ .
++Language=Finnish
++Palvelu %1 ei voinut määrittää tapahtumalähdettä.
++.
+ 
+ MessageId=6011
+ Severity=Error
+@@ -284,6 +318,9 @@ Nazwa NetBIOS i nazwa hosta DNS tego komputera została zmieniona z %1 na %2.
+ Language=Romanian
+ Numele NetBIOS și numele gazdei DNS de la acest calculator au fost schimbate din %1 în %2.
+ .
++Language=Finnish
++Tämän tietokoneen NetBIOS-nimi ja DNS-isäntänimi on muutettu nimestä %1 nimeksi %2.
++.
+ 
+ MessageId=6012
+ Severity=Error
+@@ -304,6 +341,9 @@ Domena DNS przydzielona do tego komputera uległa zmianie z %1 na %2.
+ Language=Romanian
+ Domeniul DNS atribuit acestui calculator a fost schimbat din %1 în %2.
+ .
++Language=Finnish
++Tälle tietokoneelle määritetty DNS-toimialue on muutettu toimialueesta %1 toimialueeksi %2.
++.
+ 
+ 
+ ;
+@@ -329,6 +369,9 @@ Próbowano załadować sterownik jednoprocesorowy na komputerze wieloprocesorowy
+ Language=Romanian
+ Un driver specific unui uniprocesor a fost încărcat într-un sistem de tip multiprocesor. Driverul nu a putut fi încărcat.
+ .
++Language=Finnish
++Yhden suorittimen järjestelmille tarkoitettu ajuri ladattiin moniprosessorijärjestelmään.  Ajuria ei voitu ladata.
++.
+ 
+ 
+ ;
+@@ -354,6 +397,9 @@ Nie można uruchomić usługi %1 z powodu następującego błędu: %n%2
+ Language=Romanian
+ Serviciul %1 nu a putut porni din cauza următoarei erori: %n%2
+ .
++Language=Finnish
++Palvelu %1 ei käynnistynyt seuraavan virheen vuoksi: %n%2
++.
+ 
+ MessageId=7001
+ Severity=Error
+@@ -374,6 +420,9 @@ Usługa %1 zależy od usługi %2, której nie można uruchomić z powodu następ
+ Language=Romanian
+ Serviciul %1 depinde de serviciul %2 care nu a putut porni din cauza următoarei erori: %n%3
+ .
++Language=Finnish
++Palvelu %1 on riippuvainen palvelusta %2, joka ei käynnistynyt seuraavan virheen vuoksi: %n%3
++.
+ 
+ MessageId=7002
+ Severity=Error
+@@ -394,6 +443,9 @@ Usługa %1 zależy od grupy %2, a nie uruchomiono żadnego członka tej grupy.
+ Language=Romanian
+ Serviciul %1 depinde de grupul %2 și niciun membru al acestui grup nu a pornit.
+ .
++Language=Finnish
++Palvelu %1 on riippuvainen ryhmästä %2, eikä yksikään tämän ryhmän jäsen käynnistynyt.
++.
+ 
+ MessageId=7003
+ Severity=Error
+@@ -414,6 +466,9 @@ Usługa %1 zależy od następującej nieistniejącej usługi: %2
+ Language=Romanian
+ Serviciul %1 depinde de următorul serviciu neexistent: %2
+ .
++Language=Finnish
++Palvelu %1 on riippuvainen seuraavasta palvelusta, jota ei ole: %2
++.
+ 
+ MessageId=7005
+ Severity=Error
+@@ -434,6 +489,9 @@ Wywołanie %1 nie powiodło się i wystąpił następujący błąd: %n%2
+ Language=Romanian
+ Apelul %1 a eșuat cu următoarea eroare: %n%2
+ .
++Language=Finnish
++Kutsu %1 epäonnistui seuraavalla virheellä: %n%2
++.
+ 
+ MessageId=7006
+ Severity=Error
+@@ -454,6 +512,9 @@ Wywołanie %1 dla %2 nie powiodło się i wystąpił następujący błąd: %n%3
+ Language=Romanian
+ Apelul %1 a eșuat pentru %2 cu următoarea eroare: %n%3
+ .
++Language=Finnish
++Kutsu %1 epäonnistui kohteelle %2 seuraavalla virheellä: %n%3
++.
+ 
+ MessageId=7007
+ Severity=Error
+@@ -474,6 +535,9 @@ System powrócił do ostatniej znanej dobrej konfiguracji. Trwa ponowne uruchami
+ Language=Romanian
+ Sistemul a revenit la cea mai bună configurație anterioară. Se repornește sistemul....
+ .
++Language=Finnish
++Järjestelmä palasi viimeisimpään toimivaan kokoonpanoon.  Järjestelmä käynnistyy uudelleen....
++.
+ 
+ MessageId=7008
+ Severity=Error
+@@ -494,6 +558,9 @@ W nazwie konta brak znaku ukośnika odwrotnego.
+ Language=Romanian
+ Lipsește solidusul întors din numele contului.
+ .
++Language=Finnish
++Tilin nimessä ei ole kenoviivaa.
++.
+ 
+ MessageId=7009
+ Severity=Error
+@@ -514,6 +581,9 @@ Upłynął limit czasu (%1 milisekund) podczas oczekiwania na połączenie się
+ Language=Romanian
+ Pauza (de %1 (de) milisecundă(e)) așteaptă serviciul %2 pentru conectare.
+ .
++Language=Finnish
++Aikakatkaisu (%1 millisekuntia) odotettaessa palvelun %2 yhteyttä.
++.
+ 
+ MessageId=7010
+ Severity=Error
+@@ -534,6 +604,9 @@ Upłynął limit czasu (%1 milisekund) podczas oczekiwania na operację ReadFile
+ Language=Romanian
+ Pauza (de %1 (de) milisecundă(e)) așteaptă fișierul de citire ReadFile.
+ .
++Language=Finnish
++Aikakatkaisu (%1 millisekuntia) odotettaessa ReadFile-kutsua.
++.
+ 
+ MessageId=7011
+ Severity=Error
+@@ -554,6 +627,9 @@ Upłynął limit czasu (%1 milisekund) podczas oczekiwania na odpowiedź transak
+ Language=Romanian
+ Pauza (de %1 (de) milisecundă(e)) așteaptă un răspuns de tranzacție de la serviciul %2.
+ .
++Language=Finnish
++Aikakatkaisu (%1 millisekuntia) odotettaessa palvelun %2 vastausta tapahtumaan.
++.
+ 
+ MessageId=7012
+ Severity=Error
+@@ -574,6 +650,9 @@ Wiadomość zwrócona w transakcji ma niepoprawny rozmiar.
+ Language=Romanian
+ Mesajul returnat în tranzacție are o dimensiune incorectă.
+ .
++Language=Finnish
++Tapahtumassa palautetun viestin koko on virheellinen.
++.
+ 
+ MessageId=7013
+ Severity=Error
+@@ -594,6 +673,9 @@ Próba logowania za pomocą aktualnego hasła nie powiodła się; wystąpił nas
+ Language=Romanian
+ Încercarea de autentificare cu parola curentă a eșuat cu următoarea eroare: %n%1
+ .
++Language=Finnish
++Kirjautumisyritys nykyisellä salasanalla epäonnistui seuraavalla virheellä: %n%1
++.
+ 
+ MessageId=7014
+ Severity=Error
+@@ -614,6 +696,9 @@ Druga próba logowania za pomocą starego hasła także się nie powiodła; wyst
+ Language=Romanian
+ A doua încercare de autentificare cu parola veche a eșuat de asemenea, cu următoarea eroare: %n%1
+ .
++Language=Finnish
++Toinen kirjautumisyritys vanhalla salasanalla epäonnistui myös seuraavalla virheellä: %n%1
++.
+ 
+ MessageId=7015
+ Severity=Error
+@@ -634,6 +719,9 @@ Sterowniki startu rozruchowego oraz systemowego (%1) nie mogą zależeć od usł
+ Language=Romanian
+ Driverul de pornire a inițializării sau al sistemului (%1) nu trebuie să depindă de un serviciu.
+ .
++Language=Finnish
++Käynnistyksen tai järjestelmän käynnistyksen yhteydessä käynnistyvä ajuri (%1) ei saa olla riippuvainen palvelusta.
++.
+ 
+ MessageId=7016
+ Severity=Error
+@@ -654,6 +742,9 @@ Usługa %1 zaraportowała nieprawidłowy stan bieżący %2.
+ Language=Romanian
+ Serviciul %1 a raportat o stare curentă nevalidă %2.
+ .
++Language=Finnish
++Palvelu %1 on ilmoittanut virheellisen nykyisen tilan %2.
++.
+ 
+ MessageId=7017
+ Severity=Error
+@@ -674,6 +765,9 @@ Wykryte zależności cykliczne wymagają uruchomienia %1.
+ Language=Romanian
+ A fost detectată o cerere de dependențe circulare, începând cu %1.
+ .
++Language=Finnish
++Havaittiin kehämäisiä riippuvuuksia käynnistettäessä palvelua %1 pyynnöstä.
++.
+ 
+ MessageId=7018
+ Severity=Error
+@@ -694,6 +788,9 @@ Wykryto automatycznie uruchamiane usługi zależności cyklicznych.
+ Language=Romanian
+ Au fost detectate servicii de pornire automată de dependențe circulare.
+ .
++Language=Finnish
++Havaittiin kehämäisiä riippuvuuksia käynnistettäessä palveluita automaattisesti.
++.
+ 
+ MessageId=7019
+ Severity=Error
+@@ -714,6 +811,9 @@ Zależność cykliczna: usługa %1 zależy od usługi z grupy uruchamianej póź
+ Language=Romanian
+ Dependență circulară: Serviciul %1 depinde de un serviciu dintr-un grup ce pornește mai târziu.
+ .
++Language=Finnish
++Kehämäinen riippuvuus: palvelu %1 on riippuvainen palvelusta ryhmässä, joka käynnistyy myöhemmin.
++.
+ 
+ MessageId=7020
+ Severity=Error
+@@ -734,6 +834,9 @@ Zależność cykliczna: usługa %1 zależy od grupy uruchamianej później.
+ Language=Romanian
+ Dependență circulară: Serviciul %1 depinde de un grup ce pornește mai târziu.
+ .
++Language=Finnish
++Kehämäinen riippuvuus: palvelu %1 on riippuvainen ryhmästä, joka käynnistyy myöhemmin.
++.
+ 
+ MessageId=7021
+ Severity=Error
+@@ -754,6 +857,9 @@ System powróci do ostatniej znanej dobrej konfiguracji, ponieważ uruchomienie
+ Language=Romanian
+ Sunteți pe cale să anulați revenirea la ultima configurație bună cunoscută din cauză că serviciul %1 nu a putut porni.
+ .
++Language=Finnish
++Palataan viimeisimpään toimivaan kokoonpanoon, koska palvelu %1 ei käynnistynyt.
++.
+ 
+ MessageId=7022
+ Severity=Error
+@@ -774,6 +880,9 @@ Usługa %1 zawiesiła się podczas uruchamiania.
+ Language=Romanian
+ Serviciul %1 a fost blocat la pornire.
+ .
++Language=Finnish
++Palvelu %1 jumittui käynnistyessään.
++.
+ 
+ MessageId=7023
+ Severity=Error
+@@ -794,6 +903,9 @@ Usługa %1 zakończyła działanie; wystąpił następujący błąd: %n%2
+ Language=Romanian
+ Serviciul %1 a fost închis cu următoarea eroare: %n%2
+ .
++Language=Finnish
++Palvelu %1 päättyi seuraavalla virheellä: %n%2
++.
+ 
+ MessageId=7024
+ Severity=Error
+@@ -814,6 +926,9 @@ Usługa %1 zakończyła działanie; wystąpił specyficzny dla niej błąd %2.
+ Language=Romanian
+ Serviciul %1 s-a terminat cu o eroare specifică unui serviciu %2.
+ .
++Language=Finnish
++Palvelu %1 päättyi palvelukohtaisella virheellä %2.
++.
+ 
+ MessageId=7025
+ Severity=Error
+@@ -834,6 +949,9 @@ Przynajmniej jedna usługa lub jeden sterownik nie dały się uruchomić podczas
+ Language=Romanian
+ Cel puțin un serviciu sau un driver a eșuat, în timpul pornirii sistemului. Folosiți Vizualizatorul de evenimente pentru a examina jurnalul pentru detalii.
+ .
++Language=Finnish
++Vähintään yksi palvelu tai ajuri epäonnistui järjestelmän käynnistyksen aikana.  Tarkastele tapahtumalokin tietoja Tapahtumienvalvonnassa.
++.
+ 
+ MessageId=7026
+ Severity=Error
+@@ -854,6 +972,9 @@ Nie można załadować następujących sterowników startu rozruchowego lub syst
+ Language=Romanian
+ Următorul(oarele) driver(e) de pornire pentru inițializare sau de pornire a sistemului nu a(u) putut fi încărcat(e): %1
+ .
++Language=Finnish
++Seuraavia käynnistyksen tai järjestelmän käynnistyksen yhteydessä käynnistyviä ajureita ei voitu ladata: %1
++.
+ 
+ MessageId=7027
+ Severity=Error
+@@ -874,6 +995,9 @@ Nie można uruchomić systemu LiberNT zgodnie z aktualną konfiguracją. Zamiast
+ Language=Romanian
+ LiberNT nu a putut fi pornit după configurație. În locul ei, a fost folosită o configurație funcțională anterioară.
+ .
++Language=Finnish
++LiberNT:tä ei voitu käynnistää määritetyllä tavalla.  Sen sijaan käytettiin aiempaa toimivaa kokoonpanoa.
++.
+ 
+ MessageId=7028
+ Severity=Error
+@@ -894,6 +1018,9 @@ Klucz Rejestru %1 nie przyznał dostępu do programów konta SYSTEM, w związku
+ Language=Romanian
+ Cheia de registru %1 a blocat accesul la programele contului de sistem (SYSTEM), astfel încât Administratorul de control al serviciului a preluat proprietatea la cheia de registru.
+ .
++Language=Finnish
++Rekisteriavain %1 esti SYSTEM-tilin ohjelmien käytön, joten palvelunhallinta otti rekisteriavaimen omistukseensa.
++.
+ 
+ MessageId=7029
+ Severity=Error
+@@ -914,6 +1041,9 @@ Menedżer sterowania usługami %0
+ Language=Romanian
+ Administratorul de control al serviciului %0
+ .
++Language=Finnish
++Palvelunhallinta %0
++.
+ 
+ MessageId=7030
+ Severity=Error
+@@ -934,6 +1064,9 @@ Usługa %1 jest oznaczona jako usługa interakcyjna. System jest jednak skonfigu
+ Language=Romanian
+ Serviciul %1 este marcat ca un serviciu inactiv. Totuși, sistemul este configurat să nu permită serviciile interactive. Acest serviciu nu poate funcționa corespunzător.
+ .
++Language=Finnish
++Palvelu %1 on merkitty vuorovaikutteiseksi palveluksi.  Järjestelmä on kuitenkin määritetty estämään vuorovaikutteiset palvelut.  Tämä palvelu ei ehkä toimi oikein.
++.
+ 
+ MessageId=7031
+ Severity=Error
+@@ -954,6 +1087,9 @@ Usługa %1 niespodziewanie zakończyła pracę. Wystąpiło to razy: %2. W przec
+ Language=Romanian
+ Serviciul %1 a fost închis în mod neașteptat. Acest lucru a fost făcut (de) %2 dată(ori). Următoarea măsură corectivă va fi luată în %3 milisecondă(e): %5.
+ .
++Language=Finnish
++Palvelu %1 päättyi odottamatta.  Näin on tapahtunut %2 kertaa.  Seuraava korjaustoimi suoritetaan %3 millisekunnin kuluttua: %5.
++.
+ 
+ MessageId=7032
+ Severity=Error
+@@ -974,6 +1110,9 @@ Menedżer sterowania usługami próbował podjąć akcję korekcyjną (%2) po ni
+ Language=Romanian
+ Administratorul de control al serviciului a încercat să ia o acțiune corectivă (%2) după o închidere neașteptată a serviciului %3, dar această acțiune a eșuat cu următoarea eroare: %n%4
+ .
++Language=Finnish
++Palvelunhallinta yritti suorittaa korjaustoimen (%2) palvelun %3 odottamattoman päättymisen jälkeen, mutta toimi epäonnistui seuraavalla virheellä: %n%4
++.
+ 
+ MessageId=7033
+ Severity=Error
+@@ -1003,6 +1142,11 @@ Administratorul de control al serviciului nu s-a putut inițializa cu succes. Se
+ serverului de configurație (scesrv.dll) a eșuat să se inițializeze cu eroarea %1.
+ Se repornește sistemul...
+ .
++Language=Finnish
++Palvelunhallinnan alustus epäonnistui. Suojausmäärityspalvelimen
++(scesrv.dll) alustus epäonnistui virheellä %1.  Järjestelmä
++käynnistyy uudelleen...
++.
+ 
+ MessageId=7034
+ Severity=Error
+@@ -1023,6 +1167,9 @@ Usługa %1 niespodziewanie zakończyła pracę. Wystąpiło to razy: %2.
+ Language=Romanian
+ Serviciul %1 a fost închis în mod neașteptat. Acest lucru a fost făcut %2 dată(ori).
+ .
++Language=Finnish
++Palvelu %1 päättyi odottamatta.  Näin on tapahtunut %2 kertaa.
++.
+ 
+ MessageId=7035
+ Severity=Informational
+@@ -1043,6 +1190,9 @@ Do usługi %1 został pomyślnie wysłany kod sterowania %2.
+ Language=Romanian
+ Serviciul %1 a trimis cu succes un control %2.
+ .
++Language=Finnish
++Palvelulle %1 lähetettiin onnistuneesti ohjaus %2.
++.
+ 
+ MessageId=7036
+ Severity=Informational
+@@ -1063,6 +1213,9 @@ Usługa %1 weszła w stan %2.
+ Language=Romanian
+ Serviciul %1 a intrat în stadiul %2.
+ .
++Language=Finnish
++Palvelu %1 siirtyi tilaan %2.
++.
+ 
+ MessageId=7037
+ Severity=Error
+@@ -1111,6 +1264,14 @@ Dacă nu corectați această configurație, nu veți putea reporni serviciul %1
+ sau veți întâmpina alte erori. Pentru a vă asigura că serviciul este configurat
+ corect, folosiți Administratorul de servicii în Consola de administrare (MMC).
+ .
++Language=Finnish
++Palvelunhallinta kohtasi virheen perutessaan palvelun %1 määritysmuutosta.
++Palvelun %2 tila on tällä hetkellä arvaamaton.
++
++Jos et korjaa tätä määritystä, et ehkä voi käynnistää palvelua %1 uudelleen
++tai saatat kohdata muita virheitä.  Varmista, että palvelu on määritetty
++oikein, käyttämällä Microsoft Management Consolen (MMC) Palvelut-laajennusta.
++.
+ 
+ MessageId=7038
+ Severity=Error
+@@ -1146,6 +1307,12 @@ din cauza următoarei erori: %n%3%n%nPentru a vă asigura că serviciul este
+ configurat în mod corespunzător, folosiți Administratorul de servicii în Consola de
+ administrare (MMC).
+ .
++Language=Finnish
++Palvelu %1 ei voinut kirjautua käyttäjänä %2 nykyisellä määritetyllä
++salasanalla seuraavan virheen vuoksi: %n%3%n%nVarmista, että palvelu on
++määritetty oikein, käyttämällä Microsoft Management Consolen (MMC)
++Palvelut-laajennusta.
++.
+ 
+ MessageId=7039
+ Severity=Warning
+@@ -1186,6 +1353,13 @@ procesul %2 și în schimb, s-a conectat procesul %3. %n%n
+ 
+ Rețineți că, dacă acest serviciu este configurat să pornească sub un depanator, acest comportament este de așteptat.
+ .
++Language=Finnish
++Palvelua %1 käynnistettäessä muodosti yhteyden muu palveluprosessi kuin se,
++jonka palvelunhallinta käynnisti.  Palvelunhallinta käynnisti prosessin %2,
++mutta yhteyden muodosti prosessi %3.%n%n
++
++Jos tämä palvelu on määritetty käynnistymään virheenkorjaimessa, tämä on odotettua.
++.
+ 
+ MessageId=7040
+ Severity=Informational
+@@ -1206,6 +1380,9 @@ Typ startowy usługi %1 został zmieniony z %2 do %3.
+ Language=Romanian
+ Modul de pornire al serviciului %1 a fost schimbat din %2 în %3.
+ .
++Language=Finnish
++Palvelun %1 käynnistystyypiksi muutettiin %3 (aiemmin %2).
++.
+ 
+ MessageId=7041
+ Severity=Error
+@@ -1291,6 +1468,21 @@ dreptul utilizatorului apare ca fiind șters, un obiect al Politicii grupului as
+ nod poate fi ștergerea dreptului. Verificați cu domeniul dumneavoastră de administrator pentru
+ a afla dacă se întâmplă acest lucru.
+ .
++Language=Finnish
++Palvelu %1 ei voinut kirjautua käyttäjänä %2 nykyisellä määritetyllä salasanalla seuraavan virheen vuoksi:%n
++Kirjautuminen epäonnistui: käyttäjälle ei ole myönnetty pyydettyä kirjautumistyyppiä tässä tietokoneessa.%n%n
++Palvelu: %1%n
++Toimialue ja tili: %2%n%n
++Tällä palvelutilillä ei ole tarvittavaa käyttöoikeutta "Kirjaudu palveluna".%n%n
++Käyttäjän toimet%n%n
++Myönnä palvelutilille oikeus "Kirjaudu palveluna" tässä tietokoneessa. Voit
++tehdä sen Paikallisilla suojausasetuksilla (Secpol.msc). Jos tämä tietokone
++on klusterin solmu, tarkista, että tämä käyttöoikeus on myönnetty
++klusteripalvelun tilille klusterin kaikissa solmuissa.%n%n
++Jos olet jo myöntänyt tämän käyttöoikeuden palvelutilille ja oikeus näyttää
++poistuneen, tähän solmuun liittyvä ryhmäkäytäntöobjekti saattaa poistaa
++oikeuden. Kysy toimialueen järjestelmänvalvojalta, onko näin.
++.
+ 
+ MessageId=7042
+ Severity=Informational
+@@ -1321,6 +1513,11 @@ Serviciul %1 a trimis cu succes un control %2.%n%n
+ Motivul specificat a fost: %3 [%4]%n%n
+ Comentariu: %5
+ .
++Language=Finnish
++Palvelulle %1 lähetettiin onnistuneesti ohjaus %2.%n%n
++Ilmoitettu syy: %3 [%4]%n%n
++Kommentti: %5
++.
+ 
+ MessageId=7043
+ Severity=Error
+@@ -1341,6 +1538,9 @@ Usługa %1 nie została poprawnie wyłączona po otrzymaniu kodu sterownika prze
+ Language=Romanian
+ Serviciul %1 s-a oprit corect după primirea controlului de preoprire.
+ .
++Language=Finnish
++Palvelu %1 ei sammunut oikein vastaanotettuaan sammutusta edeltävän ohjauksen.
++.
+ 
+ ;
+ ; transport events 9000-9499
+@@ -1365,6 +1565,9 @@ Language=Polish
+ Language=Romanian
+ %2 nu s-a putut înregistra cu emulatorul NDIS.
+ .
++Language=Finnish
++%2 ei voinut rekisteröityä NDIS-kääreeseen.
++.
+ 
+ MessageId=9006
+ Severity=Error
+@@ -1385,3 +1588,6 @@ Language=Polish
+ Language=Romanian
+ %2 nu a putut găsi adaptorul %3.
+ .
++Language=Finnish
++%2 ei löytänyt sovitinta %3.
++.
+diff --git a/sdk/include/reactos/mc/ntiologc.mc b/sdk/include/reactos/mc/ntiologc.mc
+index 675f6cacbb1..df6d1e8151f 100644
+--- a/sdk/include/reactos/mc/ntiologc.mc
++++ b/sdk/include/reactos/mc/ntiologc.mc
+@@ -16,7 +16,8 @@ FacilityNames=(RpcRuntime=0x2:FACILITY_RPC_RUNTIME
+                MCA=0x5:FACILITY_MCA_ERROR_CODE
+               )
+ 
+-LanguageNames=(English=0x409:MSG00409)
++LanguageNames=(English=0x409:MSG00409
++               Finnish=0x40B:MSG0040B)
+ 
+ 
+ ;
+@@ -34,6 +35,9 @@ SymbolicName=IO_ERR_RETRY_SUCCEEDED
+ Language=English
+ A retry succeeded.
+ .
++Language=Finnish
++Uusintayritys onnistui.
++.
+ 
+ MessageId=2
+ Severity=Error
+@@ -42,6 +46,9 @@ SymbolicName=IO_ERR_INSUFFICIENT_RESOURCES
+ Language=English
+ Insufficient resources.
+ .
++Language=Finnish
++Resurssit eivät riitä.
++.
+ 
+ MessageId=3
+ Severity=Error
+@@ -50,6 +57,9 @@ SymbolicName=IO_ERR_CONFIGURATION_ERROR
+ Language=English
+ Driver or device is incorrectly configured for %1.
+ .
++Language=Finnish
++Ajuri tai laite on määritetty väärin kohteelle %1.
++.
+ 
+ MessageId=4
+ Severity=Error
+@@ -58,6 +68,9 @@ SymbolicName=IO_ERR_DRIVER_ERROR
+ Language=English
+ Driver detected an internal error in its data structures for %1.
+ .
++Language=Finnish
++Ajuri havaitsi sisäisen virheen tietorakenteissaan kohteelle %1.
++.
+ 
+ MessageId=5
+ Severity=Error
+@@ -66,6 +79,9 @@ SymbolicName=IO_ERR_PARITY
+ Language=English
+ A parity error was detected on %1.
+ .
++Language=Finnish
++Kohteessa %1 havaittiin pariteettivirhe.
++.
+ 
+ MessageId=6
+ Severity=Error
+@@ -74,6 +90,9 @@ SymbolicName=IO_ERR_SEEK_ERROR
+ Language=English
+ The device, %1, had a seek error.
+ .
++Language=Finnish
++Laitteessa %1 tapahtui hakuvirhe.
++.
+ 
+ MessageId=7
+ Severity=Error
+@@ -82,6 +101,9 @@ SymbolicName=IO_ERR_BAD_BLOCK
+ Language=English
+ The device, %1, has a bad block.
+ .
++Language=Finnish
++Laitteessa %1 on viallinen lohko.
++.
+ 
+ MessageId=8
+ Severity=Error
+@@ -90,6 +112,9 @@ SymbolicName=IO_ERR_OVERRUN_ERROR
+ Language=English
+ An overrun occurred on %1.
+ .
++Language=Finnish
++Kohteessa %1 tapahtui ylivuoto.
++.
+ 
+ MessageId=9
+ Severity=Error
+@@ -98,6 +123,9 @@ SymbolicName=IO_ERR_TIMEOUT
+ Language=English
+ The device, %1, did not respond within the timeout period.
+ .
++Language=Finnish
++Laite %1 ei vastannut aikakatkaisuajan kuluessa.
++.
+ 
+ MessageId=10
+ Severity=Error
+@@ -106,6 +134,9 @@ SymbolicName=IO_ERR_SEQUENCE
+ Language=English
+ The driver detected an unexpected sequence by the device, %1.
+ .
++Language=Finnish
++Ajuri havaitsi laitteelta %1 odottamattoman järjestyksen.
++.
+ 
+ MessageId=11
+ Severity=Error
+@@ -114,6 +145,9 @@ SymbolicName=IO_ERR_CONTROLLER_ERROR
+ Language=English
+ The driver detected a controller error on %1.
+ .
++Language=Finnish
++Ajuri havaitsi ohjainvirheen kohteessa %1.
++.
+ 
+ MessageId=12
+ Severity=Error
+@@ -122,6 +156,9 @@ SymbolicName=IO_ERR_INTERNAL_ERROR
+ Language=English
+ The driver detected an internal driver error on %1.
+ .
++Language=Finnish
++Ajuri havaitsi sisäisen ajurivirheen kohteessa %1.
++.
+ 
+ MessageId=13
+ Severity=Error
+@@ -130,6 +167,9 @@ SymbolicName=IO_ERR_INCORRECT_IRQL
+ Language=English
+ The driver was configured with an incorrect interrupt for %1.
+ .
++Language=Finnish
++Ajuri määritettiin kohteelle %1 väärällä keskeytyksellä.
++.
+ 
+ MessageId=14
+ Severity=Error
+@@ -138,6 +178,9 @@ SymbolicName=IO_ERR_INVALID_IOBASE
+ Language=English
+ The driver was configured with an invalid I/O base address for %1.
+ .
++Language=Finnish
++Ajuri määritettiin kohteelle %1 virheellisellä I/O-perusosoitteella.
++.
+ 
+ MessageId=15
+ Severity=Error
+@@ -146,6 +189,9 @@ SymbolicName=IO_ERR_NOT_READY
+ Language=English
+ Insufficient resources.
+ .
++Language=Finnish
++Resurssit eivät riitä.
++.
+ 
+ MessageId=16
+ Severity=Error
+@@ -154,6 +200,9 @@ SymbolicName=IO_ERR_INVALID_REQUEST
+ Language=English
+ The request is incorrectly formatted for %1.
+ .
++Language=Finnish
++Pyyntö on muotoiltu väärin kohteelle %1.
++.
+ 
+ MessageId=17
+ Severity=Error
+@@ -162,6 +211,9 @@ SymbolicName=IO_ERR_VERSION
+ Language=English
+ The wrong version of the driver has been loaded.
+ .
++Language=Finnish
++Ajurista on ladattu väärä versio.
++.
+ 
+ MessageId=18
+ Severity=Error
+@@ -170,6 +222,9 @@ SymbolicName=IO_ERR_LAYERED_FAILURE
+ Language=English
+ The driver beneath this one has failed in some way for %1.
+ .
++Language=Finnish
++Tämän alla oleva ajuri on epäonnistunut jollakin tavalla kohteelle %1.
++.
+ 
+ MessageId=19
+ Severity=Error
+@@ -178,6 +233,9 @@ SymbolicName=IO_ERR_RESET
+ Language=English
+ The device, %1, has been reset.
+ .
++Language=Finnish
++Laite %1 on palautettu alkutilaan.
++.
+ 
+ MessageId=20
+ Severity=Error
+@@ -186,6 +244,9 @@ SymbolicName=IO_ERR_PROTOCOL
+ Language=English
+ A transport driver received a frame which violated the protocol.
+ .
++Language=Finnish
++Siirtoajuri vastaanotti kehyksen, joka rikkoi protokollaa.
++.
+ 
+ MessageId=21
+ Severity=Error
+@@ -197,6 +258,12 @@ memory regions.
+ Driver %2, with device <%3>, claimed a memory range with starting address
+ in data address 0x28 and 0x2c, and length in data address 0x30.
+ .
++Language=Finnish
++Havaittiin ristiriita kahden ajurin välillä, jotka varasivat kaksi päällekkäistä
++muistialuetta.
++Ajuri %2 laitteella <%3> varasi muistialueen, jonka alkuosoite on
++tietojen osoitteissa 0x28 ja 0x2c ja pituus tietojen osoitteessa 0x30.
++.
+ 
+ MessageId=22
+ Severity=Error
+@@ -208,6 +275,12 @@ Io port regions.
+ Driver %2, with device <%3>, claimed an IO port range with starting address
+ in data address 0x28 and 0x2c, and length in data address 0x30.
+ .
++Language=Finnish
++Havaittiin ristiriita kahden ajurin välillä, jotka varasivat kaksi päällekkäistä
++I/O-porttialuetta.
++Ajuri %2 laitteella <%3> varasi I/O-porttialueen, jonka alkuosoite on
++tietojen osoitteissa 0x28 ja 0x2c ja pituus tietojen osoitteessa 0x30.
++.
+ 
+ MessageId=23
+ Severity=Error
+@@ -219,6 +292,11 @@ channels.
+ Driver %2, with device <%3>, claimed the DMA Channel in data address 0x28, with
+ optinal port in data address 0x2c.
+ .
++Language=Finnish
++Havaittiin ristiriita kahden ajurin välillä, jotka varasivat saman DMA-kanavan.
++Ajuri %2 laitteella <%3> varasi DMA-kanavan tietojen osoitteessa 0x28 ja
++valinnaisen portin tietojen osoitteessa 0x2c.
++.
+ 
+ MessageId=24
+ Severity=Error
+@@ -229,6 +307,11 @@ A conflict has been detected between two drivers which claimed equivalent IRQs.
+ Driver %2, with device <%3>, claimed an interrupt with Level in data address
+ 0x28, vector in data address 0x2c and Affinity in data address 0x30.
+ .
++Language=Finnish
++Havaittiin ristiriita kahden ajurin välillä, jotka varasivat saman IRQ:n.
++Ajuri %2 laitteella <%3> varasi keskeytyksen, jonka taso on tietojen osoitteessa
++0x28, vektori tietojen osoitteessa 0x2c ja affiniteetti tietojen osoitteessa 0x30.
++.
+ 
+ MessageId=25
+ Severity=Error
+@@ -239,6 +322,11 @@ Insufficient resources.
+ The driver has detected a device with old or out-of-date firmware. The
+ device will not be used.
+ .
++Language=Finnish
++Resurssit eivät riitä.
++Ajuri on havainnut laitteen, jonka laiteohjelmisto on vanha tai vanhentunut.
++Laitetta ei käytetä.
++.
+ 
+ MessageId=26
+ Severity=Warning
+@@ -248,6 +336,10 @@ Language=English
+ The driver has detected that device %1 has old or out-of-date firmware.
+ Reduced performance may result.
+ .
++Language=Finnish
++Ajuri on havainnut, että laitteen %1 laiteohjelmisto on vanha tai vanhentunut.
++Suorituskyky voi heikentyä.
++.
+ 
+ MessageId=27
+ Severity=Error
+@@ -258,6 +350,11 @@ The device could not allocate one or more required resources due to conflicts
+ with other devices. The device DMA setting of '%2' could not be
+ satisified due to a conflict with Driver '%3'.
+ .
++Language=Finnish
++Laite ei voinut varata yhtä tai useampaa tarvittavaa resurssia ristiriitojen vuoksi
++muiden laitteiden kanssa. Laitteen DMA-asetusta '%2' ei voitu
++täyttää, koska se on ristiriidassa ajurin '%3' kanssa.
++.
+ 
+ MessageId=28
+ Severity=Error
+@@ -268,6 +365,11 @@ The device could not allocate one or more required resources due to conflicts
+ with other devices. The device interrupt setting of '%2' could not be
+ satisified due to a conflict with Driver '%3'.
+ .
++Language=Finnish
++Laite ei voinut varata yhtä tai useampaa tarvittavaa resurssia ristiriitojen vuoksi
++muiden laitteiden kanssa. Laitteen keskeytysasetusta '%2' ei voitu
++täyttää, koska se on ristiriidassa ajurin '%3' kanssa.
++.
+ 
+ MessageId=29
+ Severity=Error
+@@ -278,6 +380,11 @@ The device could not allocate one or more required resources due to conflicts
+ with other devices. The device memory setting of '%2' could not be
+ satisified due to a conflict with Driver '%3'.
+ .
++Language=Finnish
++Laite ei voinut varata yhtä tai useampaa tarvittavaa resurssia ristiriitojen vuoksi
++muiden laitteiden kanssa. Laitteen muistiasetusta '%2' ei voitu
++täyttää, koska se on ristiriidassa ajurin '%3' kanssa.
++.
+ 
+ MessageId=30
+ Severity=Error
+@@ -288,6 +395,11 @@ The device could not allocate one or more required resources due to conflicts
+ with other devices. The device port setting of '%2' could not be
+ satisified due to a conflict with Driver '%3'.
+ .
++Language=Finnish
++Laite ei voinut varata yhtä tai useampaa tarvittavaa resurssia ristiriitojen vuoksi
++muiden laitteiden kanssa. Laitteen porttiasetusta '%2' ei voitu
++täyttää, koska se on ristiriidassa ajurin '%3' kanssa.
++.
+ 
+ MessageId=31
+ Severity=Error
+@@ -296,6 +408,9 @@ SymbolicName=IO_BAD_BLOCK_WITH_NAME
+ Language=English
+ The file %2 on device %1 contains a bad disk block.
+ .
++Language=Finnish
++Laitteen %1 tiedostossa %2 on viallinen levylohko.
++.
+ 
+ MessageId=32
+ Severity=Warning
+@@ -304,6 +419,9 @@ SymbolicName=IO_WRITE_CACHE_ENABLED
+ Language=English
+ The driver detected that the device %1 has its write cache enabled. Data corruption may occur.
+ .
++Language=Finnish
++Ajuri havaitsi, että laitteen %1 kirjoitusvälimuisti on käytössä. Tietoja voi vioittua.
++.
+ 
+ MessageId=33
+ Severity=Warning
+@@ -312,6 +430,9 @@ SymbolicName=IO_RECOVERED_VIA_ECC
+ Language=English
+ Data was recovered using error correction code on device %1.
+ .
++Language=Finnish
++Tiedot palautettiin virheenkorjauskoodin avulla laitteessa %1.
++.
+ 
+ MessageId=34
+ Severity=Warning
+@@ -320,6 +441,9 @@ SymbolicName=IO_WRITE_CACHE_DISABLED
+ Language=English
+ The driver disabled the write cache on device %1.
+ .
++Language=Finnish
++Ajuri poisti laitteen %1 kirjoitusvälimuistin käytöstä.
++.
+ 
+ MessageId=36
+ Severity=Informational
+@@ -328,6 +452,9 @@ SymbolicName=IO_FILE_QUOTA_THRESHOLD
+ Language=English
+ A user hit their quota threshold on volume %2.
+ .
++Language=Finnish
++Käyttäjä saavutti levykiintiönsä varoitusrajan taltiolla %2.
++.
+ 
+ MessageId=37
+ Severity=Informational
+@@ -336,6 +463,9 @@ SymbolicName=IO_FILE_QUOTA_LIMIT
+ Language=English
+ A user hit their quota limit on volume %2.
+ .
++Language=Finnish
++Käyttäjä saavutti levykiintiönsä rajan taltiolla %2.
++.
+ 
+ MessageId=38
+ Severity=Informational
+@@ -345,6 +475,10 @@ Language=English
+ The system has started rebuilding the user disk quota information on
+ device %1 with label "%2".
+ .
++Language=Finnish
++Järjestelmä on aloittanut käyttäjien levykiintiötietojen uudelleenmuodostuksen
++laitteessa %1, jonka nimi on "%2".
++.
+ 
+ MessageId=39
+ Severity=Informational
+@@ -354,6 +488,10 @@ Language=English
+ The system has successfully rebuilt the user disk quota information on
+ device %1 with label "%2".
+ .
++Language=Finnish
++Järjestelmä on muodostanut käyttäjien levykiintiötiedot uudelleen
++laitteessa %1, jonka nimi on "%2".
++.
+ 
+ MessageId=40
+ Severity=Warning
+@@ -363,3 +501,7 @@ Language=English
+ The system has encounted an error rebuilding the user disk quota
+ information on device %1 with label "%2".
+ .
++Language=Finnish
++Järjestelmä kohtasi virheen muodostaessaan käyttäjien levykiintiötietoja uudelleen
++laitteessa %1, jonka nimi on "%2".
++.
+diff --git a/sdk/include/reactos/mc/pciclass.mc b/sdk/include/reactos/mc/pciclass.mc
+index 659bec11020..711e9c372fd 100644
+--- a/sdk/include/reactos/mc/pciclass.mc
++++ b/sdk/include/reactos/mc/pciclass.mc
+@@ -1,6 +1,7 @@
+ LanguageNames=(English=0x409:MSG00409
+                Polish=0x415:MSG00415
+-               Romanian=0x418:MSG00418)
++               Romanian=0x418:MSG00418
++               Finnish=0x40B:MSG0040B)
+ 
+ MessageId=0
+ SymbolicName=NONE
+@@ -13,6 +14,9 @@ Urządzenie PCI
+ Language=Romanian
+ Dispozitiv PCI
+ .
++Language=Finnish
++PCI-laite
++.
+ 
+ MessageId=1
+ SymbolicName=NONE
+@@ -25,6 +29,9 @@ Urządzenie VGA
+ Language=Romanian
+ Dispozitiv VGA
+ .
++Language=Finnish
++VGA-laite
++.
+ 
+ MessageId=256
+ SymbolicName=NONE
+@@ -37,6 +44,9 @@ Kontroler SCSI
+ Language=Romanian
+ Dispozitiv de control SCSI
+ .
++Language=Finnish
++SCSI-ohjain
++.
+ 
+ MessageId=257
+ SymbolicName=NONE
+@@ -49,6 +59,9 @@ Kontroler IDE
+ Language=Romanian
+ Dispozitiv de control IDE
+ .
++Language=Finnish
++IDE-ohjain
++.
+ 
+ MessageId=258
+ SymbolicName=NONE
+@@ -61,6 +74,9 @@ Kontroler dyskietek
+ Language=Romanian
+ Dispozitiv de control pentru dischete
+ .
++Language=Finnish
++Levykeaseman ohjain
++.
+ 
+ MessageId=259
+ SymbolicName=NONE
+@@ -73,6 +89,9 @@ Kontroler IPI
+ Language=Romanian
+ Dispozitiv de control IPI
+ .
++Language=Finnish
++IPI-ohjain
++.
+ 
+ MessageId=260
+ SymbolicName=NONE
+@@ -85,6 +104,9 @@ Kontroler RAID
+ Language=Romanian
+ Dispozitiv de control RAID
+ .
++Language=Finnish
++RAID-ohjain
++.
+ 
+ MessageId=261
+ SymbolicName=NONE
+@@ -97,6 +119,9 @@ Kontroler ATA
+ Language=Romanian
+ Dispozitiv de control ATA
+ .
++Language=Finnish
++ATA-ohjain
++.
+ 
+ MessageId=262
+ SymbolicName=NONE
+@@ -109,6 +134,9 @@ Kontroler Serial ATA
+ Language=Romanian
+ Dispozitiv de control Serial ATA
+ .
++Language=Finnish
++Serial ATA -ohjain
++.
+ 
+ MessageId=263
+ SymbolicName=NONE
+@@ -121,6 +149,9 @@ Kontroler SAS
+ Language=Romanian
+ Dispozitiv de control SAS
+ .
++Language=Finnish
++SAS-ohjain
++.
+ 
+ MessageId=384
+ SymbolicName=NONE
+@@ -133,6 +164,9 @@ Kontroler pamięci masowej
+ Language=Romanian
+ Dispozitiv de control de stocare în masă
+ .
++Language=Finnish
++Massamuistiohjain
++.
+ 
+ MessageId=512
+ SymbolicName=NONE
+@@ -145,6 +179,9 @@ Kontroler Ethernet
+ Language=Romanian
+ Dispozitiv de control de Ethernet
+ .
++Language=Finnish
++Ethernet-ohjain
++.
+ 
+ MessageId=513
+ SymbolicName=NONE
+@@ -157,6 +194,9 @@ Kontroler sieci typu Token Ring
+ Language=Romanian
+ Dispozitiv de control de rețea Token Ring
+ .
++Language=Finnish
++Token Ring -verkko-ohjain
++.
+ 
+ MessageId=514
+ SymbolicName=NONE
+@@ -169,6 +209,9 @@ Kontroler sieci typu FDDI
+ Language=Romanian
+ Dispozitiv de control de rețea FDDI
+ .
++Language=Finnish
++FDDI-verkko-ohjain
++.
+ 
+ MessageId=515
+ SymbolicName=NONE
+@@ -181,6 +224,9 @@ Kontroler sieci typu ATM
+ Language=Romanian
+ Dispozitiv de control de rețea ATM
+ .
++Language=Finnish
++ATM-verkko-ohjain
++.
+ 
+ MessageId=516
+ SymbolicName=NONE
+@@ -193,6 +239,9 @@ Kontroler ISDN
+ Language=Romanian
+ Dispozitiv de control ISDN
+ .
++Language=Finnish
++ISDN-ohjain
++.
+ 
+ MessageId=517
+ SymbolicName=NONE
+@@ -205,6 +254,9 @@ Kontroler WorldFip
+ Language=Romanian
+ Dispozitiv de control WorldFip
+ .
++Language=Finnish
++WorldFip-ohjain
++.
+ 
+ MessageId=640
+ SymbolicName=NONE
+@@ -217,6 +269,9 @@ Kontroler sieci
+ Language=Romanian
+ Dispozitiv de control de rețea
+ .
++Language=Finnish
++Verkko-ohjain
++.
+ 
+ MessageId=768
+ SymbolicName=NONE
+@@ -229,6 +284,9 @@ Kontroler wideo (zgodny z VGA)
+ Language=Romanian
+ Dispozitiv de control video (compatibil cu VGA)
+ .
++Language=Finnish
++Näytönohjain (VGA-yhteensopiva)
++.
+ 
+ MessageId=769
+ SymbolicName=NONE
+@@ -241,6 +299,9 @@ Kontroler wideo (zgodny z VGA)
+ Language=Romanian
+ Dispozitiv de control video (compatibil cu VGA)
+ .
++Language=Finnish
++Näytönohjain (VGA-yhteensopiva)
++.
+ 
+ MessageId=770
+ SymbolicName=NONE
+@@ -253,6 +314,9 @@ Kontroler wideo 3W
+ Language=Romanian
+ Dispozitiv de control video 3D
+ .
++Language=Finnish
++3D-näytönohjain
++.
+ 
+ MessageId=896
+ SymbolicName=NONE
+@@ -265,6 +329,9 @@ Kontroler wideo
+ Language=Romanian
+ Dispozitiv de control video
+ .
++Language=Finnish
++Näytönohjain
++.
+ 
+ MessageId=1024
+ SymbolicName=NONE
+@@ -277,6 +344,9 @@ Kontroler multimediów wideo
+ Language=Romanian
+ Dispozitiv de control video multimedia
+ .
++Language=Finnish
++Multimedian videoohjain
++.
+ 
+ MessageId=1025
+ SymbolicName=NONE
+@@ -289,6 +359,9 @@ Kontroler multimediów audio
+ Language=Romanian
+ Dispozitiv de control audio multimedia
+ .
++Language=Finnish
++Multimedian ääniohjain
++.
+ 
+ MessageId=1026
+ SymbolicName=NONE
+@@ -301,6 +374,9 @@ Komputerowe urządzenie telefoniczne
+ Language=Romanian
+ Dispozitiv de telefonie computerizată
+ .
++Language=Finnish
++Tietokonepuhelinlaite
++.
+ 
+ MessageId=1152
+ SymbolicName=NONE
+@@ -313,6 +389,9 @@ Kontroler multimediów
+ Language=Romanian
+ Dispozitiv de control multimedia
+ .
++Language=Finnish
++Multimediaohjain
++.
+ 
+ MessageId=1280
+ SymbolicName=NONE
+@@ -325,6 +404,9 @@ Pamięć PCI
+ Language=Romanian
+ Memorie PCI
+ .
++Language=Finnish
++PCI-muisti
++.
+ 
+ MessageId=1281
+ SymbolicName=NONE
+@@ -337,6 +419,9 @@ Pamięć PCI FLASH
+ Language=Romanian
+ Memorie PCI Flash
+ .
++Language=Finnish
++PCI-flash-muisti
++.
+ 
+ MessageId=1408
+ SymbolicName=NONE
+@@ -349,6 +434,9 @@ Kontroler pamięci PCI
+ Language=Romanian
+ Dispozitiv de control de memorie PCI
+ .
++Language=Finnish
++PCI-muistiohjain
++.
+ 
+ MessageId=1536
+ SymbolicName=NONE
+@@ -361,6 +449,9 @@ Mostek PCI HOST
+ Language=Romanian
+ Punte PCI HOST
+ .
++Language=Finnish
++PCI-isäntäsilta
++.
+ 
+ MessageId=1537
+ SymbolicName=NONE
+@@ -373,6 +464,9 @@ Mostek PCI do ISA
+ Language=Romanian
+ Punte PCI la ISA
+ .
++Language=Finnish
++PCI–ISA-silta
++.
+ 
+ MessageId=1538
+ SymbolicName=NONE
+@@ -385,6 +479,9 @@ Mostek PCI do EISA
+ Language=Romanian
+ Punte PCI la EISA
+ .
++Language=Finnish
++PCI–EISA-silta
++.
+ 
+ MessageId=1539
+ SymbolicName=NONE
+@@ -397,6 +494,9 @@ Mostek PCI do Micro Channel
+ Language=Romanian
+ Punte PCI la Micro Channel
+ .
++Language=Finnish
++PCI–Micro Channel -silta
++.
+ 
+ MessageId=1540
+ SymbolicName=NONE
+@@ -409,6 +509,9 @@ Mostek PCI do PCI
+ Language=Romanian
+ Punte PCI la PCI
+ .
++Language=Finnish
++PCI–PCI-silta
++.
+ 
+ MessageId=1541
+ SymbolicName=NONE
+@@ -421,6 +524,9 @@ Mostek PCI do PCMCIA
+ Language=Romanian
+ Punte PCI la PCMCIA
+ .
++Language=Finnish
++PCI–PCMCIA-silta
++.
+ 
+ MessageId=1542
+ SymbolicName=NONE
+@@ -433,6 +539,9 @@ Mostek PCI do NUBUS
+ Language=Romanian
+ Punte PCI la NUBUS
+ .
++Language=Finnish
++PCI–NUBUS-silta
++.
+ 
+ MessageId=1543
+ SymbolicName=NONE
+@@ -445,6 +554,9 @@ Mostek PCI do CARDBUS
+ Language=Romanian
+ Punte PCI la CARDBUS
+ .
++Language=Finnish
++PCI–CARDBUS-silta
++.
+ 
+ MessageId=1544
+ SymbolicName=NONE
+@@ -457,6 +569,9 @@ Mostek PCI-RACEway
+ Language=Romanian
+ Punte PCI la RACEway
+ .
++Language=Finnish
++PCI–RACEway-silta
++.
+ 
+ MessageId=1545
+ SymbolicName=NONE
+@@ -469,6 +584,9 @@ Półprzeźroczysty mostek PCI do PCI
+ Language=Romanian
+ Punte semi-transparentă PCI la PCI
+ .
++Language=Finnish
++Puoliläpinäkyvä PCI–PCI-silta
++.
+ 
+ MessageId=1546
+ SymbolicName=NONE
+@@ -481,6 +599,9 @@ Mostek Infiniband do hosta PCI
+ Language=Romanian
+ Punte Infiniband PCI la gazdă
+ .
++Language=Finnish
++Infiniband–PCI-isäntäsilta
++.
+ 
+ MessageId=1664
+ SymbolicName=NONE
+@@ -493,6 +614,9 @@ Inne urządzenie typu mostek PCI
+ Language=Romanian
+ Alt dispozitiv de punte PCI
+ .
++Language=Finnish
++Muu PCI-siltalaite
++.
+ 
+ MessageId=1792
+ SymbolicName=NONE
+@@ -505,6 +629,9 @@ Port szeregowy PCI
+ Language=Romanian
+ Port serial PCI
+ .
++Language=Finnish
++PCI-sarjaportti
++.
+ 
+ MessageId=1793
+ SymbolicName=NONE
+@@ -517,6 +644,9 @@ Port równoległy PCI
+ Language=Romanian
+ Port paralel PCI
+ .
++Language=Finnish
++PCI-rinnakkaisportti
++.
+ 
+ MessageId=1794
+ SymbolicName=NONE
+@@ -529,6 +659,9 @@ Wieloportowy kontroler szeregowy PCI
+ Language=Romanian
+ Dispozitiv de control serial multiport PCI
+ .
++Language=Finnish
++PCI-moniporttisarjaohjain
++.
+ 
+ MessageId=1795
+ SymbolicName=NONE
+@@ -541,6 +674,9 @@ Modem PCI
+ Language=Romanian
+ Modem PCI
+ .
++Language=Finnish
++PCI-modeemi
++.
+ 
+ MessageId=1796
+ SymbolicName=NONE
+@@ -553,6 +689,9 @@ Kontroler PCI GBIB
+ Language=Romanian
+ Dispozitiv de control PCI GBIB
+ .
++Language=Finnish
++PCI GBIB -ohjain
++.
+ 
+ MessageId=1797
+ SymbolicName=NONE
+@@ -565,6 +704,9 @@ Karta inteligentna PCI
+ Language=Romanian
+ Card inteligent PCI
+ .
++Language=Finnish
++PCI-älykortti
++.
+ 
+ MessageId=1920
+ SymbolicName=NONE
+@@ -577,6 +719,9 @@ Kontroler PCI Simple Communications
+ Language=Romanian
+ Dispozitiv de control PCI pentru comunicații simple
+ .
++Language=Finnish
++PCI:n yksinkertainen tietoliikenneohjain
++.
+ 
+ MessageId=2048
+ SymbolicName=NONE
+@@ -589,6 +734,9 @@ Kontroler przerwań systemowych
+ Language=Romanian
+ Dispozitiv de control de întrerupere a sistemului
+ .
++Language=Finnish
++Järjestelmän keskeytysohjain
++.
+ 
+ MessageId=2049
+ SymbolicName=NONE
+@@ -601,6 +749,9 @@ Kontroler systemowy DMA
+ Language=Romanian
+ Dispozitiv de control DMA de sistem
+ .
++Language=Finnish
++Järjestelmän DMA-ohjain
++.
+ 
+ MessageId=2050
+ SymbolicName=NONE
+@@ -613,6 +764,9 @@ Czasomierz systemowy
+ Language=Romanian
+ Cronometru de sistem
+ .
++Language=Finnish
++Järjestelmän ajastin
++.
+ 
+ MessageId=2051
+ SymbolicName=NONE
+@@ -625,6 +779,9 @@ Zegar czasu rzeczywistego
+ Language=Romanian
+ Ceas în timp real
+ .
++Language=Finnish
++Reaaliaikakello
++.
+ 
+ MessageId=2052
+ SymbolicName=NONE
+@@ -637,6 +794,9 @@ Rodzajowy kontroler PCI Hot-Plug
+ Language=Romanian
+ Dispozitiv de control generic PCI Hot-Plug
+ .
++Language=Finnish
++Yleinen PCI-hot-plug-ohjain
++.
+ 
+ MessageId=2053
+ SymbolicName=NONE
+@@ -649,6 +809,9 @@ Kontroler hosta SD
+ Language=Romanian
+ Dispozitiv de control de gazdă SD
+ .
++Language=Finnish
++SD-isäntäohjain
++.
+ 
+ MessageId=2173
+ SymbolicName=NONE
+@@ -661,6 +824,9 @@ Podstawowe urządzenie systemowe
+ Language=Romanian
+ Dispozitiv de sistem de bază
+ .
++Language=Finnish
++Järjestelmän peruslaite
++.
+ 
+ MessageId=2304
+ SymbolicName=NONE
+@@ -673,6 +839,9 @@ Kontroler klawiatury PCI
+ Language=Romanian
+ Dispozitiv de control de tastatură PCI
+ .
++Language=Finnish
++PCI-näppäimistöohjain
++.
+ 
+ MessageId=2305
+ SymbolicName=NONE
+@@ -685,6 +854,9 @@ Dyskretyzator PCI
+ Language=Romanian
+ Digitizor PCI
+ .
++Language=Finnish
++PCI-digitointilaite
++.
+ 
+ MessageId=2306
+ SymbolicName=NONE
+@@ -697,6 +869,9 @@ Kontroler myszy PCI
+ Language=Romanian
+ Dispozitiv de control de mouse PCI
+ .
++Language=Finnish
++PCI-hiiriohjain
++.
+ 
+ MessageId=2307
+ SymbolicName=NONE
+@@ -709,6 +884,9 @@ Kontroler skanera PCI
+ Language=Romanian
+ Dispozitiv de control dispozitivelor de scanare PCI
+ .
++Language=Finnish
++PCI-skanneriohjain
++.
+ 
+ MessageId=2308
+ SymbolicName=NONE
+@@ -721,6 +899,9 @@ Kontroler portu gier PCI
+ Language=Romanian
+ Dispozitiv de control PCI pentru port de joc
+ .
++Language=Finnish
++PCI-peliporttiohjain
++.
+ 
+ MessageId=2432
+ SymbolicName=NONE
+@@ -733,6 +914,9 @@ Urządzenie wejściowe PCI
+ Language=Romanian
+ Dispozitiv de intrare PCI
+ .
++Language=Finnish
++PCI-syöttölaite
++.
+ 
+ MessageId=2560
+ SymbolicName=NONE
+@@ -745,6 +929,9 @@ Stacja dokująca
+ Language=Romanian
+ Sistem de andocare
+ .
++Language=Finnish
++Telakointiasema
++.
+ 
+ MessageId=2688
+ SymbolicName=NONE
+@@ -757,6 +944,9 @@ Stacja dokująca (nieznanego typu)
+ Language=Romanian
+ Sistem de andocare (de tip necunoscut)
+ .
++Language=Finnish
++Telakointiasema (tuntematon tyyppi)
++.
+ 
+ MessageId=2816
+ SymbolicName=NONE
+@@ -769,6 +959,9 @@ Procesor 386
+ Language=Romanian
+ Procesor 386
+ .
++Language=Finnish
++386-suoritin
++.
+ 
+ MessageId=2817
+ SymbolicName=NONE
+@@ -781,6 +974,9 @@ Procesor 486
+ Language=Romanian
+ Procesor 486
+ .
++Language=Finnish
++486-suoritin
++.
+ 
+ MessageId=2818
+ SymbolicName=NONE
+@@ -793,6 +989,9 @@ Procesor Pentium
+ Language=Romanian
+ Procesor Pentium
+ .
++Language=Finnish
++Pentium-suoritin
++.
+ 
+ MessageId=2832
+ SymbolicName=NONE
+@@ -805,6 +1004,9 @@ Procesor ALPHA
+ Language=Romanian
+ Procesor ALPHA
+ .
++Language=Finnish
++ALPHA-suoritin
++.
+ 
+ MessageId=2848
+ SymbolicName=NONE
+@@ -817,6 +1019,9 @@ Procesor PowerPC
+ Language=Romanian
+ Procesor PowerPC
+ .
++Language=Finnish
++PowerPC-suoritin
++.
+ 
+ MessageId=2880
+ SymbolicName=NONE
+@@ -829,6 +1034,9 @@ Koprocesor
+ Language=Romanian
+ Coprocesor
+ .
++Language=Finnish
++Apusuoritin
++.
+ 
+ MessageId=3072
+ SymbolicName=NONE
+@@ -841,6 +1049,9 @@ Kontroler IEEE 1394
+ Language=Romanian
+ Dispozitiv de control IEEE 1394
+ .
++Language=Finnish
++IEEE 1394 -ohjain
++.
+ 
+ MessageId=3073
+ SymbolicName=NONE
+@@ -853,6 +1064,9 @@ Kontroler magistrali ACCESS
+ Language=Romanian
+ Dispozitiv de control de magistrală ACCESS
+ .
++Language=Finnish
++ACCESS Bus -ohjain
++.
+ 
+ MessageId=3074
+ SymbolicName=NONE
+@@ -865,6 +1079,9 @@ Kontroler SSA
+ Language=Romanian
+ Dispozitiv de control SSA
+ .
++Language=Finnish
++SSA-ohjain
++.
+ 
+ MessageId=3075
+ SymbolicName=NONE
+@@ -877,6 +1094,9 @@ Kontroler uniwersalnej magistrali szeregowej (USB)
+ Language=Romanian
+ Dispozitiv de control universal de magistrală serială (USB)
+ .
++Language=Finnish
++USB-ohjain (Universal Serial Bus)
++.
+ 
+ MessageId=3076
+ SymbolicName=NONE
+@@ -889,6 +1109,9 @@ Kontroler Fibre Channel
+ Language=Romanian
+ Dispozitiv de control Fibre Channel
+ .
++Language=Finnish
++Fibre Channel -ohjain
++.
+ 
+ MessageId=3077
+ SymbolicName=NONE
+@@ -901,6 +1124,9 @@ Kontroler magistrali zarządzania systemem
+ Language=Romanian
+ Dispozitiv de control de magistrală de management al sistemului
+ .
++Language=Finnish
++SM Bus -ohjain
++.
+ 
+ MessageId=3078
+ SymbolicName=NONE
+@@ -913,6 +1139,9 @@ Kontroler Infiniband
+ Language=Romanian
+ Dispozitiv de control Infiniband
+ .
++Language=Finnish
++Infiniband-ohjain
++.
+ 
+ MessageId=3079
+ SymbolicName=NONE
+@@ -925,6 +1154,9 @@ Interfejs IPMI
+ Language=Romanian
+ Interfață IPMI
+ .
++Language=Finnish
++IPMI-liitäntä
++.
+ 
+ MessageId=3080
+ SymbolicName=NONE
+@@ -937,6 +1169,9 @@ Interfejs SERCOS
+ Language=Romanian
+ Interfață SERCOS
+ .
++Language=Finnish
++SERCOS-liitäntä
++.
+ 
+ MessageId=3081
+ SymbolicName=NONE
+@@ -949,6 +1184,9 @@ Kontroler CANbus
+ Language=Romanian
+ Dispozitiv de control CANbus
+ .
++Language=Finnish
++CANbus-ohjain
++.
+ 
+ MessageId=3328
+ SymbolicName=NONE
+@@ -961,6 +1199,9 @@ Kontroler zgodny z iRDA
+ Language=Romanian
+ Dispozitiv de control compatibil iRDA
+ .
++Language=Finnish
++iRDA-yhteensopiva ohjain
++.
+ 
+ MessageId=3329
+ SymbolicName=NONE
+@@ -973,6 +1214,9 @@ Kontroler Consumer IR
+ Language=Romanian
+ Dispozitiv de control de infraroșu (IR) pentru consum
+ .
++Language=Finnish
++Kuluttaja-IR-ohjain
++.
+ 
+ MessageId=3344
+ SymbolicName=NONE
+@@ -985,6 +1229,9 @@ Kontroler częstotliwości radiowej
+ Language=Romanian
+ Dispozitiv de control de radiofrecvență
+ .
++Language=Finnish
++RF-ohjain
++.
+ 
+ MessageId=3345
+ SymbolicName=NONE
+@@ -997,6 +1244,9 @@ Kontroler Bluetooth
+ Language=Romanian
+ Dispozitiv de control Bluetooth
+ .
++Language=Finnish
++Bluetooth-ohjain
++.
+ 
+ MessageId=3346
+ SymbolicName=NONE
+@@ -1009,6 +1259,9 @@ Kontroler szerokopasmowy
+ Language=Romanian
+ Dispozitiv de control de bandă largă
+ .
++Language=Finnish
++Laajakaistaohjain
++.
+ 
+ MessageId=3360
+ SymbolicName=NONE
+@@ -1021,6 +1274,9 @@ Kontroler Ethernet 802.11a
+ Language=Romanian
+ Dispozitiv de control de Ethernet 802.11a
+ .
++Language=Finnish
++Ethernet 802.11a -ohjain
++.
+ 
+ MessageId=3361
+ SymbolicName=NONE
+@@ -1033,6 +1289,9 @@ Kontroler Ethernet 802.11b
+ Language=Romanian
+ Dispozitiv de control de Ethernet 802.11b
+ .
++Language=Finnish
++Ethernet 802.11b -ohjain
++.
+ 
+ MessageId=3456
+ SymbolicName=NONE
+@@ -1045,6 +1304,9 @@ Kontroler bezprzewodowy PCI
+ Language=Romanian
+ Dispozitiv de control wireless PCI
+ .
++Language=Finnish
++PCI-langaton ohjain
++.
+ 
+ MessageId=3584
+ SymbolicName=NONE
+@@ -1057,6 +1319,9 @@ Kontroler We/Wy Intelligent (I2O)
+ Language=Romanian
+ Dispozitiv de control inteligent I/O (I2O).
+ .
++Language=Finnish
++Älykäs I/O (I2O) -ohjain
++.
+ 
+ MessageId=3841
+ SymbolicName=NONE
+@@ -1069,6 +1334,9 @@ Kontroler telewizji dla komunikacji satelitarnej
+ Language=Romanian
+ Dispozitiv de control de televiziune pentru comunicații prin satelit
+ .
++Language=Finnish
++Satelliittiviestinnän televisio-ohjain
++.
+ 
+ MessageId=3842
+ SymbolicName=NONE
+@@ -1081,6 +1349,9 @@ Kontroler audio dla komunikacji satelitarnej
+ Language=Romanian
+ Dispozitiv de control audio pentru comunicații prin satelit
+ .
++Language=Finnish
++Satelliittiviestinnän ääniohjain
++.
+ 
+ MessageId=3843
+ SymbolicName=NONE
+@@ -1093,6 +1364,9 @@ Kontroler głosu dla komunikacji satelitarnej
+ Language=Romanian
+ Dispozitiv de control de voce pentru comunicații prin satelit
+ .
++Language=Finnish
++Satelliittiviestinnän puheohjain
++.
+ 
+ MessageId=3844
+ SymbolicName=NONE
+@@ -1105,6 +1379,9 @@ Kontroler danych dla komunikacji satelitarnej
+ Language=Romanian
+ Dispozitiv de control de date pentru comunicații prin satelit
+ .
++Language=Finnish
++Satelliittiviestinnän dataohjain
++.
+ 
+ MessageId=4096
+ SymbolicName=NONE
+@@ -1117,6 +1394,9 @@ Kontroler szyfrowania/odszyfrowywania danych sieciowych i komputerowych
+ Language=Romanian
+ Dispozitiv de control de criptare/decriptare de rețea și de calcul
+ .
++Language=Finnish
++Verkon ja tietojenkäsittelyn salaus- ja salauksenpurkuohjain
++.
+ 
+ MessageId=4112
+ SymbolicName=NONE
+@@ -1129,6 +1409,9 @@ Kontroler szyfrowania/odszyfrowywania rozrywki
+ Language=Romanian
+ Dispozitiv de control de criptare/decriptare de divertisment
+ .
++Language=Finnish
++Viihteen salaus- ja salauksenpurkuohjain
++.
+ 
+ MessageId=4224
+ SymbolicName=NONE
+@@ -1141,6 +1424,9 @@ Kontroler szyfrowania/odszyfrowywania PCI
+ Language=Romanian
+ Dispozitiv de control PCI de criptare/decriptare
+ .
++Language=Finnish
++PCI-salaus- ja salauksenpurkuohjain
++.
+ 
+ MessageId=4352
+ SymbolicName=NONE
+@@ -1153,6 +1439,9 @@ Moduł DPIO
+ Language=Romanian
+ Modul DPIO
+ .
++Language=Finnish
++DPIO-moduuli
++.
+ 
+ MessageId=4353
+ SymbolicName=NONE
+@@ -1165,6 +1454,9 @@ Liczniki wydajności
+ Language=Romanian
+ Contoare de performanță
+ .
++Language=Finnish
++Suorituskykylaskurit
++.
+ 
+ MessageId=4368
+ SymbolicName=NONE
+@@ -1177,6 +1469,9 @@ Kontroler PCI synchronizacji komunikacji oraz testowania/pomiaru czasu i często
+ Language=Romanian
+ Dispozitiv de control pentru sincronizarea comunicațiilor PCI și pentru testarea/măsurarea timpului și a frecvenței
+ .
++Language=Finnish
++PCI-tietoliikenteen synkronointi- sekä aika- ja taajuusmittausohjain
++.
+ 
+ MessageId=4384
+ SymbolicName=NONE
+@@ -1189,6 +1484,9 @@ Karta zarządzania
+ Language=Romanian
+ Card de administrare
+ .
++Language=Finnish
++Hallintakortti
++.
+ 
+ MessageId=4480
+ SymbolicName=NONE
+@@ -1201,3 +1499,6 @@ Kontroler PCI gromadzenia danych i przetwarzania sygnałów
+ Language=Romanian
+ Dispozitiv de control PCI pentru achiziție de date și procesare a semnalului
+ .
++Language=Finnish
++PCI-tiedonkeruu- ja signaalinkäsittelyohjain
++.
+-- 
+2.56.0
+
+
+From c525ca91ee9ee296ec2846786bfefbe3680f0547 Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 22:21:01 +0200
+Subject: [PATCH 3/4] [TRANSLATION] Add Finnish (fi-FI) to the NET and ARP
+ command message tables
+
+Problem: The help and messages of the net and arp commands had no
+Finnish.
+
+Why: They are the command line's own text.
+
+How: Add Finnish=0x40B and a Finnish block to every message of
+net_msg.mc and arp_msg.mc; commands, switches and values typed as shown
+stay as they are, and arp's column heading keeps the columns of its
+%1!-20s! entries. The help texts upstream has not written yet ("NET FILE
+...") keep their English. The tables compile with windmc.
+---
+ base/applications/network/arp/arp_msg.mc |  65 +++-
+ sdk/include/reactos/mc/net_msg.mc        | 444 +++++++++++++++++++++++
+ 2 files changed, 508 insertions(+), 1 deletion(-)
+
+diff --git a/base/applications/network/arp/arp_msg.mc b/base/applications/network/arp/arp_msg.mc
+index c76f5bad6ae..2a25aaa9c26 100644
+--- a/base/applications/network/arp/arp_msg.mc
++++ b/base/applications/network/arp/arp_msg.mc
+@@ -11,7 +11,8 @@ FacilityNames=(System=0x0:FACILITY_SYSTEM
+ 
+ LanguageNames=(English=0x409:MSG00409
+                Polish=0x415:MSG00415
+-               Romanian=0x418:MSG00418)
++               Romanian=0x418:MSG00418
++               Finnish=0x40B:MSG0040B)
+ 
+ MessageId=10000
+ SymbolicName=MSG_ARP_SYNTAX
+@@ -115,6 +116,36 @@ Exemplu:
+   > arp -s 157.55.85.212   00-aa-00-62-c6-09  .... Adaugă o intrare statică.
+   > arp -a                                    .... Afișează tabelul arp.
+ .
++Language=Finnish
++Näyttää ja muuttaa osoitteenselvitysprotokollan (ARP) käyttämiä IP-osoitteiden
++ja fyysisten osoitteiden muunnostaulukoita.
++
++ARP -s inet_addr eth_addr [if_addr]
++ARP -d inet_addr [if_addr]
++ARP -a [inet_addr] [-N if_addr]
++
++  -a            Näyttää nykyiset ARP-merkinnät kysymällä nykyiset
++                protokollatiedot.  Jos inet_addr annetaan, vain annetun
++                tietokoneen IP-osoite ja fyysinen osoite näytetään.  Jos
++                useampi kuin yksi verkkoliitäntä käyttää ARP:tä, jokaisen
++                ARP-taulukon merkinnät näytetään.
++  -g            Sama kuin -a.
++  inet_addr     Määrittää Internet-osoitteen.
++  -N if_addr    Näyttää verkkoliitännän if_addr ARP-merkinnät.
++  -d            Poistaa isännän inet_addr. inet_addr voi sisältää
++                yleismerkin *, jolloin kaikki isännät poistetaan.
++  -s            Lisää isännän ja liittää Internet-osoitteen inet_addr
++                fyysiseen osoitteeseen eth_addr.  Fyysinen osoite annetaan
++                kuutena heksadesimaalitavuna, jotka erotetaan
++                yhdysmerkeillä. Merkintä on pysyvä.
++  eth_addr      Määrittää fyysisen osoitteen.
++  if_addr       Jos tämä annetaan, se määrittää sen liitännän
++                Internet-osoitteen, jonka osoitteenmuunnostaulukkoa muutetaan.
++                Jos sitä ei anneta, käytetään ensimmäistä sopivaa liitäntää.
++Esimerkki:
++  > arp -s 157.55.85.212   00-aa-00-62-c6-09  .... Lisää pysyvän merkinnän.
++  > arp -a                                    .... Näyttää ARP-taulukon.
++.
+ 
+ MessageId=10001
+ SymbolicName=MSG_ARP_BAD_IP_ADDRESS
+@@ -129,6 +160,9 @@ ARP: zły adres IP: %1
+ Language=Romanian
+ ARP: adresă IP greșită: %1
+ .
++Language=Finnish
++ARP: virheellinen IP-osoite: %1
++.
+ 
+ MessageId=10002
+ SymbolicName=MSG_ARP_BAD_ARGUMENT
+@@ -143,6 +177,9 @@ ARP: zły argument: %1
+ Language=Romanian
+ ARP: argument greșit: %1
+ .
++Language=Finnish
++ARP: virheellinen argumentti: %1
++.
+ 
+ MessageId=10003
+ SymbolicName=MSG_ARP_INTERFACE
+@@ -163,6 +200,11 @@ Language=Romanian
+ Interfață: %1!s! --- 0x%2!lx!
+   Adresă de Internet      Adresă fizică      Tip
+ .
++Language=Finnish
++
++Liitäntä: %1!s! --- 0x%2!lx!
++  Internet-osoite       Fyysinen osoite       Tyyppi
++.
+ 
+ MessageId=10004
+ SymbolicName=MSG_ARP_NO_MEMORY
+@@ -177,6 +219,9 @@ ARP: za mało pamięci
+ Language=Romanian
+ ARP: memorie insuficientă
+ .
++Language=Finnish
++ARP: muisti ei riitä
++.
+ 
+ MessageId=10005
+ SymbolicName=MSG_ARP_OTHER
+@@ -191,6 +236,9 @@ inny%0
+ Language=Romanian
+ altele%0
+ .
++Language=Finnish
++muu%0
++.
+ 
+ MessageId=10006
+ SymbolicName=MSG_ARP_INVALID
+@@ -205,6 +253,9 @@ nieprawidłowy%0
+ Language=Romanian
+ nevalid%0
+ .
++Language=Finnish
++virheellinen%0
++.
+ 
+ MessageId=10007
+ SymbolicName=MSG_ARP_DYNAMIC
+@@ -219,6 +270,9 @@ dynamiczny%0
+ Language=Romanian
+ dinamic%0
+ .
++Language=Finnish
++dynaaminen%0
++.
+ 
+ MessageId=10008
+ SymbolicName=MSG_ARP_STATIC
+@@ -233,6 +287,9 @@ statyczny%0
+ Language=Romanian
+ static%0
+ .
++Language=Finnish
++pysyvä%0
++.
+ 
+ MessageId=10013
+ SymbolicName=MSG_ARP_ENTRY_FORMAT
+@@ -247,6 +304,9 @@ Language=Polish
+ Language=Romanian
+   %1!-20s!  %2!-20s!  %3!-10s!
+ .
++Language=Finnish
++  %1!-20s!  %2!-20s!  %3!-10s!
++.
+ 
+ MessageId=10018
+ SymbolicName=MSG_ARP_NO_ENTRIES
+@@ -261,3 +321,6 @@ Nie znaleziono żadnych wpisów ARP
+ Language=Romanian
+ Nu au fost găsite intrări ARP
+ .
++Language=Finnish
++ARP-merkintöjä ei löytynyt
++.
+diff --git a/sdk/include/reactos/mc/net_msg.mc b/sdk/include/reactos/mc/net_msg.mc
+index 43a8f09b845..32e67880018 100644
+--- a/sdk/include/reactos/mc/net_msg.mc
++++ b/sdk/include/reactos/mc/net_msg.mc
+@@ -26,6 +26,7 @@ LanguageNames=(English=0x409:MSG00409
+                Turkish=0x41F:MSG0041F
+                Chinese=0x804:MSG00804
+                Taiwanese=0x404:MSG00404
++               Finnish=0x40B:MSG0040B
+               )
+ 
+ 
+@@ -73,6 +74,11 @@ NET ACCOUNTS [/FORCELOGOFF:{分鐘|NO}] [/MINPWLEN:長度]
+              [/MAXPWAGE:{天|UNLIMITED}] [/MINPWAGE:天]
+              [/UNIQUEPW:計數] [/DOMAIN]
+ .
++Language=Finnish
++NET ACCOUNTS [/FORCELOGOFF:{minuutit|NO}] [/MINPWLEN:pituus]
++             [/MAXPWAGE:{päivät|UNLIMITED}] [/MINPWAGE:päivät]
++             [/UNIQUEPW:määrä] [/DOMAIN]
++.
+ 
+ 
+ MessageId=10001
+@@ -429,6 +435,46 @@ NET ACCOUNTS to take effect.
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET ACCOUNTS päivittää käyttäjätilitietokannan ja muuttaa kaikkien tilien
++salasana- ja kirjautumisvaatimuksia.
++Ilman parametreja NET ACCOUNTS näyttää salasanojen, kirjautumisrajoitusten ja
++toimialueen nykyiset asetukset.
++
++NET ACCOUNTS -komennon valintojen voimaantuloon tarvitaan kaksi ehtoa.
++
++- Salasana- ja kirjautumisvaatimukset ovat voimassa vain, jos
++  käyttäjätilit on luotu (Käyttäjien hallinnalla tai NET USER -komennolla).
++
++- Net Logon -palvelun on oltava käynnissä kaikilla toimialueen palvelimilla,
++  jotka tarkistavat kirjautumisen. Net Logon käynnistyy automaattisesti, kun
++  käyttöjärjestelmä käynnistyy.
++
++/FORECELOGOFF:{minuutit | NO}  Määrittää, montako minuuttia käyttäjällä on
++                               aikaa ennen kuin hänet kirjataan ulos, kun
++                               tili tai sallitut kirjautumisajat päättyvät.
++                               Oletusarvo NO estää pakotetun uloskirjauksen.
++/MINPWLEN:pituus               Määrittää salasanan merkkien vähimmäismäärän.
++                               Arvo on 0-14 merkkiä; oletus on 6 merkkiä.
++/MAXPWAGE:{päivät | UNLIMITED} Määrittää, montako päivää salasana on
++                               enintään voimassa. UNLIMITED poistaa
++                               rajoituksen. /MAXPWAGE ei voi olla pienempi
++                               kuin /MINPWAGE. Arvo on 1-999; oletuksena
++                               arvoa ei muuteta.
++/MINPWAGE:päivät               Määrittää, montako päivää on kuluttava ennen
++                               kuin käyttäjä voi vaihtaa salasanan. Arvo 0
++                               ei aseta vähimmäisaikaa. Arvo on 0-999;
++                               oletus on 0 päivää. /MINPWAGE ei voi olla
++                               suurempi kuin /MAXPWAGE.
++/UNIQUEPW:määrä                Edellyttää, että käyttäjän salasanat ovat
++                               erilaisia annetun määrän salasananvaihtoja
++                               ajan. Suurin arvo on 24.
++/DOMAIN                        Suorittaa toiminnon nykyisen toimialueen
++                               toimialueen ohjauskoneessa. Muuten toiminto
++                               suoritetaan paikallisessa tietokoneessa.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10002
+@@ -459,6 +505,9 @@ NET COMPUTER \\computername {/ADD | /DEL}
+ Language=Taiwanese
+ NET COMPUTER \\computername {/ADD | /DEL}
+ .
++Language=Finnish
++NET COMPUTER \\tietokoneen_nimi {/ADD | /DEL}
++.
+ 
+ 
+ MessageId=10003
+@@ -539,6 +588,15 @@ command is available only on server operating systems.
+ /ADD             Adds the specified computer to the domain.
+ /DEL             Removes the specified computer from the domain.
+ .
++Language=Finnish
++NET COMPUTER lisää tietokoneita toimialueen tietokantaan tai poistaa niitä
++siitä. Komento on käytettävissä vain palvelinkäyttöjärjestelmissä.
++
++\\tietokoneen_nimi Määrittää tietokoneen, joka lisätään toimialueeseen
++                  tai poistetaan siitä.
++/ADD              Lisää tietokoneen toimialueeseen.
++/DEL              Poistaa tietokoneen toimialueesta.
++.
+ 
+ 
+ MessageId=10004
+@@ -569,6 +627,9 @@ NET CONFIG [SERVER | WORKSTATION]
+ Language=Taiwanese
+ NET CONFIG [SERVER | WORKSTATION]
+ .
++Language=Finnish
++NET CONFIG [SERVER | WORKSTATION]
++.
+ 
+ 
+ MessageId=10005
+@@ -677,6 +738,17 @@ WORKSTATION   Displays information about the configuration of the
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET CONFIG näyttää Workstation- tai Server-palvelun määritystiedot.
++Ilman WORKSTATION- tai SERVER-valitsinta se näyttää määritettävissä
++olevien palveluiden luettelon. Saat ohjeen palvelun määrittämiseen
++kirjoittamalla NET HELP CONFIG palvelu.
++
++SERVER        Näyttää Server-palvelun määritystiedot.
++WORKSTATION   Näyttää Workstation-palvelun määritystiedot.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10006
+@@ -715,6 +787,10 @@ Language=Taiwanese
+ NET CONFIG SERVER [/AUTODISCONNECT:time] [/SRVCOMMENT:"text"]
+                   [/HIDDEN:{YES | NO}]
+ .
++Language=Finnish
++NET CONFIG SERVER [/AUTODISCONNECT:aika] [/SRVCOMMENT:"teksti"]
++                  [/HIDDEN:{YES | NO}]
++.
+ 
+ 
+ MessageId=10007
+@@ -882,6 +958,26 @@ type NET CONFIG SERVER without parameters.
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET CONFIG SERVER näyttää tai muuttaa Server-palvelun asetuksia.
++
++/AUTODISCONNECT:aika    Määrittää, montako minuuttia käyttäjän istunto voi
++                        olla enintään käyttämättä ennen yhteyden
++                        katkaisemista. Arvo -1 ei katkaise yhteyttä koskaan.
++                        Arvo on -1-65535 minuuttia; oletus on 15.
++/SRVCOMMENT:"teksti"    Lisää palvelimelle kommentin, joka näkyy näytöllä
++                        ja NET VIEW -komennossa.
++                        Kirjoita teksti lainausmerkkeihin.
++/HIDDEN:{YES | NO}      Määrittää, näkyykö palvelimen tietokoneen nimi
++                        palvelinluetteloissa. Huomaa, että palvelimen
++                        piilottaminen ei muuta palvelimen käyttöoikeuksia.
++                        Oletus on NO.
++
++Saat Server-palvelun nykyiset määritykset näkyviin kirjoittamalla
++NET CONFIG SERVER ilman parametreja.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10008
+@@ -912,6 +1008,9 @@ NET CONTINUE <Service Name>
+ Language=Taiwanese
+ NET CONTINUE <服務名稱>
+ .
++Language=Finnish
++NET CONTINUE palvelu
++.
+ 
+ 
+ MessageId=10009
+@@ -1022,6 +1121,19 @@ service             Is the paused service
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET CONTINUE jatkaa palvelua, joka on keskeytetty NET PAUSE -komennolla.
++
++palvelu             Keskeytetty palvelu,
++                    esimerkiksi jokin seuraavista:
++                    NET LOGON
++                    NT LM SECURITY SUPPORT PROVIDER
++                    SCHEDULE
++                    SERVER
++                    WORKSTATION
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10010
+@@ -1052,6 +1164,9 @@ NET FILE [id [/CLOSE]]
+ Language=Taiwanese
+ NET FILE [id [/CLOSE]]
+ .
++Language=Finnish
++NET FILE [tunnus [/CLOSE]]
++.
+ 
+ 
+ MessageId=10011
+@@ -1090,6 +1205,10 @@ Language=Taiwanese
+ NET FILE
+ ...
+ .
++Language=Finnish
++NET FILE
++...
++.
+ 
+ 
+ MessageId=10012
+@@ -1136,6 +1255,11 @@ NET GROUP [groupname [/COMMENT:"text"]] [/DOMAIN]
+           groupname {/ADD [/COMMENT:"text"] | /DELETE} [/DOMAIN]
+           groupname username [...] {/ADD | /DELETE} [/DOMAIN]
+ .
++Language=Finnish
++NET GROUP [ryhmän_nimi [/COMMENT:"teksti"]] [/DOMAIN]
++          ryhmän_nimi {/ADD [/COMMENT:"teksti"] | /DELETE} [/DOMAIN]
++          ryhmän_nimi käyttäjänimi [...] {/ADD | /DELETE} [/DOMAIN]
++.
+ 
+ 
+ MessageId=10013
+@@ -1300,6 +1424,25 @@ username[ ...]   List one or more usernames to add to or remove from
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET GROUP lisää, näyttää tai muuttaa palvelimien yleisiä ryhmiä. Ilman
++parametreja se näyttää palvelimen ryhmien nimet.
++
++ryhmän_nimi      Lisättävän, laajennettavan tai poistettavan ryhmän nimi.
++                 Anna pelkkä ryhmän nimi, niin näet ryhmän käyttäjien
++                 luettelon.
++/COMMENT:"teksti" Lisää kommentin uudelle tai aiemmalle ryhmälle.
++                 Kirjoita teksti lainausmerkkeihin.
++/DOMAIN          Suorittaa toiminnon nykyisen toimialueen toimialueen
++                 ohjauskoneessa. Muuten toiminto suoritetaan
++                 paikallisessa tietokoneessa.
++käyttäjänimi[ ...] Yksi tai useampi käyttäjänimi, joka lisätään ryhmään tai
++                 poistetaan siitä. Erota käyttäjänimet välilyönneillä.
++/ADD             Lisää ryhmän tai lisää käyttäjänimen ryhmään.
++/DELETE          Poistaa ryhmän tai poistaa käyttäjänimen ryhmästä.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10014
+@@ -1346,6 +1489,11 @@ NET HELP <命令>
+    - 或 -
+ NET <命令> /HELP
+ .
++Language=Finnish
++NET HELP komento
++   - tai -
++NET komento /HELP
++.
+ 
+ 
+ MessageId=10015
+@@ -1472,6 +1620,21 @@ Language=Taiwanese
+    NET HELP SYNTAX explains how to read NET HELP syntax lines.
+    NET HELP command | MORE displays Help one screen at a time.
+ .
++Language=Finnish
++   Käytettävissä ovat seuraavat komennot:
++
++   NET ACCOUNTS             NET HELP                 NET STOP
++   NET COMPUTER             NET HELPMSG              NET TIME
++   NET CONFIG               NET LOCALGROUP           NET USE
++   NET CONFIG SERVER        NET PAUSE                NET USER
++   NET CONFIG WORKSTATION   NET SESSION              NET VIEW
++   NET CONTINUE             NET SHARE
++   NET FILE                 NET START
++   NET GROUP                NET STATISTCS
++
++   NET HELP SYNTAX kertoo, miten NET HELP -syntaksirivejä luetaan.
++   NET HELP komento | MORE näyttää ohjeen yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10016
+@@ -1502,6 +1665,9 @@ NET HELPMSG message#
+ Language=Taiwanese
+ NET HELPMSG <錯誤程式碼>
+ .
++Language=Finnish
++NET HELPMSG viestin_numero
++.
+ 
+ 
+ MessageId=10017
+@@ -1573,6 +1739,14 @@ message and suggested actions you can take to solve the problem.
+ 
+ message#   Is the numerical error with which you need help.
+ .
++Language=Finnish
++NET HELPMSG näyttää tietoja verkkoviesteistä (kuten virhe-, varoitus- ja
++hälytysviesteistä). Kun kirjoitat NET HELPMSG ja virheen numeron (esimerkiksi
++"net helpmsg 2182"), saat tietoja viestistä ja ehdotuksia toimista, joilla
++voit ratkaista ongelman.
++
++viestin_numero Sen virheen numero, johon tarvitset ohjetta.
++.
+ 
+ 
+ MessageId=10018
+@@ -1619,6 +1793,11 @@ NET LOCALGROUP [組名 [/COMMENT:"文字"]] [/DOMAIN]
+                組名 {/ADD [/COMMENT:"文字"] | /DELETE} [/DOMAIN]
+                組名稱 [...] {/ADD | /DELETE} [/DOMAIN]
+ .
++Language=Finnish
++NET LOCALGROUP [ryhmän_nimi [/COMMENT:"teksti"]] [/DOMAIN]
++               ryhmän_nimi {/ADD [/COMMENT:"teksti"] | /DELETE} [/DOMAIN]
++               ryhmän_nimi nimi [...] {/ADD | /DELETE} [/DOMAIN]
++.
+ 
+ 
+ MessageId=10019
+@@ -1830,6 +2009,32 @@ name[ ...]       List one or more usernames or groupnams to add to or
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET LOCALGROUP lisää, näyttää tai muuttaa tietokoneiden paikallisia ryhmiä.
++Ilman parametreja se näyttää tietokoneen paikalliset ryhmät.
++
++ryhmän_nimi      Lisättävän, laajennettavan tai poistettavan paikallisen
++                 ryhmän nimi. Anna pelkkä ryhmän nimi, niin näet
++                 paikallisen ryhmän käyttäjien tai yleisten ryhmien
++                 luettelon.
++/COMMENT:"teksti" Lisää kommentin uudelle tai aiemmalle ryhmälle.
++                 Kirjoita teksti lainausmerkkeihin.
++/DOMAIN          Suorittaa toiminnon nykyisen toimialueen toimialueen
++                 ohjauskoneessa. Muuten toiminto suoritetaan
++                 paikallisessa tietokoneessa.
++nimi[ ...]       Yksi tai useampi käyttäjä- tai ryhmänimi, joka lisätään
++                 paikalliseen ryhmään tai poistetaan siitä. Erota nimet
++                 välilyönneillä. Nimet voivat olla käyttäjiä tai yleisiä
++                 ryhmiä, mutta eivät muita paikallisia ryhmiä. Jos käyttäjä
++                 on toisesta toimialueesta, kirjoita käyttäjänimen eteen
++                 toimialueen nimi (esimerkiksi SALES\RALPHR).
++/ADD             Lisää ryhmän tai käyttäjän nimen paikalliseen ryhmään.
++                 Tällä komennolla paikalliseen ryhmään lisätyillä
++                 käyttäjillä tai yleisillä ryhmillä on oltava tili.
++/DELETE          Poistaa ryhmän tai käyttäjän nimen paikallisesta ryhmästä.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10020
+@@ -1860,6 +2065,9 @@ NET PAUSE service
+ Language=Taiwanese
+ NET PAUSE <服務名稱>
+ .
++Language=Finnish
++NET PAUSE palvelu
++.
+ 
+ 
+ MessageId=10021
+@@ -1921,6 +2129,13 @@ service   The name of the service to be paused.
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET PAUSE keskeyttää palvelun. Keskeytetty palvelu on pidossa.
++
++palvelu   Keskeytettävän palvelun nimi.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10022
+@@ -1951,6 +2166,9 @@ NET SESSION ...
+ Language=Taiwanese
+ NET SESSION ...
+ .
++Language=Finnish
++NET SESSION ...
++.
+ 
+ 
+ MessageId=10023
+@@ -1989,6 +2207,10 @@ Language=Taiwanese
+ SESSION
+ ...
+ .
++Language=Finnish
++SESSION
++...
++.
+ 
+ 
+ MessageId=10024
+@@ -2075,6 +2297,16 @@ NET SHARE sharename=drive:path [/GRANT:user,[READ | CHANGE | FULL]]
+                     [/CACHE:Manual | Documents | Programs | None]
+           {sharename | devicename | drive:path} /DELETE
+ .
++Language=Finnish
++NET SHARE jaettu_nimi=asema:polku [/GRANT:käyttäjä,[READ | CHANGE | FULL]]
++                               [/USERS:määrä | /UNLIMITED]
++                               [/REMARK:"teksti"]
++                               [/CACHE:Manual | Documents| Programs | None]
++          jaettu_nimi [/USERS:määrä | /UNLIMITED]
++                    [/REMARK:"teksti"]
++                    [/CACHE:Manual | Documents | Programs | None]
++          {jaettu_nimi | laitenimi | asema:polku} /DELETE
++.
+ 
+ 
+ MessageId=10025
+@@ -2362,6 +2594,38 @@ devicename         Is one or more printers (LPT1: through LPT9:)
+ 
+ NET HELP command | MORE displays Help one screen at a time.
+ .
++Language=Finnish
++NET SHARE asettaa palvelimen resurssit verkon käyttäjien käyttöön. Ilman
++valintoja se näyttää tiedot kaikista tietokoneen jaetuista resursseista.
++Jokaisesta resurssista näytetään laitenimet tai polkunimet ja niihin liittyvä
++kuvaava kommentti.
++
++jaettu_nimi        Jaetun resurssin verkkonimi. Kirjoita NET SHARE ja pelkkä
++                   jaettu nimi, niin näet kyseisen jaon tiedot.
++asema:polku        Määrittää jaettavan hakemiston absoluuttisen polun.
++/GRANT:käyttäjä,oikeus Luo jaon suojauskuvauksella, joka antaa annetulle
++                   käyttäjälle pyydetyt oikeudet. Valintaa voi käyttää
++                   useammin kuin kerran, jos jaon oikeudet annetaan usealle
++                   käyttäjälle.
++/USERS:määrä       Määrittää, montako käyttäjää voi enintään käyttää jaettua
++                   resurssia samanaikaisesti.
++/UNLIMITED         Määrittää, että rajaton määrä käyttäjiä voi käyttää
++                   jaettua resurssia samanaikaisesti.
++/REMARK:"teksti"   Lisää resurssista kuvaavan kommentin.
++                   Kirjoita teksti lainausmerkkeihin.
++laitenimi          Yksi tai useampi tulostin (LPT1: - LPT9:), joka on jaettu
++                   jaetulla nimellä.
++/DELETE            Lopettaa resurssin jakamisen.
++/CACHE:Manual      Ottaa käyttöön tämän jaon ohjelmien ja tiedostojen
++                   manuaalisen asiakasvälimuistin.
++/CACHE:Documents   Ottaa käyttöön tämän jaon tiedostojen automaattisen
++                   välimuistin.
++/CACHE:Programs    Ottaa käyttöön tämän jaon tiedostojen ja ohjelmien
++                   automaattisen välimuistin.
++/CACHE:None        Poistaa tämän jaon välimuistin käytöstä.
++
++NET HELP komento | MORE näyttää ohjeen yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10026
+@@ -2392,6 +2656,9 @@ NET START [service]
+ Language=Taiwanese
+ NET START [service]
+ .
++Language=Finnish
++NET START [palvelu]
++.
+ 
+ 
+ MessageId=10027
+@@ -2486,6 +2753,17 @@ starts the net logon service.
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET START käynnistää palveluita tai näyttää käynnissä olevat palvelut.
++
++palvelu   Käynnistettävän palvelun nimi.
++
++Kun palvelun nimessä on kaksi tai useampia sanoja, se on kirjoitettava
++komentokehotteessa lainausmerkkeihin. Esimerkiksi NET START "NET LOGON"
++käynnistää Net Logon -palvelun.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10028
+@@ -2516,6 +2794,9 @@ NET STATISTICS [SERVER | WORKSTATION]
+ Language=Taiwanese
+ NET STATISTICS [SERVER | WORKSTATION]
+ .
++Language=Finnish
++NET STATISTICS [SERVER | WORKSTATION]
++.
+ 
+ 
+ MessageId=10029
+@@ -2602,6 +2883,16 @@ WORKSTATION   Displays the Workstation service statistics.
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET STATISTICS näyttää paikallisen Workstation- tai Server-palvelun
++tilastolokin. Ilman parametreja NET STATISTICS näyttää palvelut, joista
++tilastoja on saatavilla.
++
++SERVER        Näyttää Server-palvelun tilastot.
++WORKSTATION   Näyttää Workstation-palvelun tilastot.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10030
+@@ -2632,6 +2923,9 @@ NET STOP service
+ Language=Taiwanese
+ NET STOP <服務名稱>
+ .
++Language=Finnish
++NET STOP palvelu
++.
+ 
+ 
+ MessageId=10031
+@@ -2726,6 +3020,17 @@ service can stop others. Some services cannot be stopped.
+ 
+ NET HELP command | MORE displays one screen at a time.
+ .
++Language=Finnish
++NET STOP pysäyttää palveluita.
++
++palvelu   Pysäytettävän palvelun nimi.
++
++Palvelun pysäyttäminen katkaisee kaikki palvelun käyttämät verkkoyhteydet.
++Lisäksi jotkin palvelut ovat riippuvaisia toisista. Yhden palvelun
++pysäyttäminen voi pysäyttää muitakin. Joitakin palveluita ei voi pysäyttää.
++
++NET HELP komento | MORE näyttää yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10032
+@@ -2756,6 +3061,9 @@ NET TIME ...
+ Language=Taiwanese
+ NET TIME ...
+ .
++Language=Finnish
++NET TIME ...
++.
+ 
+ 
+ MessageId=10033
+@@ -2794,6 +3102,10 @@ Language=Taiwanese
+ TIME
+ ...
+ .
++Language=Finnish
++TIME
++...
++.
+ 
+ 
+ MessageId=10034
+@@ -2824,6 +3136,9 @@ NET USE ...
+ Language=Taiwanese
+ NET USE ...
+ .
++Language=Finnish
++NET USE ...
++.
+ 
+ 
+ MessageId=10035
+@@ -2862,6 +3177,10 @@ Language=Taiwanese
+ USE
+ ...
+ .
++Language=Finnish
++USE
++...
++.
+ 
+ 
+ MessageId=10036
+@@ -2908,6 +3227,11 @@ NET USER [使用者名 [密碼 | *] [選項]] [/DOMAIN]
+          使用者名 {密碼 | *} /ADD [選項] [/DOMAIN]
+          使用者名 [/DELETE] [/DOMAIN]
+ .
++Language=Finnish
++NET USER [käyttäjänimi [salasana | *] [valinnat]] [/DOMAIN]
++         käyttäjänimi {salasana | *} /ADD [valinnat] [/DOMAIN]
++         käyttäjänimi [/DELETE] [/DOMAIN]
++.
+ 
+ 
+ MessageId=10037
+@@ -3536,6 +3860,84 @@ Options      Are as follows:
+ 
+ NET HELP command | MORE displays Help one screen at a time.
+ .
++Language=Finnish
++NET USER luo ja muuttaa tietokoneiden käyttäjätilejä. Ilman valitsimia se
++näyttää tietokoneen käyttäjätilit. Käyttäjätilien tiedot tallennetaan
++käyttäjätilitietokantaan.
++
++käyttäjänimi Lisättävän, poistettavan, muutettavan tai tarkasteltavan
++             käyttäjätilin nimi. Käyttäjätilin nimessä voi olla enintään
++             20 merkkiä.
++salasana     Määrittää tai vaihtaa käyttäjän tilin salasanan.
++             Salasanan on täytettävä NET ACCOUNTS -komennon
++             /MINPWLEN-valinnalla asetettu vähimmäispituus. Siinä voi olla
++             enintään 14 merkkiä.
++*            Kysyy salasanaa. Salasana ei näy, kun kirjoitat sen
++             salasanakehotteeseen.
++/DOMAIN      Suorittaa toiminnon nykyisen toimialueen toimialueen
++             ohjauskoneessa.
++/ADD         Lisää käyttäjätilin käyttäjätilitietokantaan.
++/DELETE      Poistaa käyttäjätilin käyttäjätilitietokannasta.
++
++Valinnat     Ovat seuraavat:
++
++   Valinnat                   Kuvaus
++   --------------------------------------------------------------------
++   /ACTIVE:{YES | NO}         Ottaa tilin käyttöön tai poistaa sen
++                              käytöstä. Jos tili ei ole käytössä,
++                              käyttäjä ei voi käyttää palvelinta.
++                              Oletus on YES.
++   /COMMENT:"teksti"          Antaa käyttäjän tilille kuvaavan
++                              kommentin.  Kirjoita teksti
++                              lainausmerkkeihin.
++   /COUNTRYCODE:nnn           Käyttää käyttöjärjestelmän maakoodia
++                              käyttäjän ohje- ja virheilmoitusten
++                              kielitiedostojen valintaan. Arvo 0
++                              tarkoittaa oletusmaakoodia.
++   /EXPIRES:{päivämäärä | NEVER} Saa tilin vanhenemaan, jos päivämäärä
++                              on asetettu. NEVER ei aseta tilille
++                              aikarajaa. Vanhenemispäivä annetaan
++                              muodossa kk/pp/vv(vv). Kuukauden voi antaa
++                              numerona, kokonaan kirjoitettuna tai
++                              kolmen kirjaimen lyhenteenä. Vuodessa voi
++                              olla kaksi tai neljä numeroa. Erota
++                              päivämäärän osat kauttaviivoilla (/)
++                              ilman välilyöntejä.
++   /FULLNAME:"nimi"           Käyttäjän koko nimi (käyttäjänimen
++                              sijaan). Kirjoita nimi lainausmerkkeihin.
++   /HOMEDIR:polku             Määrittää käyttäjän kotihakemiston polun.
++                              Polun on oltava olemassa.
++   /PASSWORDCHG:{YES | NO}    Määrittää, voivatko käyttäjät vaihtaa
++                              oman salasanansa. Oletus on YES.
++   /PASSWORDREQ:{YES | NO}    Määrittää, onko käyttäjätilillä oltava
++                              salasana. Oletus on YES.
++   /PROFILEPATH[:polku]       Määrittää käyttäjän kirjautumisprofiilin
++                              polun.
++   /SCRIPTPATH:polku          Käyttäjän kirjautumiskomentosarjan
++                              sijainti.
++   /TIMES:{ajat | ALL}        Kirjautumisajat. TIMES ilmaistaan muodossa
++                              päivä[-päivä][,päivä[-päivä]],aika[-aika]
++                              [,aika[-aika]], tunnin tarkkuudella.
++                              Päivät voi kirjoittaa kokonaan tai
++                              lyhentää. Ajat voi antaa 12 tai 24 tunnin
++                              muodossa. 12 tunnin muodossa käytä
++                              merkintöjä am, pm, a.m. tai p.m. ALL
++                              tarkoittaa, että käyttäjä voi aina
++                              kirjautua, ja tyhjä arvo, että käyttäjä ei
++                              voi koskaan kirjautua. Erota päivä- ja
++                              aikamerkinnät pilkulla ja useat päivä- ja
++                              aikamerkinnät puolipisteellä.
++   /USERCOMMENT:"teksti"      Sallii järjestelmänvalvojan lisätä tai
++                              muuttaa tilin käyttäjäkommentin.
++   /WORKSTATIONS:{tietokoneen_nimi[,...] | *}
++                              Luettelee enintään kahdeksan tietokonetta,
++                              joista käyttäjä voi kirjautua verkkoon. Jos
++                              /WORKSTATIONS-luetteloa ei ole tai luettelo
++                              on *, käyttäjä voi kirjautua mistä tahansa
++                              tietokoneesta.
++
++NET HELP komento | MORE näyttää ohjeen yhden näytöllisen kerrallaan.
++.
+ 
+ 
+ MessageId=10038
+@@ -3566,6 +3968,9 @@ NET VIEW ...
+ Language=Taiwanese
+ NET VIEW ...
+ .
++Language=Finnish
++NET VIEW ...
++.
+ 
+ 
+ MessageId=10039
+@@ -3604,6 +4009,10 @@ Language=Taiwanese
+ VIEW
+ ...
+ .
++Language=Finnish
++VIEW
++...
++.
+ 
+ 
+ MessageId=10040
+@@ -3650,6 +4059,11 @@ NET [ ACCOUNTS | COMPUTER | CONFIG | CONTINUE | FILE | GROUP | HELP |
+       HELPMSG | LOCALGROUP | PAUSE | SESSION | SHARE | START |
+       STATISTICS | STOP | TIME | USE | USER | VIEW ]
+ .
++Language=Finnish
++NET [ ACCOUNTS | COMPUTER | CONFIG | CONTINUE | FILE | GROUP | HELP |
++      HELPMSG | LOCALGROUP | PAUSE | SESSION | SHARE | START |
++      STATISTICS | STOP | TIME | USE | USER | VIEW ]
++.
+ 
+ 
+ MessageId=10041
+@@ -3900,3 +4314,33 @@ The following conventions are used to indicate command syntax:
+    more must be enclosed in quotation marks. For example,
+    NET START "COMPUTER BROWSER" starts the computer browser service.
+ .
++Language=Finnish
++SYNTAKSI
++Komentojen syntaksissa käytetään seuraavia merkintöjä:
++
++-  Isot kirjaimet ovat sanoja, jotka kirjoitetaan sellaisinaan. Pienet
++   kirjaimet ovat vaihtuvien kohteiden, kuten tiedostonimien, nimiä.
++
++-  Merkit [ ja ] ympäröivät valinnaisia kohteita, jotka voi antaa
++   komennon kanssa.
++
++-  Merkit { ja } ympäröivät kohteiden luetteloita. Komennon kanssa on
++   annettava yksi luettelon kohteista.
++
++-  Merkki | erottaa luettelon kohteet. Komennon kanssa voi antaa vain
++   yhden kohteista.
++
++   Esimerkiksi seuraavassa syntaksissa on kirjoitettava NET COMMAND ja joko
++   SWITCH1 tai SWITCH2. Nimen antaminen on valinnaista.
++       NET COMMAND [nimi] {SWITCH1 | SWITCH2}
++
++-  Merkit [...] tarkoittavat, että edellisen kohteen voi toistaa.
++   Erota kohteet välilyönneillä.
++
++-  Merkit [,...] tarkoittavat, että edellisen kohteen voi toistaa, mutta
++   kohteet on erotettava pilkuilla tai puolipisteillä, ei välilyönneillä.
++
++-  Kun palvelun nimessä on kaksi tai useampia sanoja, se on kirjoitettava
++   komentokehotteessa lainausmerkkeihin. Esimerkiksi
++   NET START "COMPUTER BROWSER" käynnistää Computer Browser -palvelun.
++.
+-- 
+2.56.0
+
+
+From d2c9877369e0f6f8e8e09c6d60c74d13f6cd9f8d Mon Sep 17 00:00:00 2001
+From: Lauri Ojansivu <x@xet7.org>
+Date: Fri, 13 Nov 2026 22:22:59 +0200
+Subject: [PATCH 4/4] [TRANSLATION] Add Finnish (fi-FI) to the Special
+ Administration Console message table
+
+Problem: The Special Administration Console (sacdrv) had its prompts,
+help and errors in English only.
+
+Why: A Finnish LiberNT shows its console in Finnish.
+
+How: sacmsg.mc had no LanguageNames, so English was windmc's default
+English=0x409:MSG00001; list it as that, so the English binary and the
+header stay byte for byte as they were, and add Finnish=0x40B and a
+Finnish block to every message with the same %% format inserts. The
+process list's column headings and the edition names stay in English,
+and the identification labels keep their colons in one column.
+---
+ sdk/include/reactos/mc/sacmsg.mc | 411 +++++++++++++++++++++++++++++++
+ 1 file changed, 411 insertions(+)
+
+diff --git a/sdk/include/reactos/mc/sacmsg.mc b/sdk/include/reactos/mc/sacmsg.mc
+index a5c5f21f2e2..849dc8be6a8 100644
+--- a/sdk/include/reactos/mc/sacmsg.mc
++++ b/sdk/include/reactos/mc/sacmsg.mc
+@@ -1,3 +1,7 @@
++LanguageNames=(English=0x409:MSG00001
++               Finnish=0x40B:MSG0040B
++              )
++
+ MessageId=1
+ SymbolicName=SAC_INIT_STATUS
+ Language=English
+@@ -7,12 +11,23 @@ Computer is booting, SAC started and initialized.
+ Use the "ch -?" command for information about using channels.
+ Use the "?" command for general help.
+ 
++.
++Language=Finnish
++
++Tietokone käynnistyy, SAC on käynnistetty ja alustettu.
++
++Komento "ch -?" antaa tietoja kanavien käytöstä.
++Komento "?" näyttää yleisen ohjeen.
++
+ .
+ 
+ MessageId=2
+ SymbolicName=SAC_NEWLINE
+ Language=English
+ 
++.
++Language=Finnish
++
+ .
+ 
+ MessageId=3
+@@ -20,18 +35,28 @@ SymbolicName=SAC_PROMPT
+ Language=English
+ SAC>%0
+ .
++Language=Finnish
++SAC>%0
++.
+ 
+ MessageId=4
+ SymbolicName=SACDRV_4
+ Language=English
+ The SAC is unavailable, it was directly unloaded.
+ .
++Language=Finnish
++SAC ei ole käytettävissä, koska se poistettiin muistista suoraan.
++.
+ 
+ MessageId=5
+ SymbolicName=SACDRV_5
+ Language=English
+ The SAC will become unavailable soon.  The computer is shutting down.
+ 
++.
++Language=Finnish
++SAC lakkaa pian olemasta käytettävissä.  Tietokone sammuu.
++
+ .
+ 
+ MessageId=6
+@@ -39,264 +64,396 @@ SymbolicName=SACDRV_6
+ Language=English
+ A parameter was incorrect or missing.  Try the 'help' command for more details.
+ .
++Language=Finnish
++Parametri oli virheellinen tai puuttui.  Lisätietoja saat 'help'-komennolla.
++.
+ 
+ MessageId=7
+ SymbolicName=SACDRV_7
+ Language=English
+ Thread information is now ON.
+ .
++Language=Finnish
++Säikeiden tiedot ovat nyt käytössä.
++.
+ 
+ MessageId=8
+ SymbolicName=SACDRV_8
+ Language=English
+ Thread information is now OFF.
+ .
++Language=Finnish
++Säikeiden tiedot ovat nyt poissa käytöstä.
++.
+ 
+ MessageId=9
+ SymbolicName=SACDRV_9
+ Language=English
+ Paging is now ON.
+ .
++Language=Finnish
++Sivutus on nyt käytössä.
++.
+ 
+ MessageId=10
+ SymbolicName=SACDRV_10
+ Language=English
+ Paging is now OFF.
+ .
++Language=Finnish
++Sivutus on nyt poissa käytöstä.
++.
+ 
+ MessageId=11
+ SymbolicName=SAC_OUT_OF_MEMORY_PROMPT
+ Language=English
+ THIS LOOKS LIKE A BUG???
+ .
++Language=Finnish
++TÄMÄ NÄYTTÄÄ VIRHEELTÄ???
++.
+ 
+ MessageId=12
+ SymbolicName=SACDRV_12
+ Language=English
+ d                    Dump the current kernel log.
+ .
++Language=Finnish
++d                    Näytä nykyinen ytimen loki.
++.
+ 
+ MessageId=13
+ SymbolicName=SACDRV_13
+ Language=English
+ f                    Toggle detailed or abbreviated tlist info.
+ .
++Language=Finnish
++f                    Vaihda tlist-tietojen yksityiskohtaisen ja lyhyen muodon välillä.
++.
+ 
+ MessageId=14
+ SymbolicName=SACDRV_14
+ Language=English
+ ? or help            Display this list.
+ .
++Language=Finnish
++? tai help            Näytä tämä luettelo.
++.
+ 
+ MessageId=15
+ SymbolicName=SACDRV_15
+ Language=English
+ i                    List all IP network numbers and their IP addresses.
+ .
++Language=Finnish
++i                    Luettele kaikki IP-verkkonumerot ja niiden IP-osoitteet.
++.
+ 
+ MessageId=16
+ SymbolicName=SACDRV_16
+ Language=English
+ i <#> <ip> <subnet> <gateway> Set IP addr., subnet and gateway.
+ .
++Language=Finnish
++i <#> <ip> <aliverkko> <yhdyskäytävä> Aseta IP-osoite, aliverkko ja yhdyskäytävä.
++.
+ 
+ MessageId=18
+ SymbolicName=SACDRV_18
+ Language=English
+ k <pid>              Kill the given process.
+ .
++Language=Finnish
++k <pid>              Lopeta annettu prosessi.
++.
+ 
+ MessageId=19
+ SymbolicName=SACDRV_19
+ Language=English
+ l <pid>              Lower the priority of a process to the lowest possible.
+ .
++Language=Finnish
++l <pid>              Laske prosessin prioriteetti alimmaksi mahdolliseksi.
++.
+ 
+ MessageId=20
+ SymbolicName=SACDRV_20
+ Language=English
+ m <pid> <MB-allow>   Limit the memory usage of a process to <MB-allow>.
+ .
++Language=Finnish
++m <pid> <MB-raja>    Rajoita prosessin muistinkäyttö arvoon <MB-raja>.
++.
+ 
+ MessageId=21
+ SymbolicName=SACDRV_21
+ Language=English
+ p                    Toggle paging the display.
+ .
++Language=Finnish
++p                    Ota näytön sivutus käyttöön tai poista se käytöstä.
++.
+ 
+ MessageId=22
+ SymbolicName=SACDRV_22
+ Language=English
+ r <pid>              Raise the priority of a process by one.
+ .
++Language=Finnish
++r <pid>              Nosta prosessin prioriteettia yhdellä.
++.
+ 
+ MessageId=23
+ SymbolicName=SACDRV_23
+ Language=English
+ s                    Display the current time and date (24 hour clock used).
+ .
++Language=Finnish
++s                    Näytä nykyinen aika ja päivämäärä (24 tunnin kello).
++.
+ 
+ MessageId=24
+ SymbolicName=SACDRV_24
+ Language=English
+ s mm/dd/yyyy hh:mm   Set the current time and date (24 hour clock used).
+ .
++Language=Finnish
++s kk/pp/vvvv hh:mm   Aseta nykyinen aika ja päivämäärä (24 tunnin kello).
++.
+ 
+ MessageId=25
+ SymbolicName=SACDRV_25
+ Language=English
+ t                    Tlist.
+ .
++Language=Finnish
++t                    Tlist.
++.
+ 
+ MessageId=27
+ SymbolicName=SACDRV_27
+ Language=English
+ restart              Restart the system immediately.
+ .
++Language=Finnish
++restart              Käynnistä järjestelmä heti uudelleen.
++.
+ 
+ MessageId=28
+ SymbolicName=SACDRV_28
+ Language=English
+ shutdown             Shutdown the system immediately.
+ .
++Language=Finnish
++shutdown             Sammuta järjestelmä heti.
++.
+ 
+ MessageId=29
+ SymbolicName=SACDRV_29
+ Language=English
+ crashdump            Crash the system. You must have crash dump enabled.
+ .
++Language=Finnish
++crashdump            Kaada järjestelmä. Kaatumisvedoksen on oltava käytössä.
++.
+ 
+ MessageId=31
+ SymbolicName=SACDRV_31
+ Language=English
+ id                   Display the computer identification information.
+ .
++Language=Finnish
++id                   Näytä tietokoneen tunnistetiedot.
++.
+ 
+ MessageId=32
+ SymbolicName=SACDRV_32
+ Language=English
+ lock                 Lock access to Command Prompt channels.
+ .
++Language=Finnish
++lock                 Lukitse komentokehotekanavien käyttö.
++.
+ 
+ MessageId=48
+ SymbolicName=SAC_FAIL_PROMPT
+ Language=English
+ Failed with status 0x%%X.
+ .
++Language=Finnish
++Epäonnistui tilalla 0x%%X.
++.
+ 
+ MessageId=49
+ SymbolicName=SACDRV_49
+ Language=English
+ Date: %%02d/%%02d/%%02d  Time (GMT): %%02d:%%02d:%%02d:%%04d
+ .
++Language=Finnish
++Päivämäärä: %%02d/%%02d/%%02d  Aika (GMT): %%02d:%%02d:%%02d:%%04d
++.
+ 
+ MessageId=50
+ SymbolicName=SACDRV_50
+ Language=English
+ SAC could not retrieve the IP Address.
+ .
++Language=Finnish
++SAC ei voinut hakea IP-osoitetta.
++.
+ 
+ MessageId=51
+ SymbolicName=SACDRV_51
+ Language=English
+ SAC could not clear the existing IP Address.
+ .
++Language=Finnish
++SAC ei voinut tyhjentää nykyistä IP-osoitetta.
++.
+ 
+ MessageId=52
+ SymbolicName=SACDRV_52
+ Language=English
+ SAC could not set the IP Address.
+ .
++Language=Finnish
++SAC ei voinut asettaa IP-osoitetta.
++.
+ 
+ MessageId=54
+ SymbolicName=SACDRV_54
+ Language=English
+ SAC successfully set the IP Address, subnet mask, and gateway.
+ .
++Language=Finnish
++SAC asetti IP-osoitteen, aliverkon peitteen ja yhdyskäytävän.
++.
+ 
+ MessageId=55
+ SymbolicName=SACDRV_55
+ Language=English
+ SAC failed to terminate the process.
+ .
++Language=Finnish
++SAC ei voinut lopettaa prosessia.
++.
+ 
+ MessageId=56
+ SymbolicName=SACDRV_56
+ Language=English
+ SAC successfully terminated the process.
+ .
++Language=Finnish
++SAC lopetti prosessin.
++.
+ 
+ MessageId=57
+ SymbolicName=SACDRV_57
+ Language=English
+ SAC failed to lower the process priority.
+ .
++Language=Finnish
++SAC ei voinut laskea prosessin prioriteettia.
++.
+ 
+ MessageId=58
+ SymbolicName=SACDRV_58
+ Language=English
+ SAC successfully lowered the process priority.
+ .
++Language=Finnish
++SAC laski prosessin prioriteettia.
++.
+ 
+ MessageId=59
+ SymbolicName=SACDRV_59
+ Language=English
+ SAC failed to raise the process priority.
+ .
++Language=Finnish
++SAC ei voinut nostaa prosessin prioriteettia.
++.
+ 
+ MessageId=60
+ SymbolicName=SACDRV_60
+ Language=English
+ SAC successfully raised the process priority.
+ .
++Language=Finnish
++SAC nosti prosessin prioriteettia.
++.
+ 
+ MessageId=61
+ SymbolicName=SACDRV_61
+ Language=English
+ SAC failed to limit the available process memory.
+ .
++Language=Finnish
++SAC ei voinut rajoittaa prosessin käytettävissä olevaa muistia.
++.
+ 
+ MessageId=62
+ SymbolicName=SACDRV_62
+ Language=English
+ SAC successfully limited the available process memory.
+ .
++Language=Finnish
++SAC rajoitti prosessin käytettävissä olevaa muistia.
++.
+ 
+ MessageId=63
+ SymbolicName=SACDRV_63
+ Language=English
+ SAC cannot raise the priority of a process that was not previously lowered.
+ .
++Language=Finnish
++SAC ei voi nostaa sellaisen prosessin prioriteettia, jonka prioriteettia ei ole aiemmin laskettu.
++.
+ 
+ MessageId=64
+ SymbolicName=SACDRV_64
+ Language=English
+ SAC cannot raise the process priority any higher.
+ .
++Language=Finnish
++SAC ei voi nostaa prosessin prioriteettia enempää.
++.
+ 
+ MessageId=65
+ SymbolicName=SAC_SHUTDOWN_FAIL_PROMPT
+ Language=English
+ SAC failed to shutdown the system.
+ .
++Language=Finnish
++SAC ei voinut sammuttaa järjestelmää.
++.
+ 
+ MessageId=66
+ SymbolicName=SAC_RESTART_FAIL_PROMPT
+ Language=English
+ SAC failed to restart the system.
+ .
++Language=Finnish
++SAC ei voinut käynnistää järjestelmää uudelleen.
++.
+ 
+ MessageId=67
+ SymbolicName=SACDRV_67
+ Language=English
+ SAC failed to crashdump the system.
+ .
++Language=Finnish
++SAC ei voinut tehdä järjestelmästä kaatumisvedosta.
++.
+ 
+ MessageId=68
+ SymbolicName=SACDRV_68
+ Language=English
+ SAC failed to retrieve the task list.
+ .
++Language=Finnish
++SAC ei voinut hakea tehtäväluetteloa.
++.
+ 
+ MessageId=69
+ SymbolicName=SACDRV_69
+@@ -304,6 +461,11 @@ Language=English
+ memory: %%4ld kb  uptime:%%3ld %%2ld:%%02ld:%%02ld.%%03ld
+ 
+ 
++.
++Language=Finnish
++muisti: %%4ld kt  käynnissä:%%3ld %%2ld:%%02ld:%%02ld.%%03ld
++
++
+ .
+ 
+ MessageId=70
+@@ -311,18 +473,27 @@ SymbolicName=SACDRV_70
+ Language=English
+ No pagefile in use.
+ .
++Language=Finnish
++Sivutustiedostoa ei ole käytössä.
++.
+ 
+ MessageId=71
+ SymbolicName=SACDRV_71
+ Language=English
+ PageFile: %%wZ
+ .
++Language=Finnish
++Sivutustiedosto: %%wZ
++.
+ 
+ MessageId=72
+ SymbolicName=SACDRV_72
+ Language=English
+         Current Size: %%6ld kb  Total Used: %%6ld kb   Peak Used %%6ld kb
+ .
++Language=Finnish
++        Nykyinen koko: %%6ld kt  Käytössä yhteensä: %%6ld kt   Enimmillään %%6ld kt
++.
+ 
+ MessageId=73
+ SymbolicName=SACDRV_73
+@@ -330,102 +501,154 @@ Language=English
+ 
+  Memory:%%7ldK Avail:%%7ldK  TotalWs:%%7ldK InRam Kernel:%%5ldK P:%%5ldK
+ .
++Language=Finnish
++
++ Memory:%%7ldK Avail:%%7ldK  TotalWs:%%7ldK InRam Kernel:%%5ldK P:%%5ldK
++.
+ 
+ MessageId=74
+ SymbolicName=SACDRV_74
+ Language=English
+  Commit:%%7ldK/%%7ldK Limit:%%7ldK Peak:%%7ldK  Pool N:%%5ldK P:%%5ldK
+ .
++Language=Finnish
++ Commit:%%7ldK/%%7ldK Limit:%%7ldK Peak:%%7ldK  Pool N:%%5ldK P:%%5ldK
++.
+ 
+ MessageId=75
+ SymbolicName=SACDRV_75
+ Language=English
+     User Time   Kernel Time    Ws   Faults  Commit Pri Hnd Thd  Pid Name
+ .
++Language=Finnish
++    User Time   Kernel Time    Ws   Faults  Commit Pri Hnd Thd  Pid Name
++.
+ 
+ MessageId=76
+ SymbolicName=SACDRV_76
+ Language=English
+                            %%6ld %%8ld                          File Cache
+ .
++Language=Finnish
++                           %%6ld %%8ld                          File Cache
++.
+ 
+ MessageId=77
+ SymbolicName=SACDRV_77
+ Language=English
+ %%3ld:%%02ld:%%02ld.%%03ld %%3ld:%%02ld:%%02ld.%%03ld%%6ld %%8ld %%7ld %%2ld %%4ld %%3ld %%4ld %%wZ
+ .
++Language=Finnish
++%%3ld:%%02ld:%%02ld.%%03ld %%3ld:%%02ld:%%02ld.%%03ld%%6ld %%8ld %%7ld %%2ld %%4ld %%3ld %%4ld %%wZ
++.
+ 
+ MessageId=78
+ SymbolicName=SACDRV_78
+ Language=English
+ %%3ld:%%02ld:%%02ld.%%03ld %%3ld:%%02ld:%%02ld.%%03ld
+ .
++Language=Finnish
++%%3ld:%%02ld:%%02ld.%%03ld %%3ld:%%02ld:%%02ld.%%03ld
++.
+ 
+ MessageId=79
+ SymbolicName=SACDRV_79
+ Language=English
+ pid:%%3lx pri:%%2ld Hnd:%%5ld Pf:%%7ld Ws:%%7ldK %%wZ
+ .
++Language=Finnish
++pid:%%3lx pri:%%2ld Hnd:%%5ld Pf:%%7ld Ws:%%7ldK %%wZ
++.
+ 
+ MessageId=80
+ SymbolicName=SACDRV_80
+ Language=English
+  tid pri Ctx Swtch StrtAddr    User Time  Kernel Time  State
+ .
++Language=Finnish
++ tid pri Ctx Swtch StrtAddr    User Time  Kernel Time  State
++.
+ 
+ MessageId=81
+ SymbolicName=SACDRV_81
+ Language=English
+  %%3lx  %%2ld %%9ld %%p %%2ld:%%02ld:%%02ld.%%03ld %%2ld:%%02ld:%%02ld.%%03ld %%s%%s
+ .
++Language=Finnish
++ %%3lx  %%2ld %%9ld %%p %%2ld:%%02ld:%%02ld.%%03ld %%2ld:%%02ld:%%02ld.%%03ld %%s%%s
++.
+ 
+ MessageId=82
+ SymbolicName=SACDRV_82
+ Language=English
+ ----Press <Enter> for more----
+ .
++Language=Finnish
++----Lisää painamalla <Enter>----
++.
+ 
+ MessageId=83
+ SymbolicName=SACDRV_83
+ Language=English
+ SAC is retrieving IP Addresses...
+ .
++Language=Finnish
++SAC hakee IP-osoitteita...
++.
+ 
+ MessageId=84
+ SymbolicName=SACDRV_84
+ Language=English
+ Could not retrieve IP Address(es).
+ .
++Language=Finnish
++IP-osoitteita ei voitu hakea.
++.
+ 
+ MessageId=85
+ SymbolicName=SACDRV_85
+ Language=English
+ There are no IP Addresses available.
+ .
++Language=Finnish
++IP-osoitteita ei ole käytettävissä.
++.
+ 
+ MessageId=86
+ SymbolicName=SACDRV_86
+ Language=English
+ Net: %%d, Ip=%%d.%%d.%%d.%%d  Subnet=%%d.%%d.%%d.%%d  Gateway=%%d.%%d.%%d.%%d
+ .
++Language=Finnish
++Verkko: %%d, IP=%%d.%%d.%%d.%%d  Aliverkko=%%d.%%d.%%d.%%d  Yhdyskäytävä=%%d.%%d.%%d.%%d
++.
+ 
+ MessageId=87
+ SymbolicName=SACDRV_87
+ Language=English
+ Date: %%02d/%%02d/%%02d  Time (GMT): %%02d:%%02d
+ .
++Language=Finnish
++Päivämäärä: %%02d/%%02d/%%02d  Aika (GMT): %%02d:%%02d
++.
+ 
+ MessageId=88
+ SymbolicName=SACDRV_88
+ Language=English
+ The year is restricted from 1980 to 2099.
+ .
++Language=Finnish
++Vuoden on oltava 1980-2099.
++.
+ 
+ MessageId=89
+ SymbolicName=SACDRV_89
+ Language=English
+ That process has been killed and is being cleaned up by the system.
+ .
++Language=Finnish
++Prosessi on lopetettu, ja järjestelmä siivoaa sitä.
++.
+ 
+ MessageId=90
+ SymbolicName=SACDRV_90
+@@ -433,102 +656,154 @@ Language=English
+ A duplicate process id is being cleaned up by the system.  Try the
+ command again in a few seconds.
+ .
++Language=Finnish
++Järjestelmä siivoaa samaa prosessitunnusta käyttävää prosessia.  Yritä
++komentoa uudelleen muutaman sekunnin kuluttua.
++.
+ 
+ MessageId=92
+ SymbolicName=SACDRV_92
+ Language=English
+            Computer Name: %%ws
+ .
++Language=Finnish
++        Tietokoneen nimi: %%ws
++.
+ 
+ MessageId=93
+ SymbolicName=SACDRV_93
+ Language=English
+            Computer GUID: %%ws
+ .
++Language=Finnish
++        Tietokoneen GUID: %%ws
++.
+ 
+ MessageId=94
+ SymbolicName=SACDRV_94
+ Language=English
+   Processor Architecture: %%ws
+ .
++Language=Finnish
++   Suoritinarkkitehtuuri: %%ws
++.
+ 
+ MessageId=95
+ SymbolicName=SACDRV_95
+ Language=English
+             Build Number: %%ws
+ .
++Language=Finnish
++    Koontiversion numero: %%ws
++.
+ 
+ MessageId=96
+ SymbolicName=SACDRV_96
+ Language=English
+                  Product: %%ws
+ .
++Language=Finnish
++                   Tuote: %%ws
++.
+ 
+ MessageId=97
+ SymbolicName=SACDRV_97
+ Language=English
+     Applied Service Pack: %%ws
+ .
++Language=Finnish
++  Asennettu Service Pack: %%ws
++.
+ 
+ MessageId=98
+ SymbolicName=SAC_NO_DATA_MSG
+ Language=English
+ None%0
+ .
++Language=Finnish
++Ei mitään%0
++.
+ 
+ MessageId=99
+ SymbolicName=SACDRV_99
+ Language=English
+           Version Number: %%ws
+ .
++Language=Finnish
++            Versionumero: %%ws
++.
+ 
+ MessageId=100
+ SymbolicName=SAC_DATACENTER_SUITE_MSG
+ Language=English
+ Windows Server 2003 Datacenter Edition%0
+ .
++Language=Finnish
++Windows Server 2003 Datacenter Edition%0
++.
+ 
+ MessageId=101
+ SymbolicName=SAC_EMBEDDED_SUITE_MSG
+ Language=English
+ Windows Server 2003 Embedded%0
+ .
++Language=Finnish
++Windows Server 2003 Embedded%0
++.
+ 
+ MessageId=102
+ SymbolicName=SAC_ENTERPRISE_SUITE_MSG
+ Language=English
+ Windows Server 2003 Enterprise Edition%0
+ .
++Language=Finnish
++Windows Server 2003 Enterprise Edition%0
++.
+ 
+ MessageId=103
+ SymbolicName=SAC_NO_SUITE_MSG
+ Language=English
+ Windows Server 2003%0
+ .
++Language=Finnish
++Windows Server 2003%0
++.
+ 
+ MessageId=104
+ SymbolicName=SACDRV_104
+ Language=English
+ Computer identification information is unavailable.
+ .
++Language=Finnish
++Tietokoneen tunnistetiedot eivät ole käytettävissä.
++.
+ 
+ MessageId=105
+ SymbolicName=SAC_UNKNOWN_COMMAND
+ Language=English
+ Unrecognized command.  Try the 'help' command for more details.
+ .
++Language=Finnish
++Tuntematon komento.  Lisätietoja saat 'help'-komennolla.
++.
+ 
+ MessageId=106
+ SymbolicName=SACDRV_106
+ Language=English
+ Error: The SAC channel cannot be closed.
+ .
++Language=Finnish
++Virhe: SAC-kanavaa ei voi sulkea.
++.
+ 
+ MessageId=107
+ SymbolicName=SACDRV_107
+ Language=English
+ Error: Could not find a channel with that name.
+ .
++Language=Finnish
++Virhe: Tämännimistä kanavaa ei löytynyt.
++.
+ 
+ MessageId=108
+ SymbolicName=SACDRV_108
+@@ -539,6 +814,13 @@ Channel List
+ 
+ # Status  Channel Name
+ .
++Language=Finnish
++Kanavaluettelo
++
++(Komento "ch -?" antaa tietoja kanavien käytöstä)
++
++# Tila    Kanavan nimi
++.
+ 
+ MessageId=109
+ SymbolicName=SACDRV_109
+@@ -546,6 +828,10 @@ Language=English
+ EVENT:   A new channel has been created.  Use "ch -?" for channel help.
+ Channel: %%s
+ .
++Language=Finnish
++TAPAHTUMA: Uusi kanava on luotu.  Kanavien ohjeen saat komennolla "ch -?".
++Kanava: %%s
++.
+ 
+ MessageId=110
+ SymbolicName=SACDRV_110
+@@ -553,6 +839,10 @@ Language=English
+ EVENT:   A channel has been closed.
+ Channel: %%s
+ .
++Language=Finnish
++TAPAHTUMA: Kanava on suljettu.
++Kanava: %%s
++.
+ 
+ MessageId=111
+ SymbolicName=SACDRV_111
+@@ -567,6 +857,18 @@ Press <esc><tab> for next channel.
+ Press <esc><tab>0 to return to the SAC channel.
+ Use any other key to view this channel.
+ 
++.
++Language=Finnish
++Nimi:                  %%s
++Kuvaus:                %%s
++Tyyppi:                %%s
++Kanavan GUID:          %%08lx-%%04x-%%04x-%%02x%%02x-%%02x%%02x%%02x%%02x%%02x%%02x
++Sovellustyypin GUID:   %%08lx-%%04x-%%04x-%%02x%%02x-%%02x%%02x%%02x%%02x%%02x%%02x
++
++Siirry seuraavaan kanavaan painamalla <esc><tab>.
++Palaa SAC-kanavaan painamalla <esc><tab>0.
++Tarkastele tätä kanavaa painamalla mitä tahansa muuta näppäintä.
++
+ .
+ 
+ MessageId=112
+@@ -574,24 +876,36 @@ SymbolicName=SACDRV_112
+ Language=English
+ ch                   Channel management commands.  Use ch -? for more help.
+ .
++Language=Finnish
++ch                   Kanavien hallintakomennot.  Lisäohjeen saat komennolla ch -?.
++.
+ 
+ MessageId=113
+ SymbolicName=SAC_RESTART_TIME_PROMPT
+ Language=English
+   Time since last reboot: %%d:%%02d:%%02d
+ .
++Language=Finnish
++  Aikaa edellisestä uudelleenkäynnistyksestä: %%d:%%02d:%%02d
++.
+ 
+ MessageId=114
+ SymbolicName=SAC_RESTART_PROMPT
+ Language=English
+ SAC preparing to restart the system.
+ .
++Language=Finnish
++SAC valmistelee järjestelmän uudelleenkäynnistystä.
++.
+ 
+ MessageId=115
+ SymbolicName=SAC_SHUTDOWN_PROMPT
+ Language=English
+ SAC preparing to shutdown the system.
+ .
++Language=Finnish
++SAC valmistelee järjestelmän sammutusta.
++.
+ 
+ MessageId=116
+ SymbolicName=SACDRV_116
+@@ -600,6 +914,12 @@ Error! Failed to remove channel!
+ 
+ Please contact your system administrator.
+ 
++.
++Language=Finnish
++Virhe! Kanavan poistaminen epäonnistui!
++
++Ota yhteyttä järjestelmänvalvojaan.
++
+ .
+ 
+ MessageId=119
+@@ -607,6 +927,9 @@ SymbolicName=SACDRV_119
+ Language=English
+ cmd                  Create a Command Prompt channel.
+ .
++Language=Finnish
++cmd                  Luo komentokehotekanava.
++.
+ 
+ MessageId=120
+ SymbolicName=SACDRV_120
+@@ -615,18 +938,29 @@ Timeout: Unable to launch a Command Prompt.  The service responsible for
+          launching Command Prompt channels has timed out.  This may be
+          because the service is malfunctioning or is unresponsive.
+ .
++Language=Finnish
++Aikakatkaisu: Komentokehotetta ei voi käynnistää.  Komentokehotekanavien
++         käynnistämisestä vastaava palvelu aikakatkaistiin.  Syy voi olla, että
++         palvelu toimii väärin tai ei vastaa.
++.
+ 
+ MessageId=121
+ SymbolicName=SACDRV_121
+ Language=English
+ The Command Prompt session was successfully launched.
+ .
++Language=Finnish
++Komentokehoteistunto käynnistettiin.
++.
+ 
+ MessageId=128
+ SymbolicName=SACDRV_128
+ Language=English
+ Error: The SAC Command Console session failed to be created.
+ .
++Language=Finnish
++Virhe: SAC-komentokonsolin istunnon luominen epäonnistui.
++.
+ 
+ MessageId=131
+ SymbolicName=SACDRV_131
+@@ -636,18 +970,30 @@ Error: Unable to launch a Command Prompt.  The service responsible for launching
+        service is not yet started, is disabled by the administrator, is
+        malfunctioning or is unresponsive.
+ .
++Language=Finnish
++Virhe: Komentokehotetta ei voi käynnistää.  Komentokehotekanavien
++       käynnistämisestä vastaava palvelu ei ole vielä rekisteröitynyt.  Syy voi
++       olla, että palvelua ei ole vielä käynnistetty, järjestelmänvalvoja on
++       poistanut sen käytöstä tai se toimii väärin tai ei vastaa.
++.
+ 
+ MessageId=132
+ SymbolicName=SACDRV_132
+ Language=English
+ EVENT: The CMD command is now available.
+ .
++Language=Finnish
++TAPAHTUMA: CMD-komento on nyt käytettävissä.
++.
+ 
+ MessageId=133
+ SymbolicName=SACDRV_133
+ Language=English
+ EVENT: The CMD command is unavailable.
+ .
++Language=Finnish
++TAPAHTUMA: CMD-komento ei ole käytettävissä.
++.
+ 
+ MessageId=134
+ SymbolicName=SACDRV_134
+@@ -655,6 +1001,10 @@ Language=English
+ EVENT:   An attempt was made to close a channel but failed.
+ Channel: %%s
+ .
++Language=Finnish
++TAPAHTUMA: Kanavan sulkemista yritettiin, mutta se epäonnistui.
++Kanava: %%s
++.
+ 
+ MessageId=135
+ SymbolicName=SACDRV_135
+@@ -662,6 +1012,10 @@ Language=English
+ EVENT:   An attempt to close a channel failed because it is already closed.
+ Channel: %%s
+ .
++Language=Finnish
++TAPAHTUMA: Kanavan sulkeminen epäonnistui, koska kanava on jo suljettu.
++Kanava: %%s
++.
+ 
+ MessageId=136
+ SymbolicName=SACDRV_136
+@@ -686,75 +1040,132 @@ ch -cn <name>        Close a channel by its name.
+ Press <esc><tab> to select a channel.
+ Press <esc><tab>0 to return to the SAC channel.
+ .
++Language=Finnish
++Kanavien hallintakomennot:
++
++ch                   Luettele kaikki kanavat.
++
++Tilojen selitys: (AB)
++A: Kanavan toimintatila
++    'A' = Kanava on aktiivinen.
++    'I' = Kanava ei ole aktiivinen.
++B: Kanavan tyyppi
++    'V' = VT-UTF8-emulointi.
++    'R' = Raaka - ei emulointia.
++
++ch -si <#>           Vaihda kanavaan sen numeron perusteella.
++ch -sn <nimi>        Vaihda kanavaan sen nimen perusteella.
++ch -ci <#>           Sulje kanava sen numeron perusteella.
++ch -cn <nimi>        Sulje kanava sen nimen perusteella.
++
++Valitse kanava painamalla <esc><tab>.
++Palaa SAC-kanavaan painamalla <esc><tab>0.
++.
+ 
+ MessageId=137
+ SymbolicName=SACDRV_137
+ Language=English
+ Error: There is no channel present at the specified index.
+ .
++Language=Finnish
++Virhe: Annetussa indeksissä ei ole kanavaa.
++.
+ 
+ MessageId=144
+ SymbolicName=SAC_CHANNEL_NAME
+ Language=English
+ SAC%0
+ .
++Language=Finnish
++SAC%0
++.
+ 
+ MessageId=145
+ SymbolicName=SAC_CHANNEL_DESCRIPTION
+ Language=English
+ Special Administration Console%0
+ .
++Language=Finnish
++Erityishallintakonsoli%0
++.
+ 
+ MessageId=146
+ SymbolicName=SACDRV_146
+ Language=English
+ Command Prompt%0
+ .
++Language=Finnish
++Komentokehote%0
++.
+ 
+ MessageId=147
+ SymbolicName=SACDRV_147
+ Language=English
+ Locked access to all Command Prompt channels.
+ .
++Language=Finnish
++Kaikkien komentokehotekanavien käyttö lukittiin.
++.
+ 
+ MessageId=148
+ SymbolicName=SACDRV_148
+ Language=English
+ Launching of Command Prompt channels is disabled.
+ .
++Language=Finnish
++Komentokehotekanavien käynnistäminen on poistettu käytöstä.
++.
+ 
+ MessageId=149
+ SymbolicName=SACDRV_149
+ Language=English
+ The specified subnet mask is invalid.
+ .
++Language=Finnish
++Annettu aliverkon peite on virheellinen.
++.
+ 
+ MessageId=150
+ SymbolicName=SACDRV_150
+ Language=English
+ Error, missing network interface number.
+ .
++Language=Finnish
++Virhe, verkkoliitännän numero puuttuu.
++.
+ 
+ MessageId=151
+ SymbolicName=SACDRV_151
+ Language=English
+ The specified IP address is invalid.
+ .
++Language=Finnish
++Annettu IP-osoite on virheellinen.
++.
+ 
+ MessageId=152
+ SymbolicName=SACDRV_152
+ Language=English
+ The specified gateway IP address is invalid.
+ .
++Language=Finnish
++Annettu yhdyskäytävän IP-osoite on virheellinen.
++.
+ 
+ MessageId=153
+ SymbolicName=SAC_UNINITIALIZED_MSG
+ Language=English
+ not yet initialized%0
+ .
++Language=Finnish
++ei vielä alustettu%0
++.
+ 
+ MessageId=154
+ SymbolicName=SACDRV_154
+ Language=English
+ The maximum number of channels has been reached.
+ .
++Language=Finnish
++Kanavien enimmäismäärä on saavutettu.
++.
+-- 
+2.56.0
+

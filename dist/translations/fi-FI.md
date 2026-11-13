@@ -25,9 +25,6 @@ the GPL license text.
 
 ## Not translated yet
 
-- The message tables of sdk/include/reactos/mc (errcodes.mc, netmsgmsg.mc,
-  ntstatus.mc and the rest), which have no Finnish at all.
-- getuname's Unicode character names (about 38,000 lines).
-- Modules whose `.rc` includes none of its language files, so a fi-FI file
-  would not be used: joy, storprop, winmm, write, and the English-only
-  resources of tzres, shellbtrfs, wordpad, progman and conhost among others.
+The message tables are in their own patch, fi-FI-messages.patch, and what is
+left of them and of the rest is in the TODO Later of
+[CHANGELOG.md](../../CHANGELOG.md).
