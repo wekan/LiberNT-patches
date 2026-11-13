@@ -39,7 +39,7 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 # Upcoming LiberNT-patches release
 
 **In short:** the first release: everything **wekan/LiberNT** adds to upstream
-LiberNT, as patches - the user interface and twelve **message tables** in
+LiberNT, as patches - the user interface and fourteen **message tables** in
 **Finnish**, and the **Release All**
 and **Release All Missing** workflows, which build releases from upstream and
 these patches, with the source **with and without its git history**, the
@@ -110,6 +110,23 @@ table has gets the same Finnish, the day names and AM/PM suffixes NET USER
 `tests/real-upstream.sh` applies the patches to upstream 22a5170d535 and
 compiles all twelve changed tables with windmc, each with a Finnish binary; the
 Finnish binaries have the same message ids as the English ones.
+
+</details>
+
+<details>
+<summary><a href="https://github.com/wekan/LiberNT-patches/commit/39ce394ce6d3b8ebd2f5ddee93e0d9470a6694b0">Finnish in the virtual floppy tool, printed in the console's code page</a>. Thanks to xet7.</summary>
+
+vfd.exe's 151 messages - its errors, prompts and command help - and the 63 of
+vfd.dll, which label its open, save and property dialogs, are in Finnish. The
+prompts keep the letters vfd.exe compares the answer with (Y, N, R, F, C, O,
+T). vfd.exe printed its ANSI texts to the console, which is OEM, as they were:
+only ASCII came out right, so it now converts them with `CharToOemA` first,
+and the English output stays the same.
+
+`tests/real-upstream.sh` compiles every table as ANSI or Unicode as its
+CMakeLists says, as the build does - before, it compiled them all as Unicode -
+and checks vfd.exe's five conversions. The C change was not compiled here:
+there is no LiberNT toolchain on this machine.
 
 </details>
 
