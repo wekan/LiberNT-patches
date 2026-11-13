@@ -80,6 +80,20 @@ fi
 vfdcmd="$TMP/one/modules/rosapps/applications/cmdutils/vfdcmd/vfdcmd.c"
 n="$(grep -c 'CharToOemA(' "$vfdcmd" || true)"
 [ "$n" = 5 ] && ok "vfd.exe converts its 5 printed message texts to the OEM code page" || fail "vfd.exe has $n CharToOemA calls, want 5"
+# getuname's Finnish names: the same ids as en-US.rc, and exactly what
+# tools/getuname-fi/gen.py makes of the patched tree's en-US.rc - so the file
+# is regenerated, not hand-edited, when upstream changes the English names.
+gu="$TMP/one/dll/win32/getuname/lang"
+ids() { sed -nE 's/^ +([0-9]+) ".*/\1/p' "$1"; }
+if [ -f "$gu/fi-FI.rc" ] && [ "$(ids "$gu/fi-FI.rc" | md5sum)" = "$(ids "$gu/en-US.rc" | md5sum)" ]; then
+  ok "getuname's fi-FI.rc names the same $(ids "$gu/en-US.rc" | wc -l) characters as en-US.rc"
+else fail "getuname's fi-FI.rc is missing or its ids differ from en-US.rc"; fi
+grep -q 'lang/fi-FI.rc' "$TMP/one/dll/win32/getuname/getuname.rc" && ok "getuname.rc includes fi-FI.rc" || fail "getuname.rc does not include fi-FI.rc"
+if command -v python3 >/dev/null; then
+  python3 -I "$ROOT/tools/getuname-fi/gen.py" "$gu/en-US.rc" "$TMP/getuname-fi.rc"
+  cmp -s "$TMP/getuname-fi.rc" "$gu/fi-FI.rc" && ok "fi-FI.rc is what tools/getuname-fi/gen.py makes of en-US.rc" \
+    || fail "fi-FI.rc differs from tools/getuname-fi/gen.py's output: regenerate it"
+fi
 if [ -n "${EXPECT_TREE:-}" ]; then
   [ "$(git -C "$TMP/one" rev-parse 'HEAD^{tree}')" = "$EXPECT_TREE" ] && ok "the patched tree is the expected one" || fail "tree $(git -C "$TMP/one" rev-parse 'HEAD^{tree}'), want $EXPECT_TREE"
 fi

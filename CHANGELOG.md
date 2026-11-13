@@ -17,7 +17,6 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 <details>
 <summary>Not translated into Finnish yet</summary>
 
-- getuname's Unicode character names, about 38,000 lines.
 - Modules whose `.rc` includes none of its language files, so a fi-FI file
   would not be used: joy, storprop, winmm, write, and the English-only
   resources of tzres, shellbtrfs, wordpad, progman and conhost among others.

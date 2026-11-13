@@ -81,6 +81,9 @@ export GIT_COMMITTER_NAME="$NAME" GIT_COMMITTER_EMAIL="$EMAIL"
 git config user.name "$NAME"
 git config user.email "$EMAIL"
 applied=0
+# Byte order, not the locale's collation: the order the patches go in is part
+# of the commit hashes, which have to be the same on every machine.
+export LC_COLLATE=C
 for section in all translations; do
   for p in "$PATCHES/dist/$section"/*.patch; do
     [ -e "$p" ] || continue
