@@ -17,10 +17,6 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 <details>
 <summary>Not translated into Finnish yet</summary>
 
-- The largest message tables of `sdk/include/reactos/mc`: errcodes.mc (2,191
-  messages, the system error texts of FormatMessage), netmsgmsg.mc (1,416, the
-  network errors) and ntstatus.mc (693, the NTSTATUS texts). The other nine
-  tables are done (dist/translations/fi-FI-messages.md).
 - The ReactOS virtual floppy tool's tables in modules/rosapps (vfdmsg.mc 151,
   vfdmsg_lib.mc 63).
 - getuname's Unicode character names, about 38,000 lines.

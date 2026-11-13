@@ -16,11 +16,18 @@ switches, values typed as shown and column layouts stay as they are.
 | sdk/include/reactos/mc/net_msg.mc | 42 | the net command's help |
 | base/applications/network/arp/arp_msg.mc | 11 | the arp command |
 | sdk/include/reactos/mc/sacmsg.mc | 118 | the Special Administration Console |
+| sdk/include/reactos/mc/ntstatus.mc | 693 | the NTSTATUS texts |
+| sdk/include/reactos/mc/errcodes.mc | 2191 | the system error texts of FormatMessage |
+| sdk/include/reactos/mc/netmsgmsg.mc | 1416 | the network messages: NET command output, NERR_*, alerts, event texts |
 
 sacmsg.mc had no `LanguageNames`; English is listed as windmc's default
 `English=0x409:MSG00001`, so its binary and header stay byte for byte the same.
 A help text upstream has not written yet ("NET FILE ...", "<Add ... here>")
 keeps its English, as every other language of the table has.
+A text that an earlier table already has gets the same Finnish. In
+netmsgmsg.mc the day names and AM/PM suffixes are Finnish because NET USER
+/TIMES reads them from the table to parse what is typed, and column headers
+keep their column positions.
 `tests/real-upstream.sh` compiles every changed table with the windmc of the
 patched tree and requires a Finnish binary from each.
 
