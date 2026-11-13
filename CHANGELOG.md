@@ -41,7 +41,7 @@ riscv64-spacemit-k1 and ppc. Upstream's own releases are mirrored there too.
 # Upcoming LiberNT-patches release
 
 **In short:** the first release: everything **wekan/LiberNT** adds to upstream
-LiberNT, as patches - the user interface and nine **message tables** in
+LiberNT, as patches - the user interface and twelve **message tables** in
 **Finnish**, and the **Release All**
 and **Release All Missing** workflows, which build releases from upstream and
 these patches, with the source **with and without its git history**, the
@@ -95,6 +95,23 @@ English as windmc's default so its binary stays byte for byte the same.
 changed table, requiring a Finnish binary from each. It also stopped piping
 `git log` into `grep -q`, which under pipefail failed once there were more
 commits than grep read.
+
+</details>
+
+<details>
+<summary><a href="https://github.com/wekan/LiberNT-patches/commit/1f48d0139ba48d692e2f1be747fc77496aa4d8f4">Finnish in the system error, NTSTATUS and network message tables</a>. Thanks to xet7.</summary>
+
+The three largest message tables of `sdk/include/reactos/mc` get Finnish too:
+errcodes.mc's 2,191 system error texts that FormatMessage gives every program,
+ntstatus.mc's 693 NTSTATUS texts and netmsgmsg.mc's 1,416 network messages -
+NET command output, the NERR_* errors and the alert and event log texts. Each
+keeps the English inserts, line breaks and `\n` escapes; a text an earlier
+table has gets the same Finnish, the day names and AM/PM suffixes NET USER
+/TIMES parses are Finnish alike, and column headers keep their positions.
+
+`tests/real-upstream.sh` applies the patches to upstream 22a5170d535 and
+compiles all twelve changed tables with windmc, each with a Finnish binary; the
+Finnish binaries have the same message ids as the English ones.
 
 </details>
 
